@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+
+    <meta name="theme-color" content="#ffffff" />
+
+    <title>Magazine</title>
+
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/intro.css" />
+  </head>
+
+  <body class="intro-body">
+    <header class="site-header">
+      <a class="site-logo" href="./index.html" aria-label="홈으로 이동">
+        <span>MAGAZINE</span>
+      </a>
+
+      <button
+        class="menu-button"
+        type="button"
+        aria-label="메뉴 열기"
+        aria-expanded="false"
+        aria-controls="site-menu"
+      >
+        <img src="./bar.svg" alt="" />
+      </button>
+
+      <nav class="site-menu" id="site-menu" aria-label="주요 메뉴">
+        <a href="./html/criticism.html">CRITICISM</a>
+        <a href="./html/article.html">ARTICLE</a>
+        <a href="./html/interview.html">INTERVIEW</a>
+        <a href="./html/essay.html">ESSAY</a>
+        <a href="./html/about.html">ABOUT</a>
+      </nav>
+    </header>
+
+    <main class="intro-page">
+      <section
+        class="morph-stage"
+        aria-label="3D 입자 애니메이션"
+      >
+        <div class="morph-scene"></div>
+      </section>
+    </main>
+
+    <script type="module" src="./intro.js"></script>
+    <script src="./script.js" defer></script>
+  </body>
+</html>

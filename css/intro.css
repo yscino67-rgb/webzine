@@ -1,0 +1,146 @@
+/* =========================
+   기본 설정
+========================= */
+
+:root {
+  --intro-background: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+
+  background-color: var(--intro-background);
+}
+
+body.intro-body {
+  position: relative;
+
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+
+  overflow: hidden;
+}
+
+@supports (height: 100dvh) {
+  body.intro-body {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+}
+
+/* =========================
+   전체 화면 애니메이션 영역
+========================= */
+
+.intro-page {
+  position: fixed;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  background-color: var(--intro-background);
+
+  overflow: hidden;
+}
+
+.morph-stage {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+}
+
+.morph-scene {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* =========================
+   Three.js 캔버스
+========================= */
+
+.intro-webgl-canvas {
+  position: absolute;
+
+  inset: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  border: 0;
+
+  background-color: transparent;
+
+  outline: none;
+
+  pointer-events: none;
+  touch-action: none;
+}
+
+/* =========================
+   이전 요소 제거
+========================= */
+
+.intro-header,
+.intro-logo,
+.morph-link,
+.morph-enter,
+.intro-menu,
+.intro-menu-link,
+.intro-menu-number,
+.intro-menu-title,
+.intro-skip,
+.morph-object,
+.mosaic-layer,
+.mosaic-tile,
+.resolution-tile,
+.smooth-circle,
+.underwater-particle-canvas,
+.sphere-axes,
+.sphere-shell,
+.flat-disc,
+.sphere-axis,
+.sphere-equator {
+  display: none !important;
+}
+
+.morph-scene::before,
+.morph-scene::after,
+.morph-object::before,
+.morph-object::after {
+  content: none !important;
+
+  display: none !important;
+}
