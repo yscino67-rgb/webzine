@@ -5,23 +5,25 @@ backend:
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
-locale: "ko"
-
 collections:
   - name: "posts"
     label: "게시글"
-
     folder: "content/posts"
-
     create: true
-
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
 
     fields:
-
       - label: "제목"
         name: "title"
         widget: "string"
+
+      - label: "작성자"
+        name: "author"
+        widget: "string"
+
+      - label: "작성일"
+        name: "date"
+        widget: "datetime"
 
       - label: "카테고리"
         name: "category"
@@ -32,22 +34,9 @@ collections:
           - "Essay"
           - "Interview"
 
-      - label: "작성자"
-        name: "author"
-        widget: "string"
-
-      - label: "게시일"
-        name: "date"
-        widget: "datetime"
-
       - label: "대표 이미지"
         name: "thumbnail"
         widget: "image"
-        required: false
-
-      - label: "요약"
-        name: "summary"
-        widget: "text"
         required: false
 
       - label: "본문"
