@@ -25,20 +25,6 @@ collections:
         name: "date"
         widget: "datetime"
 
-      - label: "카테고리"
-        name: "category"
-        widget: "select"
-        options:
-          - "Article"
-          - "Criticism"
-          - "Essay"
-          - "Interview"
-
-      - label: "대표 이미지"
-        name: "thumbnail"
-        widget: "image"
-        required: false
-
       - label: "본문"
         name: "body"
         widget: "markdown"
