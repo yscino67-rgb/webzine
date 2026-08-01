@@ -387,6 +387,11 @@ body.intro-body {
     scaleX(1);
 }
 
+.galaxy-category.is-text-visible span {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* 글자는 처음에 숨김 */
 .galaxy-category span {
   opacity: 0;

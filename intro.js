@@ -70,7 +70,7 @@ const SETTINGS = {
   galaxyRotationSpeed: 0.12,
 
   /* 카테고리 등장 */
-  categoryRevealTime: 16,
+  categoryRevealTime: 0,
 
   /*
     네모가 펼쳐진 다음
