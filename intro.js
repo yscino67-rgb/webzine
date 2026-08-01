@@ -1,3 +1,5 @@
+
+
 "use strict";
 
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
@@ -28,6 +30,9 @@ const SETTINGS = {
   builderRatio: 0.76,
 
   animationSpeed: 1.2,
+
+  categoryRevealTime: 16,
+  categoryRevealInterval: 0.42,
 
   outerBeginTime: 1.2,
   outerEndTime: 5.9,
@@ -235,6 +240,13 @@ let cloudRadiusZ = 0;
 let startTime = null;
 let animationFrameId = null;
 let resizeTimer = null;
+
+const categoryLabels =
+  Array.from(
+    document.querySelectorAll(
+      "[data-category-label]"
+    )
+  );
 
 const pointerTarget = {
   x: 0,
@@ -1278,6 +1290,41 @@ const FRAME_INTERVAL =
 
 let previousFrameTime = 0;
 
+function updateCategoryLabels(
+  elapsed
+) {
+  categoryLabels.forEach(
+    (
+      label,
+      index
+    ) => {
+      const revealTime =
+        SETTINGS.categoryRevealTime +
+        index *
+        SETTINGS.categoryRevealInterval;
+
+      if (
+        elapsed >=
+        revealTime
+      ) {
+        label.classList.add(
+          "is-visible"
+        );
+      }
+    }
+  );
+}
+
+function resetCategoryLabels() {
+  categoryLabels.forEach(
+    (label) => {
+      label.classList.remove(
+        "is-visible"
+      );
+    }
+  );
+}
+
 function animate(timestamp) {
 
   animationFrameId =
@@ -1470,6 +1517,8 @@ if (reducedMotion) {
       animate
     );
 }
+
+
 
 /* =========================================================
    정리
