@@ -141,6 +141,118 @@
   transform: scale(0.99);
 }
 
+/* =========================================================
+   아카이브 상단 필터
+========================================================= */
+
+.archive-header {
+  position: relative;
+
+  display: block;
+
+  padding:
+    28px
+    44px
+    18px;
+
+  pointer-events: auto;
+}
+
+.archive-filter {
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  width: max-content;
+
+  font-family: "Pretendard", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1;
+
+  white-space: nowrap;
+}
+
+.archive-filter a {
+  display: inline-block;
+
+  color: #111111;
+
+  letter-spacing: -0.075em;
+
+  text-decoration: none;
+
+  transition:
+    opacity 180ms ease,
+    letter-spacing 180ms ease;
+}
+
+.archive-filter a:hover {
+  opacity: 0.45;
+  letter-spacing: -0.095em;
+}
+
+.archive-filter-arrow {
+  display: inline-block;
+
+  margin-left: -8px;
+
+  color: #111111;
+
+  font-size: 25px;
+  font-weight: 400;
+  line-height: 0.75;
+
+  transform: scaleX(1.55);
+  transform-origin: left center;
+}
+
+/* =========================================================
+   모바일
+========================================================= */
+
+@media (max-width: 767px) {
+  .archive-header {
+    padding:
+      20px
+      20px
+      14px;
+  }
+
+  .archive-filter {
+    gap: 11px;
+
+    max-width: 100%;
+
+    font-size: 12px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .archive-filter::-webkit-scrollbar {
+    display: none;
+  }
+
+  .archive-filter a {
+    flex: 0 0 auto;
+
+    letter-spacing: -0.06em;
+  }
+
+  .archive-filter-arrow {
+    flex: 0 0 auto;
+
+    margin-left: -5px;
+
+    font-size: 18px;
+  }
+}
+
 @media (hover: hover) {
   .index-item:not(.index-item--placeholder):hover {
     transform: translateY(-4px);

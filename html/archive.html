@@ -18,15 +18,17 @@
   </head>
 
   <body>
-    <header class="site-header">
-      <nav class="category-navigation" aria-label="카테고리 메뉴">
-        <a href="./archive.html" class="category-link">CRITICISM</a>
-        <a href="#" class="category-link">INTERVIEW</a>
-        <a href="#" class="category-link">ESSAY</a>
-        <a href="#" class="category-link">ARTICLE</a>
-        <a href="#" class="category-link">ABOUT</a>
-      </nav>
-    </header>
+    <header class="site-header archive-header">
+  <nav class="archive-filter" aria-label="카테고리 메뉴">
+    <a href="./archive.html?category=all">ALL</a>
+    <a href="./archive.html?category=criticism">CRITICISM</a>
+    <a href="./archive.html?category=essay">ESSAY</a>
+    <a href="./archive.html?category=article">ARTICLE</a>
+    <a href="./archive.html?category=about">ABOUT</a>
+
+    <span class="archive-filter-arrow" aria-hidden="true">&gt;</span>
+  </nav>
+</header>
 
 <main class="site-main">
   <section class="article-index" aria-label="기사 목록">
