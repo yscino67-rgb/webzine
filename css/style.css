@@ -392,11 +392,10 @@ select {
   }
 }
 
-/* 로고 크기 최종 강제 지정 */
 .site-header .site-logo img {
-  width: 46px !important;
-  height: auto !important;
-  max-width: 55px !important;
+  display: block;
+  width: 55px;
+  height: auto;
 }
 
 @media (max-width: 767px) {
