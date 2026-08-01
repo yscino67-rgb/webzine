@@ -2,6 +2,31 @@
 
 "use strict";
 
+/* 내부 페이지에서 새로고침하면 인트로로 이동 */
+const navigationEntry =
+  performance.getEntriesByType("navigation")[0];
+
+const isReload =
+  navigationEntry?.type === "reload";
+
+const currentPath =
+  window.location.pathname.replace(/\/+$/, "");
+
+const isIntroPage =
+  currentPath === "" ||
+  currentPath === "/index.html";
+
+const isAdminPage =
+  currentPath.startsWith("/admin");
+
+if (
+  isReload &&
+  !isIntroPage &&
+  !isAdminPage
+) {
+  window.location.replace("/");
+}
+
 const menuButton =
   document.querySelector(".menu-button");
 
