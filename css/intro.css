@@ -363,7 +363,7 @@ body.intro-body {
 
   transition:
     opacity 180ms linear,
-    clip-path 3400ms
+    clip-path 3000ms
       cubic-bezier(
         0.16,
         1,
