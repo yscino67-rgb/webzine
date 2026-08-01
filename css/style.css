@@ -392,6 +392,13 @@ select {
   }
 }
 
+/* 로고 크기 최종 강제 지정 */
+.site-header .site-logo img {
+  width: 46px !important;
+  height: auto !important;
+  max-width: 55px !important;
+}
+
 @media (max-width: 767px) {
   .site-header {
     padding: 20px;
