@@ -1,39 +1,47 @@
-
-
 "use strict";
 
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
-const container = document.querySelector(".morph-scene");
+/* =========================================================
+   HTML 요소
+========================================================= */
+
+const container =
+  document.querySelector(".morph-scene");
 
 if (!container) {
-  throw new Error(".morph-scene 요소를 찾지 못했습니다.");
+  throw new Error(
+    ".morph-scene 요소를 찾지 못했습니다."
+  );
 }
 
 container
   .querySelectorAll("canvas")
   .forEach((canvas) => canvas.remove());
 
+const categoryLabels =
+  Array.from(
+    document.querySelectorAll(
+      "[data-category-label]"
+    )
+  );
+
 /* =========================================================
    설정
 ========================================================= */
 
 const SETTINGS = {
+  /* 입자 수 */
   desktopParticleCount: 1200,
   mobileParticleCount: 700,
+
+  /* 전체 입자 중 은하에 들어오는 비율 */
   builderRatio: 0.88,
 
-  /*
-    전체 입자 가운데 은하를 만드는 비율입니다.
-    나머지는 주변에 흩어진 채 유지됩니다.
-  */
-  builderRatio: 0.76,
-
+  /* 전체 애니메이션 시간 배율 */
   animationSpeed: 1.2,
 
-  categoryRevealTime: 0,
-  categoryRevealInterval: 0.2,
-
+  /* 입자가 은하로 들어오는 시간 */
   outerBeginTime: 1.2,
   outerEndTime: 5.9,
 
@@ -46,64 +54,109 @@ const SETTINGS = {
   minimumJoinDuration: 2.7,
   maximumJoinDuration: 8.7,
 
-  /*
-    최종 은하 크기
-  */
+  /* 은하 크기 */
   galaxyRadiusXScale: 0.56,
   galaxyRadiusZScale: 0.29,
   galaxyThicknessScale: 0.032,
 
-  /*
-    은하 중심부의 빈 공간 크기
-  */
-  galaxyHoleSize: 0.30,
+  /* 은하 중심의 빈 공간 */
+  galaxyHoleSize: 0.3,
 
-  /*
-    은하 기울기
-  */
+  /* 은하 기울기 */
   galaxyTiltX: -0.28,
   galaxyTiltZ: -0.14,
 
-  /*
-    완성된 은하 회전 속도
-  */
+  /* 은하 회전 속도 */
   galaxyRotationSpeed: 0.12,
 
+  /* 카테고리 등장 */
+  categoryRevealTime: 16,
+
   /*
-    마우스 움직임
+    네모가 펼쳐진 다음
+    글자가 나타날 때까지 기다리는 시간
   */
+  categoryTextDelay: 1.35,
+
+  /*
+    네모 → 글자까지 나온 다음
+    다음 네모가 시작되는 간격
+  */
+  categoryRevealInterval: 2.15,
+
+  /* 카테고리 궤도 속도 */
+  categoryRotationSpeed: 0.12,
+
+  /* 카테고리 타원 궤도 범위 */
+  categoryOrbitWidth: 0.37,
+  categoryOrbitHeight: 0.14,
+
+  /* 마우스 시차 */
   pointerParallaxX: 0.48,
   pointerParallaxY: 0.32
 };
 
-const PARTICLE_COLOR = new THREE.Color("#000000");
+const PARTICLE_COLOR =
+  new THREE.Color("#000000");
+
+/* =========================================================
+   성능 설정
+========================================================= */
+
+function isMobileViewport() {
+  return window.innerWidth < 768;
+}
+
+function getTargetFPS() {
+  return isMobileViewport()
+    ? 24
+    : 30;
+}
+
+function getPixelRatio() {
+  const maximumRatio =
+    isMobileViewport()
+      ? 1
+      : 1.5;
+
+  return Math.min(
+    window.devicePixelRatio || 1,
+    maximumRatio
+  );
+}
 
 /* =========================================================
    Three.js 장면
 ========================================================= */
 
-const scene = new THREE.Scene();
+const scene =
+  new THREE.Scene();
 
-const camera = new THREE.PerspectiveCamera(
-  42,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  100
+const camera =
+  new THREE.PerspectiveCamera(
+    42,
+    window.innerWidth /
+      window.innerHeight,
+    0.1,
+    100
+  );
+
+camera.position.set(
+  0,
+  0,
+  11.5
 );
 
-camera.position.set(0, 0, 11.5);
-
-const renderer = new THREE.WebGLRenderer({
-  antialias: true,
-  alpha: true,
-  powerPreference: "high-performance"
-});
+const renderer =
+  new THREE.WebGLRenderer({
+    antialias: true,
+    alpha: true,
+    powerPreference:
+      "high-performance"
+  });
 
 renderer.setPixelRatio(
-  Math.min(
-    window.devicePixelRatio || 1,
-    2
-  )
+  getPixelRatio()
 );
 
 renderer.setSize(
@@ -112,106 +165,114 @@ renderer.setSize(
   false
 );
 
-renderer.setClearColor(0xffffff, 0);
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.domElement.className = "intro-webgl-canvas";
+renderer.setClearColor(
+  0xffffff,
+  0
+);
 
-container.appendChild(renderer.domElement);
+renderer.outputColorSpace =
+  THREE.SRGBColorSpace;
+
+renderer.domElement.className =
+  "intro-webgl-canvas";
+
+container.appendChild(
+  renderer.domElement
+);
 
 /* =========================================================
    입자 셰이더
 ========================================================= */
 
-const particleMaterial = new THREE.ShaderMaterial({
-  transparent: true,
-  depthTest: true,
-  depthWrite: false,
-  blending: THREE.NormalBlending,
+const particleMaterial =
+  new THREE.ShaderMaterial({
+    transparent: true,
+    depthTest: true,
+    depthWrite: false,
+    blending:
+      THREE.NormalBlending,
 
-  uniforms: {
-    uPixelRatio: {
-      value: Math.min(
-        window.devicePixelRatio || 1,
-        2
-      )
-    }
-  },
-
-  vertexShader: `
-    attribute float aSize;
-    attribute float aOpacity;
-    attribute vec3 color;
-
-    uniform float uPixelRatio;
-
-    varying float vOpacity;
-    varying vec3 vColor;
-
-    void main() {
-      vec4 modelPosition =
-        modelMatrix *
-        vec4(position, 1.0);
-
-      vec4 viewPosition =
-        viewMatrix *
-        modelPosition;
-
-      gl_Position =
-        projectionMatrix *
-        viewPosition;
-
-      float perspectiveScale =
-        12.0 /
-        max(
-          2.0,
-          -viewPosition.z
-        );
-
-      gl_PointSize =
-        aSize *
-        uPixelRatio *
-        perspectiveScale;
-
-      vOpacity = aOpacity;
-      vColor = color;
-    }
-  `,
-
-  fragmentShader: `
-    varying float vOpacity;
-    varying vec3 vColor;
-
-    void main() {
-      vec2 point =
-        gl_PointCoord -
-        vec2(0.5);
-
-      float squareDistance =
-        max(
-          abs(point.x),
-          abs(point.y)
-        );
-
-      float edge =
-        1.0 -
-        smoothstep(
-          0.46,
-          0.5,
-          squareDistance
-        );
-
-      if (edge <= 0.001) {
-        discard;
+    uniforms: {
+      uPixelRatio: {
+        value: getPixelRatio()
       }
+    },
 
-      gl_FragColor =
-        vec4(
-          vColor,
-          vOpacity * edge
-        );
-    }
-  `
-});
+    vertexShader: `
+      attribute float aSize;
+      attribute float aOpacity;
+      attribute vec3 color;
+
+      uniform float uPixelRatio;
+
+      varying float vOpacity;
+      varying vec3 vColor;
+
+      void main() {
+        vec4 modelPosition =
+          modelMatrix *
+          vec4(position, 1.0);
+
+        vec4 viewPosition =
+          viewMatrix *
+          modelPosition;
+
+        gl_Position =
+          projectionMatrix *
+          viewPosition;
+
+        float perspectiveScale =
+          12.0 /
+          max(
+            2.0,
+            -viewPosition.z
+          );
+
+        gl_PointSize =
+          aSize *
+          uPixelRatio *
+          perspectiveScale;
+
+        vOpacity = aOpacity;
+        vColor = color;
+      }
+    `,
+
+    fragmentShader: `
+      varying float vOpacity;
+      varying vec3 vColor;
+
+      void main() {
+        vec2 point =
+          gl_PointCoord -
+          vec2(0.5);
+
+        float squareDistance =
+          max(
+            abs(point.x),
+            abs(point.y)
+          );
+
+        float edge =
+          1.0 -
+          smoothstep(
+            0.46,
+            0.5,
+            squareDistance
+          );
+
+        if (edge <= 0.001) {
+          discard;
+        }
+
+        gl_FragColor =
+          vec4(
+            vColor,
+            vOpacity * edge
+          );
+      }
+    `
+  });
 
 /* =========================================================
    상태
@@ -219,6 +280,7 @@ const particleMaterial = new THREE.ShaderMaterial({
 
 let points = null;
 let particleGeometry = null;
+
 let particles = [];
 
 let positions = null;
@@ -241,12 +303,12 @@ let startTime = null;
 let animationFrameId = null;
 let resizeTimer = null;
 
-const categoryLabels =
-  Array.from(
-    document.querySelectorAll(
-      "[data-category-label]"
-    )
-  );
+let previousFrameTime = 0;
+let frameInterval =
+  1000 / getTargetFPS();
+
+let pageHidden =
+  document.hidden;
 
 const pointerTarget = {
   x: 0,
@@ -268,7 +330,10 @@ function clamp(
   maximum = 1
 ) {
   return Math.min(
-    Math.max(value, minimum),
+    Math.max(
+      value,
+      minimum
+    ),
     maximum
   );
 }
@@ -280,13 +345,17 @@ function lerp(
 ) {
   return (
     start +
-    (end - start) *
+    (
+      end -
+      start
+    ) *
     progress
   );
 }
 
 function smootherstep(progress) {
-  const value = clamp(progress);
+  const value =
+    clamp(progress);
 
   return (
     value *
@@ -310,20 +379,26 @@ function randomBetween(
   return (
     minimum +
     Math.random() *
-    (maximum - minimum)
+    (
+      maximum -
+      minimum
+    )
   );
 }
 
 function shuffle(array) {
   for (
-    let index = array.length - 1;
+    let index =
+      array.length - 1;
     index > 0;
     index -= 1
   ) {
     const randomIndex =
       Math.floor(
         Math.random() *
-        (index + 1)
+        (
+          index + 1
+        )
       );
 
     [
@@ -350,32 +425,31 @@ function calculateWorldSize() {
 
   visibleHeight =
     2 *
-    Math.tan(verticalFov / 2) *
+    Math.tan(
+      verticalFov / 2
+    ) *
     camera.position.z;
 
   visibleWidth =
     visibleHeight *
     camera.aspect;
 
-  galaxyRadiusX =
+  const baseSize =
     Math.min(
       visibleWidth,
       visibleHeight
-    ) *
+    );
+
+  galaxyRadiusX =
+    baseSize *
     SETTINGS.galaxyRadiusXScale;
 
   galaxyRadiusZ =
-    Math.min(
-      visibleWidth,
-      visibleHeight
-    ) *
+    baseSize *
     SETTINGS.galaxyRadiusZScale;
 
   galaxyThickness =
-    Math.min(
-      visibleWidth,
-      visibleHeight
-    ) *
+    baseSize *
     SETTINGS.galaxyThicknessScale;
 
   cloudRadiusX =
@@ -394,12 +468,15 @@ function calculateWorldSize() {
 }
 
 /* =========================================================
-   초기 흩어진 입자 위치
+   흩어진 초기 위치
 ========================================================= */
 
 function createCloudPosition() {
   const yDirection =
-    randomBetween(-1, 1);
+    randomBetween(
+      -1,
+      1
+    );
 
   const angle =
     randomBetween(
@@ -421,7 +498,9 @@ function createCloudPosition() {
     lerp(
       0.22,
       1,
-      Math.cbrt(Math.random())
+      Math.cbrt(
+        Math.random()
+      )
     );
 
   return {
@@ -445,10 +524,12 @@ function createCloudPosition() {
 }
 
 /* =========================================================
-   은하수 목표 좌표 생성
+   은하 목표 좌표
 ========================================================= */
 
-function createGalaxyTargets(count) {
+function createGalaxyTargets(
+  count
+) {
   const targets = [];
 
   for (
@@ -462,10 +543,9 @@ function createGalaxyTargets(count) {
     let layer;
     let radialProgress;
 
-    /*
-      바깥 고리에 가장 많은 입자를 배치합니다.
-    */
-    if (randomValue < 0.58) {
+    if (
+      randomValue < 0.58
+    ) {
       layer = "outer";
 
       radialProgress =
@@ -488,24 +568,18 @@ function createGalaxyTargets(count) {
 
       radialProgress =
         randomBetween(
-          SETTINGS.galaxyHoleSize + 0.07,
-          0.70
+          SETTINGS.galaxyHoleSize +
+            0.07,
+          0.7
         );
     }
 
-    /*
-      중심이 완전히 꽉 차지 않도록
-      최소 반지름을 유지합니다.
-    */
     radialProgress =
       Math.max(
         radialProgress,
         SETTINGS.galaxyHoleSize
       );
 
-    /*
-      은하의 소용돌이 방향을 위한 각도입니다.
-    */
     const baseAngle =
       randomBetween(
         0,
@@ -525,10 +599,6 @@ function createGalaxyTargets(count) {
         0.24
       );
 
-    /*
-      완벽한 타원이 아니라
-      먼지처럼 약간 흔들린 고리로 만듭니다.
-    */
     const radialNoise =
       randomBetween(
         0.93,
@@ -569,9 +639,6 @@ function createGalaxyTargets(count) {
 
       layer,
 
-      radiusProgress:
-        radialProgress,
-
       angleOffset:
         randomBetween(
           -0.08,
@@ -580,13 +647,11 @@ function createGalaxyTargets(count) {
     });
   }
 
-  shuffle(targets);
-
-  return targets;
+  return shuffle(targets);
 }
 
 /* =========================================================
-   입자 시스템 생성
+   입자 시스템
 ========================================================= */
 
 function disposeParticleSystem() {
@@ -608,12 +673,11 @@ function buildParticleSystem() {
   disposeParticleSystem();
   calculateWorldSize();
 
-  const isMobile =
-    window.innerWidth <
-    768;
+  const mobile =
+    isMobileViewport();
 
   const particleCount =
-    isMobile
+    mobile
       ? SETTINGS.mobileParticleCount
       : SETTINGS.desktopParticleCount;
 
@@ -623,19 +687,21 @@ function buildParticleSystem() {
       SETTINGS.builderRatio
     );
 
-  const builderIndexes =
-    Array.from(
-      {
-        length: particleCount
-      },
-      (_, index) => index
+  const indexes =
+    shuffle(
+      Array.from(
+        {
+          length:
+            particleCount
+        },
+        (_, index) =>
+          index
+      )
     );
 
-  shuffle(builderIndexes);
-
-  const builderIndexSet =
+  const builderSet =
     new Set(
-      builderIndexes.slice(
+      indexes.slice(
         0,
         builderCount
       )
@@ -675,14 +741,13 @@ function buildParticleSystem() {
     index < particleCount;
     index += 1
   ) {
-    const cloudPosition =
+    const source =
       createCloudPosition();
 
     const isBuilder =
-      builderIndexSet.has(index);
+      builderSet.has(index);
 
     let target = null;
-
     let joinStart =
       Number.POSITIVE_INFINITY;
 
@@ -695,7 +760,8 @@ function buildParticleSystem() {
       targetIndex += 1;
 
       if (
-        target.layer === "outer"
+        target.layer ===
+        "outer"
       ) {
         joinStart =
           randomBetween(
@@ -703,7 +769,8 @@ function buildParticleSystem() {
             SETTINGS.outerEndTime
           );
       } else if (
-        target.layer === "middle"
+        target.layer ===
+        "middle"
       ) {
         joinStart =
           randomBetween(
@@ -719,29 +786,12 @@ function buildParticleSystem() {
       }
     }
 
-    const sourceSize =
-      randomBetween(
-        isMobile ? 2.6 : 5.2,
-        isMobile ? 6 : 7
-      );
-
-    const targetSize =
-      randomBetween(
-        isMobile ? 5.2 : 6,
-        isMobile ? 7.2 : 8.6
-      );
-
     particles.push({
       isBuilder,
 
-      sourceX:
-        cloudPosition.x,
-
-      sourceY:
-        cloudPosition.y,
-
-      sourceZ:
-        cloudPosition.z,
+      sourceX: source.x,
+      sourceY: source.y,
+      sourceZ: source.z,
 
       target,
       joinStart,
@@ -775,8 +825,25 @@ function buildParticleSystem() {
           ? -1
           : 1,
 
-      sourceSize,
-      targetSize
+      sourceSize:
+        randomBetween(
+          mobile
+            ? 2.6
+            : 5.2,
+          mobile
+            ? 6
+            : 7
+        ),
+
+      targetSize:
+        randomBetween(
+          mobile
+            ? 5.2
+            : 6,
+          mobile
+            ? 7.2
+            : 8.6
+        )
     });
   }
 
@@ -856,7 +923,7 @@ function buildParticleSystem() {
 }
 
 /* =========================================================
-   초기 흩어진 입자 움직임
+   흩어진 입자 움직임
 ========================================================= */
 
 function calculateOrbitPosition(
@@ -969,7 +1036,7 @@ function calculateOrbitPosition(
 }
 
 /* =========================================================
-   은하수 회전 좌표
+   은하 회전 좌표
 ========================================================= */
 
 function calculateGalaxyPosition(
@@ -982,14 +1049,15 @@ function calculateGalaxyPosition(
     target.angleOffset;
 
   const cosRotation =
-    Math.cos(rotationAngle);
+    Math.cos(
+      rotationAngle
+    );
 
   const sinRotation =
-    Math.sin(rotationAngle);
+    Math.sin(
+      rotationAngle
+    );
 
-  /*
-    은하의 자체 회전
-  */
   let x =
     target.x *
     cosRotation +
@@ -1005,9 +1073,6 @@ function calculateGalaxyPosition(
   let y =
     target.y;
 
-  /*
-    은하를 뒤로 기울입니다.
-  */
   const cosTiltX =
     Math.cos(
       SETTINGS.galaxyTiltX
@@ -1019,24 +1084,16 @@ function calculateGalaxyPosition(
     );
 
   const tiltedY =
-    y *
-    cosTiltX -
-    z *
-    sinTiltX;
+    y * cosTiltX -
+    z * sinTiltX;
 
   const tiltedZ =
-    y *
-    sinTiltX +
-    z *
-    cosTiltX;
+    y * sinTiltX +
+    z * cosTiltX;
 
   y = tiltedY;
   z = tiltedZ;
 
-  /*
-    화면에서 대각선으로 보이도록
-    한 번 더 기울입니다.
-  */
   const cosTiltZ =
     Math.cos(
       SETTINGS.galaxyTiltZ
@@ -1048,23 +1105,16 @@ function calculateGalaxyPosition(
     );
 
   const tiltedX =
-    x *
-    cosTiltZ -
-    y *
-    sinTiltZ;
+    x * cosTiltZ -
+    y * sinTiltZ;
 
   const finalY =
-    x *
-    sinTiltZ +
-    y *
-    cosTiltZ;
-
-  x = tiltedX;
-  y = finalY;
+    x * sinTiltZ +
+    y * cosTiltZ;
 
   return {
-    x,
-    y,
+    x: tiltedX,
+    y: finalY,
     z
   };
 }
@@ -1073,7 +1123,9 @@ function calculateGalaxyPosition(
    입자 업데이트
 ========================================================= */
 
-function updateParticles(elapsed) {
+function updateParticles(
+  elapsed
+) {
   if (!particleGeometry) {
     return;
   }
@@ -1122,7 +1174,7 @@ function updateParticles(elapsed) {
           elapsed
         );
 
-      const horizontalDistance =
+      const distance =
         Math.max(
           Math.hypot(
             orbitPosition.x,
@@ -1133,11 +1185,11 @@ function updateParticles(elapsed) {
 
       const tangentX =
         -orbitPosition.z /
-        horizontalDistance;
+        distance;
 
       const tangentZ =
         orbitPosition.x /
-        horizontalDistance;
+        distance;
 
       const curveAmount =
         Math.sin(
@@ -1190,43 +1242,40 @@ function updateParticles(elapsed) {
     const positionIndex =
       index * 3;
 
-    positions[positionIndex] =
-      currentX;
+    positions[
+      positionIndex
+    ] = currentX;
 
-    positions[positionIndex + 1] =
-      currentY;
+    positions[
+      positionIndex + 1
+    ] = currentY;
 
-    positions[positionIndex + 2] =
-      currentZ;
-
-    const sourceSize =
-      particle.sourceSize;
-
-    const finalSize =
-      particle.targetSize;
+    positions[
+      positionIndex + 2
+    ] = currentZ;
 
     sizes[index] =
       lerp(
-        sourceSize,
-        finalSize,
+        particle.sourceSize,
+        particle.targetSize,
         joinProgress
       );
 
-    /*
-      모든 입자의 불투명도를 동일하게 유지합니다.
-    */
     opacities[index] = 1;
 
-    /*
-      모든 입자의 색상을 완전한 검정으로 유지합니다.
-    */
-    colors[positionIndex] =
+    colors[
+      positionIndex
+    ] =
       PARTICLE_COLOR.r;
 
-    colors[positionIndex + 1] =
+    colors[
+      positionIndex + 1
+    ] =
       PARTICLE_COLOR.g;
 
-    colors[positionIndex + 2] =
+    colors[
+      positionIndex + 2
+    ] =
       PARTICLE_COLOR.b;
   }
 
@@ -1245,6 +1294,133 @@ function updateParticles(elapsed) {
   particleGeometry
     .getAttribute("color")
     .needsUpdate = true;
+}
+
+/* =========================================================
+   카테고리 움직임과 순차 등장
+========================================================= */
+
+function updateCategoryLabels(
+  elapsed
+) {
+  const stageWidth =
+    container.clientWidth ||
+    window.innerWidth;
+
+  const stageHeight =
+    container.clientHeight ||
+    window.innerHeight;
+
+  const orbitWidth =
+    stageWidth *
+    SETTINGS.categoryOrbitWidth;
+
+  const orbitHeight =
+    stageHeight *
+    SETTINGS.categoryOrbitHeight;
+
+  categoryLabels.forEach(
+    (
+      label,
+      index
+    ) => {
+      const baseAngle =
+        Number(
+          label.dataset.angle
+        ) || 0;
+
+      const radius =
+        Number(
+          label.dataset.radius
+        ) || 1;
+
+      const currentAngle =
+        baseAngle +
+        elapsed *
+        SETTINGS.categoryRotationSpeed;
+
+      const categoryX =
+        Math.cos(
+          currentAngle
+        ) *
+        orbitWidth *
+        radius;
+
+      const categoryY =
+        Math.sin(
+          currentAngle
+        ) *
+        orbitHeight *
+        radius;
+
+      label.style.setProperty(
+        "--category-x",
+        `${categoryX}px`
+      );
+
+      label.style.setProperty(
+        "--category-y",
+        `${categoryY}px`
+      );
+
+      const boxRevealTime =
+        SETTINGS.categoryRevealTime +
+        index *
+        SETTINGS.categoryRevealInterval;
+
+      const textRevealTime =
+        boxRevealTime +
+        SETTINGS.categoryTextDelay;
+
+      if (
+        elapsed >=
+        boxRevealTime
+      ) {
+        label.classList.add(
+          "is-box-visible"
+        );
+      }
+
+      if (
+        elapsed >=
+        textRevealTime
+      ) {
+        label.classList.add(
+          "is-text-visible"
+        );
+      }
+    }
+  );
+}
+
+function showAllCategoryLabels() {
+  categoryLabels.forEach(
+    (label) => {
+      label.classList.add(
+        "is-box-visible",
+        "is-text-visible"
+      );
+    }
+  );
+}
+
+function resetCategoryLabels() {
+  categoryLabels.forEach(
+    (label) => {
+      label.classList.remove(
+        "is-box-visible",
+        "is-text-visible"
+      );
+
+      label.style.removeProperty(
+        "--category-x"
+      );
+
+      label.style.removeProperty(
+        "--category-y"
+      );
+    }
+  );
 }
 
 /* =========================================================
@@ -1277,106 +1453,64 @@ window.addEventListener(
 );
 
 /* =========================================================
+   탭이 보이지 않을 때 정지
+========================================================= */
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+    pageHidden =
+      document.hidden;
+
+    if (!pageHidden) {
+      previousFrameTime =
+        performance.now();
+    }
+  }
+);
+
+/* =========================================================
    애니메이션
 ========================================================= */
 
-const TARGET_FPS =
-  window.innerWidth < 768
-    ? 24
-    : 30;
-
-const FRAME_INTERVAL =
-  1000 / TARGET_FPS;
-
-let previousFrameTime = 0;
-
-function updateCategoryLabels(
-  elapsed
-) {
-  categoryLabels.forEach(
-    (
-      label,
-      index
-    ) => {
-      const revealTime =
-        SETTINGS.categoryRevealTime +
-        index *
-        SETTINGS.categoryRevealInterval;
-
-      if (
-        elapsed >=
-        revealTime
-      ) {
-        label.classList.add(
-          "is-visible"
-        );
-      }
-    }
-  );
-}
-
-function resetCategoryLabels() {
-  categoryLabels.forEach(
-    (label) => {
-      label.classList.remove(
-        "is-visible"
-      );
-    }
-  );
-}
-
 function animate(timestamp) {
-
   animationFrameId =
-
     requestAnimationFrame(
-
       animate
-
     );
 
-  if (previousFrameTime === 0) {
+  if (pageHidden) {
+    return;
+  }
 
+  if (
+    previousFrameTime === 0
+  ) {
     previousFrameTime =
-
       timestamp;
-
   }
 
   const frameDelta =
-
     timestamp -
-
     previousFrameTime;
 
   if (
-
     frameDelta <
-
-    FRAME_INTERVAL
-
+    frameInterval
   ) {
-
     return;
-
   }
 
   previousFrameTime =
-
     timestamp -
-
     (
-
       frameDelta %
-
-      FRAME_INTERVAL
-
+      frameInterval
     );
 
   if (startTime === null) {
-
-    startTime = timestamp;
-
+    startTime =
+      timestamp;
   }
 
   const elapsed =
@@ -1424,11 +1558,6 @@ function animate(timestamp) {
     scene,
     camera
   );
-
-  animationFrameId =
-    requestAnimationFrame(
-      animate
-    );
 }
 
 /* =========================================================
@@ -1448,11 +1577,11 @@ function resize() {
 
   camera.updateProjectionMatrix();
 
+  const pixelRatio =
+    getPixelRatio();
+
   renderer.setPixelRatio(
-    Math.min(
-      window.devicePixelRatio || 1,
-      2
-    )
+    pixelRatio
   );
 
   renderer.setSize(
@@ -1461,16 +1590,21 @@ function resize() {
     false
   );
 
-  particleMaterial.uniforms
-    .uPixelRatio.value =
-      Math.min(
-        window.devicePixelRatio || 1,
-        2
-      );
+  particleMaterial
+    .uniforms
+    .uPixelRatio
+    .value =
+      pixelRatio;
+
+  frameInterval =
+    1000 /
+    getTargetFPS();
 
   buildParticleSystem();
+  resetCategoryLabels();
 
   startTime = null;
+  previousFrameTime = 0;
 }
 
 window.addEventListener(
@@ -1508,6 +1642,8 @@ if (reducedMotion) {
     finalElapsed
   );
 
+  showAllCategoryLabels();
+
   renderer.render(
     scene,
     camera
@@ -1518,8 +1654,6 @@ if (reducedMotion) {
       animate
     );
 }
-
-
 
 /* =========================================================
    정리
