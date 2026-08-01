@@ -398,6 +398,12 @@ select {
   height: auto;
 }
 
+.site-logo img {
+  display: block;
+  width: 40px !important;
+  height: auto !important;
+}
+
 @media (max-width: 767px) {
   .site-header {
     padding: 20px;
