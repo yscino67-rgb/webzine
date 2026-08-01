@@ -9,7 +9,7 @@
   --background-color: #ffffff;
   --text-color: #111111;
 
-  --logo-width: 40px;
+  --logo-width: 24px;
   --menu-icon-width: 39px;
 }
 
@@ -405,7 +405,7 @@ select {
 
 @media (max-width: 767px) {
   :root {
-    --logo-width: 34px;
+    --logo-width: 22px;
     --menu-icon-width: 34px;
   }
 
