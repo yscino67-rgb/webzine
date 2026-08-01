@@ -9,6 +9,13 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.m
 const container =
   document.querySelector(".morph-scene");
 
+const categoryLabels =
+  Array.from(
+    document.querySelectorAll(
+      "[data-category-label]"
+    )
+  );
+
 if (!container) {
   throw new Error(
     ".morph-scene 요소를 찾지 못했습니다."
@@ -17,14 +24,9 @@ if (!container) {
 
 container
   .querySelectorAll("canvas")
-  .forEach((canvas) => canvas.remove());
-
-const categoryLabels =
-  Array.from(
-    document.querySelectorAll(
-      "[data-category-label]"
-    )
-  );
+  .forEach((canvas) => {
+    canvas.remove();
+  });
 
 /* =========================================================
    설정
@@ -33,15 +35,15 @@ const categoryLabels =
 const SETTINGS = {
   /* 입자 수 */
   desktopParticleCount: 1200,
-  mobileParticleCount: 700,
+  mobileParticleCount: 650,
 
-  /* 전체 입자 중 은하에 들어오는 비율 */
+  /* 은하에 들어오는 입자 비율 */
   builderRatio: 0.88,
 
-  /* 전체 애니메이션 시간 배율 */
+  /* 전체 시간 속도 */
   animationSpeed: 1.2,
 
-  /* 입자가 은하로 들어오는 시간 */
+  /* 입자가 은하로 모이는 시간 */
   outerBeginTime: 1.2,
   outerEndTime: 5.9,
 
@@ -59,7 +61,7 @@ const SETTINGS = {
   galaxyRadiusZScale: 0.29,
   galaxyThicknessScale: 0.032,
 
-  /* 은하 중심의 빈 공간 */
+  /* 중앙 빈 공간 */
   galaxyHoleSize: 0.3,
 
   /* 은하 기울기 */
@@ -69,29 +71,26 @@ const SETTINGS = {
   /* 은하 회전 속도 */
   galaxyRotationSpeed: 0.12,
 
-  /* 카테고리 등장 */
-  categoryRevealTime: 0,
+  /* 첫 번째 회색 네모 등장 시간 */
+  categoryRevealTime: 3,
+
+  /* 네모가 펼쳐진 뒤 글자가 나오는 시간 */
+  categoryTextDelay: 1.4,
 
   /*
-    네모가 펼쳐진 다음
-    글자가 나타날 때까지 기다리는 시간
+    첫 번째 네모 → 첫 번째 글자 →
+    두 번째 네모 순서 간격
   */
-  categoryTextDelay: 1.35,
+  categoryRevealInterval: 2.4,
 
-  /*
-    네모 → 글자까지 나온 다음
-    다음 네모가 시작되는 간격
-  */
-  categoryRevealInterval: 2.15,
-
-  /* 카테고리 궤도 속도 */
+  /* 카테고리 회전 속도 */
   categoryRotationSpeed: 0.12,
 
-  /* 카테고리 타원 궤도 범위 */
-  categoryOrbitWidth: 0.37,
+  /* 카테고리 회전 범위 */
+  categoryOrbitWidth: 0.36,
   categoryOrbitHeight: 0.14,
 
-  /* 마우스 시차 */
+  /* 마우스 반응 */
   pointerParallaxX: 0.48,
   pointerParallaxY: 0.32
 };
@@ -114,14 +113,14 @@ function getTargetFPS() {
 }
 
 function getPixelRatio() {
-  const maximumRatio =
+  const maximumPixelRatio =
     isMobileViewport()
       ? 1
       : 1.5;
 
   return Math.min(
     window.devicePixelRatio || 1,
-    maximumRatio
+    maximumPixelRatio
   );
 }
 
@@ -280,7 +279,6 @@ const particleMaterial =
 
 let points = null;
 let particleGeometry = null;
-
 let particles = [];
 
 let positions = null;
@@ -304,8 +302,10 @@ let animationFrameId = null;
 let resizeTimer = null;
 
 let previousFrameTime = 0;
+
 let frameInterval =
-  1000 / getTargetFPS();
+  1000 /
+  getTargetFPS();
 
 let pageHidden =
   document.hidden;
@@ -468,7 +468,7 @@ function calculateWorldSize() {
 }
 
 /* =========================================================
-   흩어진 초기 위치
+   초기 입자 위치
 ========================================================= */
 
 function createCloudPosition() {
@@ -524,7 +524,7 @@ function createCloudPosition() {
 }
 
 /* =========================================================
-   은하 목표 좌표
+   은하 목표 위치
 ========================================================= */
 
 function createGalaxyTargets(
@@ -748,6 +748,7 @@ function buildParticleSystem() {
       builderSet.has(index);
 
     let target = null;
+
     let joinStart =
       Number.POSITIVE_INFINITY;
 
@@ -789,9 +790,14 @@ function buildParticleSystem() {
     particles.push({
       isBuilder,
 
-      sourceX: source.x,
-      sourceY: source.y,
-      sourceZ: source.z,
+      sourceX:
+        source.x,
+
+      sourceY:
+        source.y,
+
+      sourceZ:
+        source.z,
 
       target,
       joinStart,
@@ -831,17 +837,17 @@ function buildParticleSystem() {
             ? 2.6
             : 5.2,
           mobile
-            ? 6
+            ? 5
             : 7
         ),
 
       targetSize:
         randomBetween(
           mobile
-            ? 5.2
+            ? 4.2
             : 6,
           mobile
-            ? 7.2
+            ? 6
             : 8.6
         )
     });
@@ -1036,7 +1042,7 @@ function calculateOrbitPosition(
 }
 
 /* =========================================================
-   은하 회전 좌표
+   은하 회전 위치
 ========================================================= */
 
 function calculateGalaxyPosition(
@@ -1113,8 +1119,12 @@ function calculateGalaxyPosition(
     y * cosTiltZ;
 
   return {
-    x: tiltedX,
-    y: finalY,
+    x:
+      tiltedX,
+
+    y:
+      finalY,
+
     z
   };
 }
@@ -1261,7 +1271,8 @@ function updateParticles(
         joinProgress
       );
 
-    opacities[index] = 1;
+    opacities[index] =
+      1;
 
     colors[
       positionIndex
@@ -1280,35 +1291,48 @@ function updateParticles(
   }
 
   particleGeometry
-    .getAttribute("position")
+    .getAttribute(
+      "position"
+    )
     .needsUpdate = true;
 
   particleGeometry
-    .getAttribute("aSize")
+    .getAttribute(
+      "aSize"
+    )
     .needsUpdate = true;
 
   particleGeometry
-    .getAttribute("aOpacity")
+    .getAttribute(
+      "aOpacity"
+    )
     .needsUpdate = true;
 
   particleGeometry
-    .getAttribute("color")
+    .getAttribute(
+      "color"
+    )
     .needsUpdate = true;
 }
 
 /* =========================================================
-   카테고리 움직임과 순차 등장
+   카테고리 위치 및 등장
 ========================================================= */
 
 function updateCategoryLabels(
   elapsed
 ) {
+  const stage =
+    document.querySelector(
+      ".morph-stage"
+    );
+
   const stageWidth =
-    container.clientWidth ||
+    stage?.clientWidth ||
     window.innerWidth;
 
   const stageHeight =
-    container.clientHeight ||
+    stage?.clientHeight ||
     window.innerHeight;
 
   const orbitWidth =
@@ -1353,15 +1377,12 @@ function updateCategoryLabels(
         orbitHeight *
         radius;
 
-      label.style.setProperty(
-        "--category-x",
-        `${categoryX}px`
-      );
-
-      label.style.setProperty(
-        "--category-y",
-        `${categoryY}px`
-      );
+      label.style.transform =
+        `translate3d(
+          calc(-50% + ${categoryX}px),
+          calc(-50% + ${categoryY}px),
+          0
+        )`;
 
       const boxRevealTime =
         SETTINGS.categoryRevealTime +
@@ -1413,11 +1434,7 @@ function resetCategoryLabels() {
       );
 
       label.style.removeProperty(
-        "--category-x"
-      );
-
-      label.style.removeProperty(
-        "--category-y"
+        "transform"
       );
     }
   );
@@ -1453,7 +1470,7 @@ window.addEventListener(
 );
 
 /* =========================================================
-   탭이 보이지 않을 때 정지
+   브라우저 탭 비활성화
 ========================================================= */
 
 document.addEventListener(
@@ -1551,8 +1568,13 @@ function animate(timestamp) {
     0
   );
 
-  updateParticles(elapsed);
-  updateCategoryLabels(elapsed);
+  updateParticles(
+    elapsed
+  );
+
+  updateCategoryLabels(
+    elapsed
+  );
 
   renderer.render(
     scene,
@@ -1561,7 +1583,7 @@ function animate(timestamp) {
 }
 
 /* =========================================================
-   리사이즈
+   화면 크기 변경
 ========================================================= */
 
 function resize() {
@@ -1639,6 +1661,10 @@ if (reducedMotion) {
     SETTINGS.maximumJoinDuration;
 
   updateParticles(
+    finalElapsed
+  );
+
+  updateCategoryLabels(
     finalElapsed
   );
 

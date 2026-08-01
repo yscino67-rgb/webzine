@@ -317,11 +317,6 @@ body.intro-body {
    은하 카테고리
 ========================================================= */
 
-.morph-stage {
-  position: relative;
-  overflow: hidden;
-}
-
 .galaxy-categories {
   position: absolute;
   inset: 0;
@@ -348,7 +343,7 @@ body.intro-body {
   box-sizing: border-box;
 
   color: #000000;
-  background: #e2e2e2;
+  background-color: #e2e2e2;
 
   font-size: 11px;
   font-weight: 500;
@@ -357,21 +352,19 @@ body.intro-body {
 
   opacity: 0;
 
-  transform:
-    translate(
-      calc(-50% + var(--category-x, 0px)),
-      calc(-50% + var(--category-y, 0px))
-    )
-    scaleX(0);
+  clip-path: inset(
+    0 50% 0 50%
+  );
 
-  transform-origin: center;
-  will-change: transform;
+  will-change:
+    transform,
+    clip-path;
 
   pointer-events: none;
 
   transition:
     opacity 180ms linear,
-    transform 1600ms
+    clip-path 1600ms
       cubic-bezier(
         0.16,
         1,
@@ -380,22 +373,21 @@ body.intro-body {
       );
 }
 
-/* 회색 네모가 양옆으로 펼쳐짐 */
+/* 네모가 중앙에서 양옆으로 펼쳐짐 */
 .galaxy-category.is-box-visible {
   opacity: 1;
 
-  transform:
-    translate(
-      calc(-50% + var(--category-x, 0px)),
-      calc(-50% + var(--category-y, 0px))
-    )
-    scaleX(1);
+  clip-path: inset(
+    0 0 0 0
+  );
 }
 
 /* 글자는 처음에 숨김 */
 .galaxy-category span {
   opacity: 0;
-  transform: translateY(4px);
+
+  transform:
+    translateY(4px);
 
   transition:
     opacity 520ms ease,
@@ -408,10 +400,12 @@ body.intro-body {
       );
 }
 
-/* 네모가 펼쳐진 뒤 글자 표시 */
+/* 네모 다음에 글자가 나타남 */
 .galaxy-category.is-text-visible span {
   opacity: 1;
-  transform: translateY(0);
+
+  transform:
+    translateY(0);
 }
 
 .galaxy-category.is-text-visible {
@@ -420,7 +414,7 @@ body.intro-body {
 
 .galaxy-category:hover {
   color: #ffffff;
-  background: #000000;
+  background-color: #000000;
 }
 
 @media (max-width: 767px) {
@@ -433,7 +427,7 @@ body.intro-body {
 
     transition:
       opacity 180ms linear,
-      transform 1400ms
+      clip-path 1400ms
         cubic-bezier(
           0.16,
           1,
