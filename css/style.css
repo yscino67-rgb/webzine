@@ -141,7 +141,7 @@ select {
 .site-logo img {
   display: block;
 
-  width: 100px;
+  width: 60px;
   height: auto;
 }
 
@@ -398,7 +398,7 @@ select {
   }
 
   .site-logo img {
-    width: 72px;
+    width: 48px;
   }
 
   .site-logo span {
