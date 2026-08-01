@@ -31,7 +31,7 @@ const SETTINGS = {
 
   animationSpeed: 1.2,
 
-  categoryRevealTime: 16,
+  categoryRevealTime: 3,
   categoryRevealInterval: 0.42,
 
   outerBeginTime: 1.2,
