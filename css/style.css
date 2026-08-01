@@ -5,8 +5,12 @@
 :root {
   --page-padding: clamp(30px, 2.2vw, 52px);
   --content-width: 100%;
+
   --background-color: #ffffff;
   --text-color: #111111;
+
+  --logo-width: 40px;
+  --menu-icon-width: 39px;
 }
 
 /* =========================================================
@@ -66,6 +70,7 @@ body {
   width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
+
   margin: 0;
 
   background-color: var(--background-color);
@@ -99,7 +104,7 @@ select {
 }
 
 /* =========================================================
-   공통 상단 헤더
+   고정 헤더
 ========================================================= */
 
 .site-header {
@@ -109,7 +114,7 @@ select {
   z-index: 1000;
 
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 
   width: 100%;
@@ -133,7 +138,9 @@ select {
   z-index: 1002;
 
   display: block;
-  flex: 0 0 auto;
+  flex: 0 0 var(--logo-width);
+
+  width: var(--logo-width);
 
   line-height: 0;
 }
@@ -141,11 +148,12 @@ select {
 .site-logo img {
   display: block;
 
-  width: 46px;
+  width: 100%;
   height: auto;
+  max-width: 100%;
 }
 
-/* SVG 대신 텍스트를 사용하는 페이지 대응 */
+/* 텍스트 로고를 쓰는 페이지 대응 */
 .site-logo span {
   display: block;
 
@@ -157,7 +165,7 @@ select {
 }
 
 /* =========================================================
-   메뉴 버튼
+   햄버거 메뉴 버튼
 ========================================================= */
 
 .menu-button {
@@ -183,8 +191,8 @@ select {
 .menu-button img {
   display: block;
 
-  width: 39px;
-  height: 12px;
+  width: var(--menu-icon-width);
+  height: auto;
 }
 
 /* =========================================================
@@ -228,7 +236,6 @@ select {
   font-size: 28px;
   font-weight: 500;
   line-height: 1;
-  text-decoration: none;
 
   transition:
     opacity 180ms ease;
@@ -239,7 +246,7 @@ select {
 }
 
 /* =========================================================
-   일반 페이지 상단 카테고리 메뉴
+   일반 페이지 카테고리 내비게이션
 ========================================================= */
 
 .category-navigation {
@@ -251,6 +258,7 @@ select {
 
   width: 100%;
   max-width: var(--content-width);
+
   margin: 0 auto;
 }
 
@@ -269,17 +277,13 @@ select {
   -webkit-tap-highlight-color: transparent;
 }
 
-.category-link:first-child,
-.category-link:last-child {
-  text-align: left;
-}
-
 /* =========================================================
    메인 콘텐츠
 ========================================================= */
 
 .site-main {
   width: 100%;
+
   min-height: calc(100vh - 68px);
   min-height: calc(100dvh - 68px);
 
@@ -287,7 +291,7 @@ select {
 }
 
 /* =========================================================
-   모바일
+   태블릿 및 작은 화면
 ========================================================= */
 
 @media (max-width: 899px) {
@@ -297,6 +301,7 @@ select {
 
   .category-navigation {
     justify-content: flex-start;
+
     gap: 20px;
 
     width: 100%;
@@ -337,6 +342,7 @@ select {
   .article-layout {
     display: flex;
     flex-direction: column;
+
     gap: 42px;
   }
 
@@ -365,6 +371,7 @@ select {
 
   .article-image {
     width: 100%;
+
     aspect-ratio: 5 / 3;
   }
 
@@ -392,39 +399,31 @@ select {
   }
 }
 
-.site-header .site-logo img {
-  display: block;
-  width: 55px;
-  height: auto;
-}
-
-.site-logo img {
-  display: block;
-  width: 40px !important;
-  height: auto !important;
-}
+/* =========================================================
+   모바일
+========================================================= */
 
 @media (max-width: 767px) {
-  .site-header {
-    padding: 20px;
+  :root {
+    --logo-width: 34px;
+    --menu-icon-width: 34px;
   }
 
-  .site-logo img {
-    width: 48px;
+  .site-header {
+    padding: 20px;
   }
 
   .site-logo span {
     font-size: 14px;
   }
 
-  .menu-button img {
-    width: 34px;
-    height: auto;
-  }
-
   .site-menu {
     width: 100%;
-    padding: 90px 20px 30px;
+
+    padding:
+      90px
+      20px
+      30px;
   }
 
   .site-menu a {
