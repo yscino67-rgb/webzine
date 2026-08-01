@@ -294,9 +294,10 @@ select {
    태블릿 및 작은 화면
 ========================================================= */
 
-@media (max-width: 899px) {
+@media (max-width: 767px) {
   :root {
-    --page-padding: 22px;
+    --logo-width: 30px;
+    --menu-icon-width: 34px;
   }
 
   .category-navigation {
@@ -405,8 +406,8 @@ select {
 
 @media (max-width: 767px) {
   :root {
-    --logo-width: 22px;
-    --menu-icon-width: 34px;
+    --logo-width: 36px;
+    --menu-icon-width: 39px;
   }
 
   .site-header {
