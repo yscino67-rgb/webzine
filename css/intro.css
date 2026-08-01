@@ -319,6 +319,8 @@ body.intro-body {
 
 .morph-stage {
   position: relative;
+  width: 100%;
+  height: 100vh;
   overflow: hidden;
 }
 
@@ -331,13 +333,13 @@ body.intro-body {
 .galaxy-categories {
   position: absolute;
   inset: 0;
-  z-index: 20;
-
+  z-index: 100;
   pointer-events: none;
 }
 
 .galaxy-category {
   position: absolute;
+  z-index: 101;
 
   display: flex;
   align-items: center;
@@ -345,55 +347,49 @@ body.intro-body {
 
   min-width: 76px;
   height: 28px;
-  padding: 0 13px;
+  padding: 0 12px;
 
-  box-sizing: border-box;
-
-  color: #000000;
-  background-color: #e6e6e6;
+  color: #000;
+  background: #e6e6e6;
 
   font-size: 11px;
-  font-weight: 500;
-  line-height: 1;
   text-decoration: none;
 
   opacity: 0;
+  transform:
+    translate(-50%, -50%)
+    scaleX(0);
 
-  clip-path: inset(0 50% 0 50%);
-
-  transform: translate(-50%, -50%);
+  transform-origin: center;
+  pointer-events: none;
 
   transition:
-    clip-path 850ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 120ms linear;
-
-  pointer-events: none;
+    transform 800ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 100ms linear;
 }
 
 .galaxy-category span {
   opacity: 0;
-  transform: translateY(3px);
-
-  transition:
-    opacity 300ms ease,
-    transform 380ms ease;
+  transition: opacity 300ms ease 450ms;
 }
 
 .galaxy-category.is-visible {
   opacity: 1;
-  clip-path: inset(0 0 0 0);
+
+  transform:
+    translate(-50%, -50%)
+    scaleX(1);
+
   pointer-events: auto;
 }
 
 .galaxy-category.is-visible span {
   opacity: 1;
-  transform: translateY(0);
-  transition-delay: 420ms;
 }
 
 .category-essay {
-  left: 31%;
-  top: 34%;
+  left: 32%;
+  top: 33%;
 }
 
 .category-article {
@@ -407,46 +403,11 @@ body.intro-body {
 }
 
 .category-interview {
-  left: 57%;
+  left: 58%;
   top: 70%;
 }
 
 .category-about {
-  left: 79%;
+  left: 80%;
   top: 75%;
-}
-
-@media (max-width: 767px) {
-  .galaxy-category {
-    min-width: 58px;
-    height: 23px;
-    padding: 0 9px;
-
-    font-size: 9px;
-  }
-
-  .category-essay {
-    left: 31%;
-    top: 38%;
-  }
-
-  .category-article {
-    left: 71%;
-    top: 35%;
-  }
-
-  .category-criticism {
-    left: 16%;
-    top: 61%;
-  }
-
-  .category-interview {
-    left: 58%;
-    top: 67%;
-  }
-
-  .category-about {
-    left: 82%;
-    top: 72%;
-  }
 }

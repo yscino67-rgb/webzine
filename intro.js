@@ -31,8 +31,8 @@ const SETTINGS = {
 
   animationSpeed: 1.2,
 
-  categoryRevealTime: 3,
-  categoryRevealInterval: 0.42,
+  categoryRevealTime: 0,
+  categoryRevealInterval: 0.2,
 
   outerBeginTime: 1.2,
   outerEndTime: 5.9,
@@ -1418,6 +1418,7 @@ function animate(timestamp) {
   );
 
   updateParticles(elapsed);
+  updateCategoryLabels(elapsed);
 
   renderer.render(
     scene,
