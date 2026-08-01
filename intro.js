@@ -1268,9 +1268,68 @@ window.addEventListener(
    애니메이션
 ========================================================= */
 
+const TARGET_FPS =
+  window.innerWidth < 768
+    ? 24
+    : 30;
+
+const FRAME_INTERVAL =
+  1000 / TARGET_FPS;
+
+let previousFrameTime = 0;
+
 function animate(timestamp) {
+
+  animationFrameId =
+
+    requestAnimationFrame(
+
+      animate
+
+    );
+
+  if (previousFrameTime === 0) {
+
+    previousFrameTime =
+
+      timestamp;
+
+  }
+
+  const frameDelta =
+
+    timestamp -
+
+    previousFrameTime;
+
+  if (
+
+    frameDelta <
+
+    FRAME_INTERVAL
+
+  ) {
+
+    return;
+
+  }
+
+  previousFrameTime =
+
+    timestamp -
+
+    (
+
+      frameDelta %
+
+      FRAME_INTERVAL
+
+    );
+
   if (startTime === null) {
+
     startTime = timestamp;
+
   }
 
   const elapsed =
