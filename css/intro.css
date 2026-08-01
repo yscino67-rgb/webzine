@@ -317,6 +317,11 @@ body.intro-body {
    은하 카테고리
 ========================================================= */
 
+.morph-stage {
+  position: relative;
+  overflow: hidden;
+}
+
 .galaxy-categories {
   position: absolute;
   inset: 0;
@@ -387,11 +392,6 @@ body.intro-body {
     scaleX(1);
 }
 
-.galaxy-category.is-text-visible span {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 /* 글자는 처음에 숨김 */
 .galaxy-category span {
   opacity: 0;
@@ -408,7 +408,7 @@ body.intro-body {
       );
 }
 
-/* 네모가 펼쳐진 다음 글자 표시 */
+/* 네모가 펼쳐진 뒤 글자 표시 */
 .galaxy-category.is-text-visible span {
   opacity: 1;
   transform: translateY(0);
