@@ -349,12 +349,11 @@ body.intro-body {
   font-weight: 500;
   line-height: 1;
   text-decoration: none;
+  white-space: nowrap;
 
   opacity: 0;
 
-  clip-path: inset(
-    0 50% 0 50%
-  );
+  clip-path: inset(0 50% 0 50%);
 
   will-change:
     transform,
@@ -364,7 +363,7 @@ body.intro-body {
 
   transition:
     opacity 180ms linear,
-    clip-path 1600ms
+    clip-path 3400ms
       cubic-bezier(
         0.16,
         1,
@@ -373,43 +372,22 @@ body.intro-body {
       );
 }
 
-/* 네모가 중앙에서 양옆으로 펼쳐짐 */
+/*
+  네모와 텍스트가 같이
+  중앙에서 양옆으로 펼쳐짐
+*/
 .galaxy-category.is-box-visible {
   opacity: 1;
-
-  clip-path: inset(
-    0 0 0 0
-  );
-}
-
-/* 글자는 처음에 숨김 */
-.galaxy-category span {
-  opacity: 0;
-
-  transform:
-    translateY(4px);
-
-  transition:
-    opacity 520ms ease,
-    transform 650ms
-      cubic-bezier(
-        0.22,
-        1,
-        0.36,
-        1
-      );
-}
-
-/* 네모 다음에 글자가 나타남 */
-.galaxy-category.is-text-visible span {
-  opacity: 1;
-
-  transform:
-    translateY(0);
-}
-
-.galaxy-category.is-text-visible {
+  clip-path: inset(0 0 0 0);
   pointer-events: auto;
+}
+
+/*
+  텍스트는 별도 애니메이션 없음
+*/
+.galaxy-category span {
+  opacity: 1;
+  transform: none;
 }
 
 .galaxy-category:hover {
@@ -427,7 +405,7 @@ body.intro-body {
 
     transition:
       opacity 180ms linear,
-      clip-path 1400ms
+      clip-path 2200ms
         cubic-bezier(
           0.16,
           1,

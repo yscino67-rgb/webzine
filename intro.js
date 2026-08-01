@@ -1394,22 +1394,13 @@ function updateCategoryLabels(
         SETTINGS.categoryTextDelay;
 
       if (
-        elapsed >=
-        boxRevealTime
-      ) {
-        label.classList.add(
-          "is-box-visible"
-        );
-      }
-
-      if (
-        elapsed >=
-        textRevealTime
-      ) {
-        label.classList.add(
-          "is-text-visible"
-        );
-      }
+  elapsed >=
+  boxRevealTime
+) {
+  label.classList.add(
+    "is-box-visible"
+  );
+}
     }
   );
 }
@@ -1418,8 +1409,7 @@ function showAllCategoryLabels() {
   categoryLabels.forEach(
     (label) => {
       label.classList.add(
-        "is-box-visible",
-        "is-text-visible"
+        "is-box-visible"
       );
     }
   );
@@ -1429,8 +1419,7 @@ function resetCategoryLabels() {
   categoryLabels.forEach(
     (label) => {
       label.classList.remove(
-        "is-box-visible",
-        "is-text-visible"
+        "is-box-visible"
       );
 
       label.style.removeProperty(
