@@ -72,16 +72,16 @@ const SETTINGS = {
   galaxyRotationSpeed: 0.12,
 
   /* 첫 번째 회색 네모 등장 시간 */
-  categoryRevealTime: 24.5,
+  categoryRevealTime: 15.5,
 
   /* 네모가 펼쳐진 뒤 글자가 나오는 시간 */
-  categoryTextDelay: 1.4,
+  categoryTextDelay: 0.8,
 
   /*
     첫 번째 네모 → 첫 번째 글자 →
     두 번째 네모 순서 간격
   */
-  categoryRevealInterval: 3.4,
+  categoryRevealInterval: 2.2,
 
   /* 카테고리 회전 속도 */
   categoryRotationSpeed: 0.12,
