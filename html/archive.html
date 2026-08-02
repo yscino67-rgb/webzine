@@ -8,29 +8,67 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
 
-    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="theme-color"
+      content="#ffffff"
+    />
 
     <title>Magazine Archive</title>
 
-    <link rel="stylesheet" href="../css/style.css" />
-    <link rel="stylesheet" href="../css/index.css" />
+    <link
+      rel="stylesheet"
+      href="../css/style.css?v=11"
+    />
+
+    <link
+      rel="stylesheet"
+      href="../css/index.css?v=11"
+    />
   </head>
 
   <body>
     <header class="site-header archive-header">
-      <nav class="archive-filter" aria-label="카테고리 메뉴">
-        <a href="./archive.html?category=all">ALL</a>
-        <a href="./archive.html?category=criticism">CRITICISM</a>
-        <a href="./archive.html?category=essay">ESSAY</a>
-        <a href="./archive.html?category=article">ARTICLE</a>
-        <a href="./archive.html?category=about">ABOUT</a>
-
-        <span
-          class="archive-filter-arrow"
-          aria-hidden="true"
+      <nav
+        class="archive-filter"
+        aria-label="카테고리 메뉴"
+      >
+        <a
+          class="archive-filter-all"
+          href="./archive.html?category=all"
         >
-          &gt;
-        </span>
+          ALL
+        </a>
+
+        <button
+          class="archive-filter-toggle"
+          type="button"
+          aria-label="카테고리 메뉴 열기"
+          aria-expanded="false"
+          aria-controls="archive-filter-items"
+        >
+          <span aria-hidden="true"></span>
+        </button>
+
+        <div
+          class="archive-filter-items"
+          id="archive-filter-items"
+        >
+          <a href="./archive.html?category=criticism">
+            CRITICISM
+          </a>
+
+          <a href="./archive.html?category=essay">
+            ESSAY
+          </a>
+
+          <a href="./archive.html?category=article">
+            ARTICLE
+          </a>
+
+          <a href="./archive.html?category=about">
+            ABOUT
+          </a>
+        </div>
       </nav>
     </header>
 
@@ -39,7 +77,6 @@
         class="article-index"
         aria-label="기사 목록"
       >
-        <!-- 왼쪽 1단: 001~007 -->
         <div class="index-column">
           <!-- 001 -->
           <a
@@ -148,7 +185,6 @@
           </a>
         </div>
 
-        <!-- 오른쪽 2단: 008~014 -->
         <div class="index-column">
           <!-- 008 -->
           <a
@@ -231,7 +267,7 @@
     </main>
 
     <script
-      src="../script.js"
+      src="../script.js?v=11"
       defer
     ></script>
   </body>

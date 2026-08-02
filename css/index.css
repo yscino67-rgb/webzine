@@ -35,6 +35,10 @@
   padding: 0;
 }
 
+/*
+  HTML에 index-column이 여러 개 있어도
+  하나의 연속된 목록처럼 표시
+*/
 .index-column {
   display: contents;
 }
@@ -71,7 +75,6 @@
   box-shadow: none;
 
   text-decoration: none;
-
   overflow: hidden;
 
   transition:
@@ -182,6 +185,7 @@
 @media (hover: hover) {
   .index-item:not(.index-item--placeholder):hover {
     background-color: rgba(0, 0, 0, 0.58);
+
     transform: translateY(-2px);
   }
 }
@@ -207,10 +211,23 @@
   display: flex;
   align-items: center;
 
-  gap: 16px;
+  gap: 12px;
 
   width: max-content;
   max-width: 100%;
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   ALL
+========================================================= */
+
+.archive-filter-all {
+  display: inline-block;
+  flex: 0 0 auto;
+
+  color: #111111;
 
   font-family:
     "Special Gothic Condensed One",
@@ -220,28 +237,166 @@
   font-size: 40px;
   font-weight: 400;
   line-height: 1;
+  letter-spacing: -0.03em;
 
-  white-space: nowrap;
+  text-decoration: none;
+
+  transition: opacity 180ms ease;
 }
 
-.archive-filter a {
+/* =========================================================
+   검정 네모 버튼
+========================================================= */
+
+.archive-filter-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  width: 20px;
+  height: 20px;
+
+  padding: 0;
+
+  background: transparent;
+  border: 0;
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+.archive-filter-toggle span {
+  display: block;
+
+  width: 13px;
+  height: 13px;
+
+  background-color: #111111;
+
+  transform: scale(1);
+  transform-origin: center;
+
+  transition:
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 180ms ease;
+}
+
+/* 열렸을 때 네모를 조금 작게 */
+.archive-filter.is-open .archive-filter-toggle span {
+  transform: scale(0.72);
+}
+
+/* =========================================================
+   펼쳐지는 메뉴 영역
+========================================================= */
+
+.archive-filter-items {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  max-width: 0;
+
+  opacity: 0;
+  visibility: hidden;
+
+  overflow: hidden;
+
+  transform: translateX(-18px);
+  transform-origin: left center;
+
+  transition:
+    max-width 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 180ms ease,
+    transform 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 620ms;
+}
+
+/* 펼쳐진 상태 */
+.archive-filter.is-open .archive-filter-items {
+  max-width: 700px;
+
+  opacity: 1;
+  visibility: visible;
+
+  transform: translateX(0);
+
+  transition:
+    max-width 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 220ms ease 60ms,
+    transform 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s;
+}
+
+/* =========================================================
+   펼쳐지는 개별 메뉴
+========================================================= */
+
+.archive-filter-items a {
   display: inline-block;
   flex: 0 0 auto;
 
   color: #111111;
 
+  font-family:
+    "Special Gothic Condensed One",
+    "Pretendard",
+    sans-serif;
+
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1;
   letter-spacing: -0.03em;
 
   text-decoration: none;
 
+  opacity: 0;
+
+  transform: translateX(-14px);
+
   transition:
-    opacity 180ms ease,
-    letter-spacing 180ms ease;
+    opacity 200ms ease,
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.archive-filter a:hover {
+/* 순서대로 오른쪽으로 펼쳐짐 */
+.archive-filter.is-open .archive-filter-items a {
+  opacity: 1;
+
+  transform: translateX(0);
+}
+
+.archive-filter.is-open .archive-filter-items a:nth-child(1) {
+  transition-delay: 80ms;
+}
+
+.archive-filter.is-open .archive-filter-items a:nth-child(2) {
+  transition-delay: 130ms;
+}
+
+.archive-filter.is-open .archive-filter-items a:nth-child(3) {
+  transition-delay: 180ms;
+}
+
+.archive-filter.is-open .archive-filter-items a:nth-child(4) {
+  transition-delay: 230ms;
+}
+
+.archive-filter.is-open .archive-filter-items a:nth-child(5) {
+  transition-delay: 280ms;
+}
+
+/* =========================================================
+   상단 메뉴 인터랙션
+========================================================= */
+
+.archive-filter a:hover,
+.archive-filter-toggle:hover {
   opacity: 0.45;
-  letter-spacing: -0.05em;
 }
 
 /* =========================================================
@@ -292,9 +447,9 @@
   }
 
   .archive-filter {
-    gap: 11px;
+    gap: 9px;
 
-    font-size: 21px;
+    max-width: 100%;
 
     overflow-x: auto;
     overflow-y: hidden;
@@ -307,8 +462,30 @@
     display: none;
   }
 
-  .archive-filter a {
-    letter-spacing: -0.025em;
+  .archive-filter-all {
+    font-size: 28px;
+  }
+
+  .archive-filter-toggle {
+    width: 16px;
+    height: 16px;
+  }
+
+  .archive-filter-toggle span {
+    width: 10px;
+    height: 10px;
+  }
+
+  .archive-filter-items {
+    gap: 11px;
+  }
+
+  .archive-filter-items a {
+    font-size: 20px;
+  }
+
+  .archive-filter.is-open .archive-filter-items {
+    max-width: 520px;
   }
 
   .article-index {
@@ -347,5 +524,17 @@
 
   .index-subcategory {
     font-size: 12px;
+  }
+}
+
+/* =========================================================
+   움직임 최소화 설정 사용자
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .archive-filter-items,
+  .archive-filter-items a,
+  .archive-filter-toggle span {
+    transition: none;
   }
 }
