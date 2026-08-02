@@ -1,12 +1,22 @@
-/* =========================
+/* =========================================================
    기본 설정
-========================= */
+========================================================= */
 
 :root {
   --intro-background: #ffffff;
+
+  /* 카테고리 바 */
+  --galaxy-category-background: #e2e2e2;
+  --galaxy-category-text: #000000;
+
+  /* 카테고리 바 애니메이션 */
+  --galaxy-category-duration: 3000ms;
+  --galaxy-category-easing: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -14,6 +24,7 @@ html,
 body {
   width: 100%;
   min-height: 100%;
+
   margin: 0;
 
   background-color: var(--intro-background);
@@ -36,9 +47,9 @@ body.intro-body {
   }
 }
 
-/* =========================
+/* =========================================================
    전체 화면 애니메이션 영역
-========================= */
+========================================================= */
 
 .intro-page {
   position: fixed;
@@ -85,9 +96,9 @@ body.intro-body {
   isolation: isolate;
 }
 
-/* =========================
+/* =========================================================
    Three.js 캔버스
-========================= */
+========================================================= */
 
 .intro-webgl-canvas {
   position: absolute;
@@ -100,18 +111,17 @@ body.intro-body {
   height: 100%;
 
   border: 0;
+  outline: none;
 
   background-color: transparent;
-
-  outline: none;
 
   pointer-events: none;
   touch-action: none;
 }
 
-/* =========================
-   이전 요소 제거
-========================= */
+/* =========================================================
+   사용하지 않는 이전 요소 제거
+========================================================= */
 
 .intro-header,
 .intro-logo,
@@ -146,24 +156,30 @@ body.intro-body {
 }
 
 /* =========================================================
-   은하수 카테고리
+   은하수 카테고리 전체 영역
 ========================================================= */
-
-.morph-stage {
-  position: relative;
-  overflow: hidden;
-}
 
 .galaxy-categories {
   position: absolute;
+
   inset: 0;
-  z-index: 10;
+  z-index: 20;
+
+  overflow: hidden;
 
   pointer-events: none;
 }
 
+/* =========================================================
+   개별 카테고리 바
+========================================================= */
+
 .galaxy-category {
   position: absolute;
+
+  left: 50%;
+  top: 50%;
+  z-index: 21;
 
   display: flex;
   align-items: center;
@@ -171,76 +187,121 @@ body.intro-body {
 
   min-width: 76px;
   height: 28px;
-  padding: 0 13px;
 
-  box-sizing: border-box;
+  padding:
+    0
+    13px;
 
-  color: #000000;
-  background: #e6e6e6;
+  color: var(--galaxy-category-text);
+  background-color: var(--galaxy-category-background);
+
+  /*
+    인덱스·아카이브 상단 메뉴와 같은 영어 서체
+  */
+  font-family:
+    "CossetteTitre",
+    "Special Gothic Condensed One",
+    "Pretendard",
+    sans-serif;
 
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1;
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
+
   text-decoration: none;
+  white-space: nowrap;
 
   opacity: 0;
 
   /*
-    가운데에서 양옆으로 펼쳐지는 효과
+    중앙에서 양옆으로 펼쳐지는 형태
   */
-  clip-path: inset(
-    0 50% 0 50%
-  );
+  clip-path: inset(0 50% 0 50%);
 
-  transform:
-    translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 
-  transition:
-    clip-path 780ms
-      cubic-bezier(
-        0.22,
-        1,
-        0.36,
-        1
-      ),
-    opacity 100ms linear;
+  transform-origin: center;
+
+  will-change:
+    transform,
+    clip-path,
+    opacity;
 
   pointer-events: none;
-}
-
-.galaxy-category span {
-  opacity: 0;
-  transform: translateY(4px);
 
   transition:
-    opacity 280ms ease,
-    transform 380ms ease;
+    opacity 180ms linear,
+    clip-path
+      var(--galaxy-category-duration)
+      var(--galaxy-category-easing),
+    color 180ms ease,
+    background-color 180ms ease;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
+/* 텍스트는 바와 함께 표시 */
+.galaxy-category span {
+  display: block;
+
+  font: inherit;
+  line-height: inherit;
+
+  opacity: 1;
+  transform: none;
+}
+
+/* =========================================================
+   카테고리 표시 상태
+========================================================= */
+
 /*
-  표시 상태
+  현재 intro.js가 is-box-visible을 사용하는 경우
 */
-.galaxy-category.is-visible {
+.galaxy-category.is-box-visible {
   opacity: 1;
 
-  clip-path: inset(
-    0 0 0 0
-  );
+  clip-path: inset(0 0 0 0);
 
   pointer-events: auto;
 }
 
-.galaxy-category.is-visible span {
+/*
+  이전 코드에서 is-visible을 사용하는 경우도 호환
+*/
+.galaxy-category.is-visible {
   opacity: 1;
-  transform: translateY(0);
 
-  transition-delay: 420ms;
+  clip-path: inset(0 0 0 0);
+
+  pointer-events: auto;
 }
 
-/*
-  카테고리별 위치
-*/
+/* =========================================================
+   마우스 오버
+========================================================= */
+
+@media (hover: hover) {
+  .galaxy-category:hover {
+    color: #ffffff;
+    background-color: #000000;
+  }
+}
+
+.galaxy-category:focus-visible {
+  color: #ffffff;
+  background-color: #000000;
+
+  outline: 1px solid #000000;
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   카테고리별 기본 위치
+   JS가 위치를 직접 지정하면 JS 값이 우선됩니다.
+========================================================= */
+
 .category-essay {
   left: 31%;
   top: 34%;
@@ -266,23 +327,22 @@ body.intro-body {
   top: 75%;
 }
 
-/*
-  마우스 오버
-*/
-.galaxy-category:hover {
-  background: #000000;
-  color: #ffffff;
-}
-
 /* =========================================================
    모바일
 ========================================================= */
 
 @media (max-width: 767px) {
+  :root {
+    --galaxy-category-duration: 2200ms;
+  }
+
   .galaxy-category {
     min-width: 58px;
     height: 23px;
-    padding: 0 9px;
+
+    padding:
+      0
+      9px;
 
     font-size: 9px;
   }
@@ -314,103 +374,14 @@ body.intro-body {
 }
 
 /* =========================================================
-   은하 카테고리
+   움직임 최소화 설정 사용자
 ========================================================= */
 
-.galaxy-categories {
-  position: absolute;
-  inset: 0;
-  z-index: 20;
-
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.galaxy-category {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 21;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  min-width: 76px;
-  height: 28px;
-  padding: 0 13px;
-
-  box-sizing: border-box;
-
-  color: #000000;
-  background-color: #e2e2e2;
-
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1;
-  text-decoration: none;
-  white-space: nowrap;
-
-  opacity: 0;
-
-  clip-path: inset(0 50% 0 50%);
-
-  will-change:
-    transform,
-    clip-path;
-
-  pointer-events: none;
-
-  transition:
-    opacity 180ms linear,
-    clip-path 3000ms
-      cubic-bezier(
-        0.16,
-        1,
-        0.3,
-        1
-      );
-}
-
-/*
-  네모와 텍스트가 같이
-  중앙에서 양옆으로 펼쳐짐
-*/
-.galaxy-category.is-box-visible {
-  opacity: 1;
-  clip-path: inset(0 0 0 0);
-  pointer-events: auto;
-}
-
-/*
-  텍스트는 별도 애니메이션 없음
-*/
-.galaxy-category span {
-  opacity: 1;
-  transform: none;
-}
-
-.galaxy-category:hover {
-  color: #ffffff;
-  background-color: #000000;
-}
-
-@media (max-width: 767px) {
+@media (prefers-reduced-motion: reduce) {
   .galaxy-category {
-    min-width: 58px;
-    height: 23px;
-    padding: 0 9px;
-
-    font-size: 9px;
-
     transition:
       opacity 180ms linear,
-      clip-path 2200ms
-        cubic-bezier(
-          0.16,
-          1,
-          0.3,
-          1
-        );
+      color 180ms ease,
+      background-color 180ms ease;
   }
 }
