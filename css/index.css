@@ -35,10 +35,6 @@
   padding: 0;
 }
 
-/*
-  HTML에 index-column이 두 개 있어도
-  화면에서는 하나의 연속된 목록처럼 표시
-*/
 .index-column {
   display: contents;
 }
@@ -248,58 +244,27 @@
 }
 
 /* =========================================================
-   세로로 길고 얇은 > 화살표
+   Pretendard > 문자
 ========================================================= */
 
 .archive-filter-arrow {
-  position: relative;
-
   display: inline-block;
   flex: 0 0 auto;
 
-  width: 20px;
-  height: 42px;
+  margin-left: -4px;
 
-  margin-left: -3px;
+  color: #111111;
 
-  font-size: 0;
-  line-height: 0;
-}
+  font-family:
+    "Pretendard",
+    sans-serif;
 
-/* 위쪽 대각선 */
-.archive-filter-arrow::before {
-  content: "";
+  font-size: 52px;
+  font-weight: 500;
+  line-height: 0.7;
 
-  position: absolute;
-  top: 7px;
-  left: 3px;
-
-  width: 20px;
-  height: 2px;
-
-  background-color: #111111;
-  border-radius: 999px;
-
-  transform: rotate(48deg);
-  transform-origin: left center;
-}
-
-/* 아래쪽 대각선 */
-.archive-filter-arrow::after {
-  content: "";
-
-  position: absolute;
-  bottom: 7px;
-  left: 3px;
-
-  width: 20px;
-  height: 2px;
-
-  background-color: #111111;
-  border-radius: 999px;
-
-  transform: rotate(-48deg);
-  transform-origin: left center;
+  transform: translateY(-1px);
+  transform-origin: center;
 }
 
 /* =========================================================
@@ -370,26 +335,12 @@
   }
 
   .archive-filter-arrow {
-    width: 14px;
-    height: 30px;
-
     margin-left: -2px;
-  }
 
-  .archive-filter-arrow::before {
-    top: 5px;
-    left: 2px;
+    font-size: 36px;
+    line-height: 0.7;
 
-    width: 14px;
-    height: 1.5px;
-  }
-
-  .archive-filter-arrow::after {
-    bottom: 5px;
-    left: 2px;
-
-    width: 14px;
-    height: 1.5px;
+    transform: translateY(-1px);
   }
 
   .article-index {
