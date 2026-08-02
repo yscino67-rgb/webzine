@@ -3,20 +3,14 @@
 ========================================================= */
 
 :root {
-  /* 열기·닫기 공통 애니메이션 시간 */
+  /* 열기와 닫기에서 완전히 동일하게 사용하는 시간 */
   --archive-animation-duration: 800ms;
 
-  /* 열기·닫기 공통 움직임 */
+  /* 열기와 닫기에서 완전히 동일하게 사용하는 움직임 */
   --archive-animation-easing: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* 열렸을 때 검정 네모 크기 */
+  /* 열렸을 때 검정 네모 크기: 1이면 크기 변화 없음 */
   --archive-square-open-scale: 1;
-
-  /* PC 메뉴 최대 너비 */
-  --archive-menu-open-width: 560px;
-
-  /* 모바일 메뉴 최대 너비 */
-  --archive-menu-open-width-mobile: 420px;
 }
 
 /* =========================================================
@@ -267,25 +261,24 @@
 
   gap: 16px;
 
-  width: auto;
-  max-width: 0;
+  /*
+    닫힌 상태의 실제 너비.
+    JS가 열린 상태의 정확한 너비를 계산합니다.
+  */
+  width: 0;
+  min-width: 0;
 
   margin-left: 0;
 
   opacity: 0;
-  visibility: hidden;
 
   overflow: hidden;
 
-  transform: translateX(-12px);
-  transform-origin: left center;
-
   /*
-    열기와 닫기 모두 아래의 동일한 transition을 사용합니다.
-    열린 상태에서 transition을 다시 선언하지 않습니다.
+    열기와 닫기 모두 이 한 transition만 사용합니다.
   */
   transition:
-    max-width
+    width
       var(--archive-animation-duration)
       var(--archive-animation-easing),
     margin-left
@@ -293,46 +286,16 @@
       var(--archive-animation-easing),
     opacity
       var(--archive-animation-duration)
-      var(--archive-animation-easing),
-    transform
-      var(--archive-animation-duration)
-      var(--archive-animation-easing),
-    visibility
-      0s
-      linear
-      var(--archive-animation-duration);
+      var(--archive-animation-easing);
 }
 
-/* 펼쳐진 상태 */
+/* 열린 상태 */
 .archive-filter.is-open .archive-filter-items {
-  max-width: var(--archive-menu-open-width);
+  width: var(--archive-menu-width, 0px);
 
   margin-left: 12px;
 
   opacity: 1;
-  visibility: visible;
-
-  transform: translateX(0);
-
-  /*
-    열리는 즉시 visibility만 활성화합니다.
-    나머지 애니메이션은 기본 상태와 동일합니다.
-  */
-  transition:
-    max-width
-      var(--archive-animation-duration)
-      var(--archive-animation-easing),
-    margin-left
-      var(--archive-animation-duration)
-      var(--archive-animation-easing),
-    opacity
-      var(--archive-animation-duration)
-      var(--archive-animation-easing),
-    transform
-      var(--archive-animation-duration)
-      var(--archive-animation-easing),
-    visibility
-      0s;
 }
 
 /* =========================================================
@@ -356,31 +319,11 @@
   letter-spacing: -0.03em;
 
   text-decoration: none;
-
-  opacity: 0;
-
-  transform: translateX(-10px);
-
-  /*
-    열기와 닫기 모두 같은 시간과 easing 사용
-  */
-  transition:
-    opacity
-      var(--archive-animation-duration)
-      var(--archive-animation-easing),
-    transform
-      var(--archive-animation-duration)
-      var(--archive-animation-easing);
-}
-
-.archive-filter.is-open .archive-filter-items a {
-  opacity: 1;
-  transform: translateX(0);
 }
 
 /*
-  순차 지연은 제거했습니다.
-  모든 메뉴가 열고 닫힐 때 같은 타이밍으로 움직입니다.
+  개별 글자에는 별도 opacity, 이동, 지연을 주지 않습니다.
+  전체 메뉴 영역과 네모가 하나의 끈처럼 같은 속도로 왕복합니다.
 */
 
 /* =========================================================
@@ -405,8 +348,7 @@
 
   cursor: pointer;
 
-  transition:
-    opacity 180ms ease;
+  transition: opacity 180ms ease;
 
   -webkit-tap-highlight-color: transparent;
 }
@@ -516,7 +458,6 @@
   }
 
   .archive-filter.is-open .archive-filter-items {
-    max-width: var(--archive-menu-open-width-mobile);
     margin-left: 9px;
   }
 
@@ -539,6 +480,7 @@
 
   .article-index {
     row-gap: 14px;
+
     margin-top: 42px;
   }
 
@@ -581,7 +523,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .archive-filter-items,
-  .archive-filter-items a,
   .archive-filter-toggle span {
     transition: none;
   }

@@ -67,28 +67,83 @@ const archiveFilter =
 const archiveFilterToggle =
   document.querySelector(".archive-filter-toggle");
 
+const archiveFilterItems =
+  document.querySelector(".archive-filter-items");
+
 if (
   archiveFilter &&
-  archiveFilterToggle
+  archiveFilterToggle &&
+  archiveFilterItems
 ) {
+  function updateArchiveMenuWidth() {
+    const wasOpen =
+      archiveFilter.classList.contains("is-open");
+
+    /*
+      현재 애니메이션을 건드리지 않고
+      내부 콘텐츠의 실제 너비를 측정합니다.
+    */
+    const previousWidth =
+      archiveFilterItems.style.width;
+
+    const previousTransition =
+      archiveFilterItems.style.transition;
+
+    archiveFilterItems.style.transition = "none";
+    archiveFilterItems.style.width = "max-content";
+
+    const menuWidth =
+      Math.ceil(archiveFilterItems.getBoundingClientRect().width);
+
+    archiveFilterItems.style.width = previousWidth;
+    archiveFilterItems.style.transition = previousTransition;
+
+    archiveFilter.style.setProperty(
+      "--archive-menu-width",
+      `${menuWidth}px`
+    );
+
+    if (!wasOpen) {
+      archiveFilter.classList.remove("is-open");
+    }
+  }
+
+  /*
+    폰트 로딩 후 측정해야 정확한 글자 너비가 계산됩니다.
+  */
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(updateArchiveMenuWidth);
+  } else {
+    updateArchiveMenuWidth();
+  }
+
   archiveFilterToggle.addEventListener(
     "click",
     () => {
-      const isOpen =
-        archiveFilter.classList.toggle("is-open");
+      updateArchiveMenuWidth();
 
-      archiveFilterToggle.setAttribute(
-        "aria-expanded",
-        String(isOpen)
-      );
+      requestAnimationFrame(() => {
+        const isOpen =
+          archiveFilter.classList.toggle("is-open");
 
-      archiveFilterToggle.setAttribute(
-        "aria-label",
-        isOpen
-          ? "카테고리 메뉴 닫기"
-          : "카테고리 메뉴 열기"
-      );
+        archiveFilterToggle.setAttribute(
+          "aria-expanded",
+          String(isOpen)
+        );
+
+        archiveFilterToggle.setAttribute(
+          "aria-label",
+          isOpen
+            ? "카테고리 메뉴 닫기"
+            : "카테고리 메뉴 열기"
+        );
+      });
     }
+  );
+
+  window.addEventListener(
+    "resize",
+    updateArchiveMenuWidth
   );
 
   document.addEventListener(
