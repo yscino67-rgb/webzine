@@ -569,3 +569,31 @@
     transition: none;
   }
 }
+
+/* =========================================================
+   아카이브 페이지 폰트
+========================================================= */
+
+/* 영어 상단 메뉴 */
+.archive-page .archive-filter-all,
+.archive-page .archive-filter-items a,
+.archive-page .index-date,
+.archive-page .index-subcategory {
+  font-family:
+    "CossetteTitre",
+    "Special Gothic Condensed One",
+    "Pretendard",
+    sans-serif;
+
+  font-weight: 400;
+}
+
+/* 한글 작성자와 제목 */
+.archive-page .index-author,
+.archive-page .index-title {
+  font-family:
+    "Pretendard",
+    sans-serif;
+
+  font-weight: 500;
+}
