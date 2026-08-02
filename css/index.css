@@ -82,6 +82,7 @@
     clamp(24px, 2.4vw, 40px);
 
   border: 0;
+  border-top: 0;
   border-bottom: 1px solid #111111;
 
   background-color: #ffffff;
@@ -99,8 +100,15 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* 목록 최상단 선 */
-.article-index .index-item:first-of-type {
+/*
+  전체 목록의 첫 번째 기사에만 위쪽 선 적용
+
+  두 번째 index-column의 첫 항목에는 위쪽 선이 생기지 않으므로
+  앞 항목의 아래쪽 선과 겹치지 않습니다.
+*/
+.article-index
+  > .index-column:first-child
+  > .index-item:first-child {
   border-top: 1px solid #111111;
 }
 
@@ -166,7 +174,6 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
-
   letter-spacing: 0;
 
   white-space: nowrap;
@@ -190,7 +197,6 @@
   font-size: 17px;
   font-weight: 400;
   line-height: 1;
-
   letter-spacing: 0;
 
   text-align: right;
@@ -443,8 +449,10 @@
 
     column-gap: 16px;
 
+    min-height: 82px;
+
     padding:
-      22px
+      14px
       24px;
   }
 
@@ -555,16 +563,23 @@
     column-gap: 12px;
     row-gap: 10px;
 
-    min-height: 155px;
+    min-height: 120px;
 
     padding:
-      16px
+      12px
       0
-      20px;
+      14px;
 
-    border-bottom-width: 1px;
+    border-top: 0;
+    border-bottom: 1px solid #111111;
 
     overflow: visible;
+  }
+
+  .article-index
+    > .index-column:first-child
+    > .index-item:first-child {
+    border-top: 1px solid #111111;
   }
 
   .index-author {
@@ -623,7 +638,7 @@
   }
 
   /*
-    모바일 빈 항목은 화면을 불필요하게 길게 만들지 않도록 숨김
+    모바일 빈 항목은 숨김
   */
   .index-item--placeholder {
     display: none;
@@ -667,10 +682,10 @@
   font-weight: 500;
 }
 
-/*
-  모바일에서는 기사 정보의 가독성을 위해
-  날짜와 세부 카테고리에 Pretendard를 적용
-*/
+/* =========================================================
+   모바일 기사 폰트
+========================================================= */
+
 @media (max-width: 767px) {
   .archive-page .index-date,
   .archive-page .index-subcategory {
