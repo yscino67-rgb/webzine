@@ -1,4 +1,22 @@
 /* =========================================================
+   아카이브 조절 변수
+========================================================= */
+
+:root {
+  /* 메뉴가 펼쳐지고 접히는 속도 */
+  --archive-animation-duration: 600ms;
+
+  /* 열렸을 때 검정 네모 크기 */
+  --archive-square-open-scale: 1;
+
+  /* PC에서 펼쳐질 수 있는 최대 너비 */
+  --archive-menu-open-width: 560px;
+
+  /* 모바일에서 펼쳐질 수 있는 최대 너비 */
+  --archive-menu-open-width-mobile: 420px;
+}
+
+/* =========================================================
    메인 기사 인덱스
 ========================================================= */
 
@@ -242,7 +260,7 @@
 }
 
 /* =========================================================
-   펼쳐지는 메뉴 영역
+   펼쳐지는 메뉴 전체 영역
 ========================================================= */
 
 .archive-filter-items {
@@ -251,7 +269,9 @@
 
   gap: 16px;
 
+  width: auto;
   max-width: 0;
+
   margin-left: 0;
 
   opacity: 0;
@@ -259,33 +279,60 @@
 
   overflow: hidden;
 
-  transform: translateX(-12px);
+  transform:
+    translateX(-12px)
+    scaleX(0.96);
+
   transform-origin: left center;
 
   transition:
-    max-width 600ms cubic-bezier(0.22, 1, 0.36, 1),
-    margin-left 600ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 180ms ease,
-    transform 600ms cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0s linear 600ms;
+    max-width
+      var(--archive-animation-duration)
+      cubic-bezier(0.22, 1, 0.36, 1),
+    margin-left
+      var(--archive-animation-duration)
+      cubic-bezier(0.22, 1, 0.36, 1),
+    opacity
+      180ms
+      ease,
+    transform
+      var(--archive-animation-duration)
+      cubic-bezier(0.22, 1, 0.36, 1),
+    visibility
+      0s
+      linear
+      var(--archive-animation-duration);
 }
 
 /* 펼쳐진 상태 */
 .archive-filter.is-open .archive-filter-items {
-  max-width: 560px;
+  max-width: var(--archive-menu-open-width);
+
   margin-left: 12px;
 
   opacity: 1;
   visibility: visible;
 
-  transform: translateX(0);
+  transform:
+    translateX(0)
+    scaleX(1);
 
   transition:
-    max-width 600ms cubic-bezier(0.22, 1, 0.36, 1),
-    margin-left 600ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 220ms ease 40ms,
-    transform 600ms cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0s;
+    max-width
+      var(--archive-animation-duration)
+      cubic-bezier(0.22, 1, 0.36, 1),
+    margin-left
+      var(--archive-animation-duration)
+      cubic-bezier(0.22, 1, 0.36, 1),
+    opacity
+      220ms
+      ease
+      40ms,
+    transform
+      var(--archive-animation-duration)
+      cubic-bezier(0.22, 1, 0.36, 1),
+    visibility
+      0s;
 }
 
 /* =========================================================
@@ -319,12 +366,13 @@
     transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* 순서대로 오른쪽으로 펼쳐짐 */
+/* 열렸을 때 각 메뉴 표시 */
 .archive-filter.is-open .archive-filter-items a {
   opacity: 1;
   transform: translateX(0);
 }
 
+/* 오른쪽으로 주르륵 나타나는 시간 차이 */
 .archive-filter.is-open .archive-filter-items a:nth-child(1) {
   transition-delay: 60ms;
 }
@@ -345,9 +393,14 @@
   transition-delay: 220ms;
 }
 
+/* 닫힐 때는 지연 없이 바로 사라지게 설정 */
+.archive-filter:not(.is-open) .archive-filter-items a {
+  transition-delay: 0ms;
+}
+
 /* =========================================================
    검정 네모 버튼
-   메뉴 뒤에 배치되어 열릴 때 오른쪽으로 밀림
+   메뉴 뒤에 있으므로 펼쳐질 때 오른쪽으로 이동
 ========================================================= */
 
 .archive-filter-toggle {
@@ -368,8 +421,7 @@
 
   cursor: pointer;
 
-  transition:
-    opacity 180ms ease;
+  transition: opacity 180ms ease;
 
   -webkit-tap-highlight-color: transparent;
 }
@@ -381,6 +433,24 @@
   height: 13px;
 
   background-color: #111111;
+
+  transform: scale(1);
+  transform-origin: center;
+
+  transition:
+    transform
+      var(--archive-animation-duration)
+      cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/*
+  열린 상태에서 네모가 줄어드는 부분
+
+  크기 변화가 싫다면:
+  --archive-square-open-scale: 1;
+*/
+.archive-filter.is-open .archive-filter-toggle span {
+  transform: scale(var(--archive-square-open-scale));
 }
 
 /* =========================================================
@@ -390,6 +460,11 @@
 .archive-filter a:hover,
 .archive-filter-toggle:hover {
   opacity: 0.45;
+}
+
+.archive-filter-toggle:focus-visible {
+  outline: 1px solid #111111;
+  outline-offset: 4px;
 }
 
 /* =========================================================
@@ -462,7 +537,7 @@
   }
 
   .archive-filter.is-open .archive-filter-items {
-    max-width: 420px;
+    max-width: var(--archive-menu-open-width-mobile);
     margin-left: 9px;
   }
 
@@ -529,7 +604,7 @@
 @media (prefers-reduced-motion: reduce) {
   .archive-filter-items,
   .archive-filter-items a,
-  .archive-filter-toggle {
+  .archive-filter-toggle span {
     transition: none;
   }
 }
