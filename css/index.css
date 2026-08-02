@@ -8,7 +8,7 @@
   --archive-square-open-scale: 1;
 
   /* 작은 메뉴와 네모의 세로 위치 */
-  --archive-small-menu-offset-y: -13px;
+  --archive-small-menu-offset-y: 0px;
   --archive-square-offset-y: -12px;
 }
 
