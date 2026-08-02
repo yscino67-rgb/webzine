@@ -71,6 +71,7 @@
   box-shadow: none;
 
   text-decoration: none;
+
   overflow: hidden;
 
   transition:
@@ -244,30 +245,6 @@
 }
 
 /* =========================================================
-   Pretendard > 문자
-========================================================= */
-
-.archive-filter-arrow {
-  display: inline-block;
-  flex: 0 0 auto;
-
-  margin-left: -4px;
-
-  color: #111111;
-
-  font-family:
-    "Pretendard",
-    sans-serif;
-
-  font-size: 52px;
-  font-weight: 500;
-  line-height: 0.7;
-
-  transform: translateY(-1px);
-  transform-origin: center;
-}
-
-/* =========================================================
    태블릿
 ========================================================= */
 
@@ -334,17 +311,9 @@
     letter-spacing: -0.025em;
   }
 
-  .archive-filter-arrow {
-    margin-left: -2px;
-
-    font-size: 36px;
-    line-height: 0.7;
-
-    transform: translateY(-1px);
-  }
-
   .article-index {
     row-gap: 14px;
+
     margin-top: 42px;
   }
 
