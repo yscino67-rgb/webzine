@@ -9,7 +9,10 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.m
 const container =
   document.querySelector(".morph-scene");
 
-const categoryLabels =
+const stage =
+  document.querySelector(".morph-stage");
+
+const categoryElements =
   Array.from(
     document.querySelectorAll(
       "[data-category-label]"
@@ -33,8 +36,14 @@ container
 ========================================================= */
 
 const SETTINGS = {
-  /* 입자 수 */
-  desktopParticleCount: 1200,
+  /*
+    모바일은 기존 값을 유지합니다.
+
+    데스크톱은 1200개에서 800개로 줄여
+    저사양 PC에서도 끊김을 완화합니다.
+  */
+  desktopParticleCount: 800,
+  desktopLowPowerParticleCount: 620,
   mobileParticleCount: 650,
 
   /* 은하에 들어오는 입자 비율 */
@@ -71,16 +80,14 @@ const SETTINGS = {
   /* 은하 회전 속도 */
   galaxyRotationSpeed: 0.12,
 
-  /* 첫 번째 회색 네모 등장 시간 */
+  /*
+    첫 번째 회색 박스 등장 시간
+
+    기존 24.5초보다 9초 빠른 설정입니다.
+  */
   categoryRevealTime: 15.5,
 
-  /* 네모가 펼쳐진 뒤 글자가 나오는 시간 */
-  categoryTextDelay: 0.8,
-
-  /*
-    첫 번째 네모 → 첫 번째 글자 →
-    두 번째 네모 순서 간격
-  */
+  /* 다음 박스가 등장하는 간격 */
   categoryRevealInterval: 2.2,
 
   /* 카테고리 회전 속도 */
@@ -106,17 +113,51 @@ function isMobileViewport() {
   return window.innerWidth < 768;
 }
 
+function isLowPowerDesktop() {
+  if (isMobileViewport()) {
+    return false;
+  }
+
+  const processorCount =
+    navigator.hardwareConcurrency || 8;
+
+  const deviceMemory =
+    navigator.deviceMemory || 8;
+
+  return (
+    processorCount <= 4 ||
+    deviceMemory <= 4
+  );
+}
+
+function getParticleCount() {
+  if (isMobileViewport()) {
+    return SETTINGS.mobileParticleCount;
+  }
+
+  return isLowPowerDesktop()
+    ? SETTINGS.desktopLowPowerParticleCount
+    : SETTINGS.desktopParticleCount;
+}
+
 function getTargetFPS() {
+  /*
+    모바일은 기존 24FPS 유지.
+
+    데스크톱은 입자 계산을 가볍게 만든 뒤
+    60FPS로 표시해 30FPS 특유의 끊겨 보이는
+    움직임을 줄입니다.
+  */
   return isMobileViewport()
     ? 24
-    : 30;
+    : 60;
 }
 
 function getPixelRatio() {
   const maximumPixelRatio =
     isMobileViewport()
       ? 1
-      : 1.5;
+      : 1.25;
 
   return Math.min(
     window.devicePixelRatio || 1,
@@ -148,10 +189,13 @@ camera.position.set(
 
 const renderer =
   new THREE.WebGLRenderer({
-    antialias: true,
+    /*
+      점이 네모 형태이므로 안티앨리어싱 효과는 적고
+      GPU 사용량은 늘어납니다.
+  */
+    antialias: false,
     alpha: true,
-    powerPreference:
-      "high-performance"
+    powerPreference: "high-performance"
   });
 
 renderer.setPixelRatio(
@@ -188,8 +232,7 @@ const particleMaterial =
     transparent: true,
     depthTest: true,
     depthWrite: false,
-    blending:
-      THREE.NormalBlending,
+    blending: THREE.NormalBlending,
 
     uniforms: {
       uPixelRatio: {
@@ -274,6 +317,30 @@ const particleMaterial =
   });
 
 /* =========================================================
+   미리 계산하는 고정 회전값
+========================================================= */
+
+const COS_GALAXY_TILT_X =
+  Math.cos(
+    SETTINGS.galaxyTiltX
+  );
+
+const SIN_GALAXY_TILT_X =
+  Math.sin(
+    SETTINGS.galaxyTiltX
+  );
+
+const COS_GALAXY_TILT_Z =
+  Math.cos(
+    SETTINGS.galaxyTiltZ
+  );
+
+const SIN_GALAXY_TILT_Z =
+  Math.sin(
+    SETTINGS.galaxyTiltZ
+  );
+
+/* =========================================================
    상태
 ========================================================= */
 
@@ -286,6 +353,9 @@ let sizes = null;
 let opacities = null;
 let colors = null;
 
+let positionAttribute = null;
+let sizeAttribute = null;
+
 let visibleWidth = 0;
 let visibleHeight = 0;
 
@@ -297,18 +367,24 @@ let cloudRadiusX = 0;
 let cloudRadiusY = 0;
 let cloudRadiusZ = 0;
 
-let startTime = null;
 let animationFrameId = null;
 let resizeTimer = null;
 
 let previousFrameTime = 0;
+let elapsedTime = 0;
 
 let frameInterval =
   1000 /
   getTargetFPS();
 
-let pageHidden =
-  document.hidden;
+let previousMobileState =
+  isMobileViewport();
+
+let previousLandscapeState =
+  window.innerWidth >
+  window.innerHeight;
+
+let isDisposed = false;
 
 const pointerTarget = {
   x: 0,
@@ -319,6 +395,55 @@ const pointerCurrent = {
   x: 0,
   y: 0
 };
+
+/*
+  매 입자마다 새 객체를 만들지 않고
+  같은 객체를 반복 사용합니다.
+*/
+const orbitOutput = {
+  x: 0,
+  y: 0,
+  z: 0
+};
+
+const galaxyOutput = {
+  x: 0,
+  y: 0,
+  z: 0
+};
+
+/*
+  카테고리별 숫자 값을 매 프레임
+  dataset에서 다시 읽지 않도록 저장합니다.
+*/
+const categoryItems =
+  categoryElements.map(
+    (element, index) => {
+      return {
+        element,
+
+        baseAngle:
+          Number(
+            element.dataset.angle
+          ) || 0,
+
+        radius:
+          Number(
+            element.dataset.radius
+          ) || 1,
+
+        revealTime:
+          SETTINGS.categoryRevealTime +
+          index *
+          SETTINGS.categoryRevealInterval,
+
+        revealed:
+          element.classList.contains(
+            "is-box-visible"
+          )
+      };
+    }
+  );
 
 /* =========================================================
    공통 함수
@@ -527,9 +652,7 @@ function createCloudPosition() {
    은하 목표 위치
 ========================================================= */
 
-function createGalaxyTargets(
-  count
-) {
+function createGalaxyTargets(count) {
   const targets = [];
 
   for (
@@ -543,9 +666,7 @@ function createGalaxyTargets(
     let layer;
     let radialProgress;
 
-    if (
-      randomValue < 0.58
-    ) {
+    if (randomValue < 0.58) {
       layer = "outer";
 
       radialProgress =
@@ -667,6 +788,9 @@ function disposeParticleSystem() {
 
   points = null;
   particleGeometry = null;
+
+  positionAttribute = null;
+  sizeAttribute = null;
 }
 
 function buildParticleSystem() {
@@ -677,9 +801,7 @@ function buildParticleSystem() {
     isMobileViewport();
 
   const particleCount =
-    mobile
-      ? SETTINGS.mobileParticleCount
-      : SETTINGS.desktopParticleCount;
+    getParticleCount();
 
   const builderCount =
     Math.floor(
@@ -787,6 +909,26 @@ function buildParticleSystem() {
       }
     }
 
+    const sourceSize =
+      randomBetween(
+        mobile
+          ? 2.6
+          : 5.2,
+        mobile
+          ? 5
+          : 7
+      );
+
+    const targetSize =
+      randomBetween(
+        mobile
+          ? 4.2
+          : 6,
+        mobile
+          ? 6
+          : 8.6
+      );
+
     particles.push({
       isBuilder,
 
@@ -831,38 +973,55 @@ function buildParticleSystem() {
           ? -1
           : 1,
 
-      sourceSize:
-        randomBetween(
-          mobile
-            ? 2.6
-            : 5.2,
-          mobile
-            ? 5
-            : 7
-        ),
-
-      targetSize:
-        randomBetween(
-          mobile
-            ? 4.2
-            : 6,
-          mobile
-            ? 6
-            : 8.6
-        )
+      sourceSize,
+      targetSize
     });
+
+    const positionIndex =
+      index * 3;
+
+    /*
+      첫 렌더링부터 올바른 위치가 보이도록
+      초기 위치를 바로 채웁니다.
+    */
+    positions[positionIndex] =
+      source.x;
+
+    positions[positionIndex + 1] =
+      source.y;
+
+    positions[positionIndex + 2] =
+      source.z;
+
+    sizes[index] =
+      sourceSize;
+
+    /*
+      색상과 투명도는 변하지 않으므로
+      생성할 때 한 번만 저장합니다.
+    */
+    opacities[index] = 1;
+
+    colors[positionIndex] =
+      PARTICLE_COLOR.r;
+
+    colors[positionIndex + 1] =
+      PARTICLE_COLOR.g;
+
+    colors[positionIndex + 2] =
+      PARTICLE_COLOR.b;
   }
 
   particleGeometry =
     new THREE.BufferGeometry();
 
-  const positionAttribute =
+  positionAttribute =
     new THREE.BufferAttribute(
       positions,
       3
     );
 
-  const sizeAttribute =
+  sizeAttribute =
     new THREE.BufferAttribute(
       sizes,
       1
@@ -888,12 +1047,16 @@ function buildParticleSystem() {
     THREE.DynamicDrawUsage
   );
 
+  /*
+    투명도와 색상은 매 프레임 바뀌지 않으므로
+    StaticDrawUsage를 사용합니다.
+  */
   opacityAttribute.setUsage(
-    THREE.DynamicDrawUsage
+    THREE.StaticDrawUsage
   );
 
   colorAttribute.setUsage(
-    THREE.DynamicDrawUsage
+    THREE.StaticDrawUsage
   );
 
   particleGeometry.setAttribute(
@@ -922,8 +1085,7 @@ function buildParticleSystem() {
       particleMaterial
     );
 
-  points.frustumCulled =
-    false;
+  points.frustumCulled = false;
 
   scene.add(points);
 }
@@ -934,7 +1096,10 @@ function buildParticleSystem() {
 
 function calculateOrbitPosition(
   particle,
-  elapsed
+  elapsed,
+  cosFrameZ,
+  sinFrameZ,
+  output
 ) {
   const angleY =
     elapsed *
@@ -987,25 +1152,13 @@ function calculateOrbitPosition(
   y = rotatedY;
   z = rotatedZ;
 
-  const angleZ =
-    Math.sin(
-      elapsed * 0.14
-    ) *
-    0.035;
-
-  const cosZ =
-    Math.cos(angleZ);
-
-  const sinZ =
-    Math.sin(angleZ);
-
   const rotatedX =
-    x * cosZ -
-    y * sinZ;
+    x * cosFrameZ -
+    y * sinFrameZ;
 
   const finalY =
-    x * sinZ +
-    y * cosZ;
+    x * sinFrameZ +
+    y * cosFrameZ;
 
   x = rotatedX;
   y = finalY;
@@ -1034,11 +1187,9 @@ function calculateOrbitPosition(
     ) *
     0.12;
 
-  return {
-    x,
-    y,
-    z
-  };
+  output.x = x;
+  output.y = y;
+  output.z = z;
 }
 
 /* =========================================================
@@ -1047,7 +1198,8 @@ function calculateOrbitPosition(
 
 function calculateGalaxyPosition(
   target,
-  elapsed
+  elapsed,
+  output
 ) {
   const rotationAngle =
     elapsed *
@@ -1079,66 +1231,70 @@ function calculateGalaxyPosition(
   let y =
     target.y;
 
-  const cosTiltX =
-    Math.cos(
-      SETTINGS.galaxyTiltX
-    );
-
-  const sinTiltX =
-    Math.sin(
-      SETTINGS.galaxyTiltX
-    );
-
   const tiltedY =
-    y * cosTiltX -
-    z * sinTiltX;
+    y *
+    COS_GALAXY_TILT_X -
+    z *
+    SIN_GALAXY_TILT_X;
 
   const tiltedZ =
-    y * sinTiltX +
-    z * cosTiltX;
+    y *
+    SIN_GALAXY_TILT_X +
+    z *
+    COS_GALAXY_TILT_X;
 
   y = tiltedY;
   z = tiltedZ;
 
-  const cosTiltZ =
-    Math.cos(
-      SETTINGS.galaxyTiltZ
-    );
-
-  const sinTiltZ =
-    Math.sin(
-      SETTINGS.galaxyTiltZ
-    );
-
   const tiltedX =
-    x * cosTiltZ -
-    y * sinTiltZ;
+    x *
+    COS_GALAXY_TILT_Z -
+    y *
+    SIN_GALAXY_TILT_Z;
 
   const finalY =
-    x * sinTiltZ +
-    y * cosTiltZ;
+    x *
+    SIN_GALAXY_TILT_Z +
+    y *
+    COS_GALAXY_TILT_Z;
 
-  return {
-    x:
-      tiltedX,
-
-    y:
-      finalY,
-
-    z
-  };
+  output.x = tiltedX;
+  output.y = finalY;
+  output.z = z;
 }
 
 /* =========================================================
    입자 업데이트
 ========================================================= */
 
-function updateParticles(
-  elapsed
-) {
-  if (!particleGeometry) {
+function updateParticles(elapsed) {
+  if (
+    !particleGeometry ||
+    !positionAttribute ||
+    !sizeAttribute
+  ) {
     return;
   }
+
+  /*
+    모든 입자에서 동일한 Z축 회전값은
+    프레임마다 한 번만 계산합니다.
+  */
+  const frameAngleZ =
+    Math.sin(
+      elapsed * 0.14
+    ) *
+    0.035;
+
+  const cosFrameZ =
+    Math.cos(
+      frameAngleZ
+    );
+
+  const sinFrameZ =
+    Math.sin(
+      frameAngleZ
+    );
 
   for (
     let index = 0;
@@ -1148,20 +1304,22 @@ function updateParticles(
     const particle =
       particles[index];
 
-    const orbitPosition =
-      calculateOrbitPosition(
-        particle,
-        elapsed
-      );
+    calculateOrbitPosition(
+      particle,
+      elapsed,
+      cosFrameZ,
+      sinFrameZ,
+      orbitOutput
+    );
 
     let currentX =
-      orbitPosition.x;
+      orbitOutput.x;
 
     let currentY =
-      orbitPosition.y;
+      orbitOutput.y;
 
     let currentZ =
-      orbitPosition.z;
+      orbitOutput.z;
 
     let joinProgress = 0;
 
@@ -1178,34 +1336,39 @@ function updateParticles(
           particle.joinDuration
         );
 
-      const galaxyPosition =
-        calculateGalaxyPosition(
-          particle.target,
-          elapsed
-        );
+      calculateGalaxyPosition(
+        particle.target,
+        elapsed,
+        galaxyOutput
+      );
 
       const distance =
         Math.max(
-          Math.hypot(
-            orbitPosition.x,
-            orbitPosition.z
+          Math.sqrt(
+            orbitOutput.x *
+            orbitOutput.x +
+            orbitOutput.z *
+            orbitOutput.z
           ),
           0.001
         );
 
       const tangentX =
-        -orbitPosition.z /
+        -orbitOutput.z /
         distance;
 
       const tangentZ =
-        orbitPosition.x /
+        orbitOutput.x /
         distance;
 
-      const curveAmount =
+      const joinWave =
         Math.sin(
           Math.PI *
           joinProgress
-        ) *
+        );
+
+      const curveAmount =
+        joinWave *
         Math.pow(
           1 -
           joinProgress,
@@ -1216,8 +1379,8 @@ function updateParticles(
 
       currentX =
         lerp(
-          orbitPosition.x,
-          galaxyPosition.x,
+          orbitOutput.x,
+          galaxyOutput.x,
           joinProgress
         ) +
         tangentX *
@@ -1225,14 +1388,11 @@ function updateParticles(
 
       currentY =
         lerp(
-          orbitPosition.y,
-          galaxyPosition.y,
+          orbitOutput.y,
+          galaxyOutput.y,
           joinProgress
         ) +
-        Math.sin(
-          Math.PI *
-          joinProgress
-        ) *
+        joinWave *
         Math.sin(
           particle.phase
         ) *
@@ -1241,8 +1401,8 @@ function updateParticles(
 
       currentZ =
         lerp(
-          orbitPosition.z,
-          galaxyPosition.z,
+          orbitOutput.z,
+          galaxyOutput.z,
           joinProgress
         ) +
         tangentZ *
@@ -1252,17 +1412,14 @@ function updateParticles(
     const positionIndex =
       index * 3;
 
-    positions[
-      positionIndex
-    ] = currentX;
+    positions[positionIndex] =
+      currentX;
 
-    positions[
-      positionIndex + 1
-    ] = currentY;
+    positions[positionIndex + 1] =
+      currentY;
 
-    positions[
-      positionIndex + 2
-    ] = currentZ;
+    positions[positionIndex + 2] =
+      currentZ;
 
     sizes[index] =
       lerp(
@@ -1270,63 +1427,20 @@ function updateParticles(
         particle.targetSize,
         joinProgress
       );
-
-    opacities[index] =
-      1;
-
-    colors[
-      positionIndex
-    ] =
-      PARTICLE_COLOR.r;
-
-    colors[
-      positionIndex + 1
-    ] =
-      PARTICLE_COLOR.g;
-
-    colors[
-      positionIndex + 2
-    ] =
-      PARTICLE_COLOR.b;
   }
 
-  particleGeometry
-    .getAttribute(
-      "position"
-    )
-    .needsUpdate = true;
-
-  particleGeometry
-    .getAttribute(
-      "aSize"
-    )
-    .needsUpdate = true;
-
-  particleGeometry
-    .getAttribute(
-      "aOpacity"
-    )
-    .needsUpdate = true;
-
-  particleGeometry
-    .getAttribute(
-      "color"
-    )
-    .needsUpdate = true;
+  /*
+    실제로 바뀌는 위치와 크기만 GPU에 전송합니다.
+  */
+  positionAttribute.needsUpdate = true;
+  sizeAttribute.needsUpdate = true;
 }
 
 /* =========================================================
    카테고리 위치 및 등장
 ========================================================= */
 
-function updateCategoryLabels(
-  elapsed
-) {
-  const stage =
-    document.querySelector(
-      ".morph-stage"
-    );
-
+function updateCategoryLabels(elapsed) {
   const stageWidth =
     stage?.clientWidth ||
     window.innerWidth;
@@ -1343,87 +1457,60 @@ function updateCategoryLabels(
     stageHeight *
     SETTINGS.categoryOrbitHeight;
 
-  categoryLabels.forEach(
-    (
-      label,
-      index
-    ) => {
-      const baseAngle =
-        Number(
-          label.dataset.angle
-        ) || 0;
+  for (
+    let index = 0;
+    index < categoryItems.length;
+    index += 1
+  ) {
+    const item =
+      categoryItems[index];
 
-      const radius =
-        Number(
-          label.dataset.radius
-        ) || 1;
+    const currentAngle =
+      item.baseAngle +
+      elapsed *
+      SETTINGS.categoryRotationSpeed;
 
-      const currentAngle =
-        baseAngle +
-        elapsed *
-        SETTINGS.categoryRotationSpeed;
+    const categoryX =
+      Math.cos(
+        currentAngle
+      ) *
+      orbitWidth *
+      item.radius;
 
-      const categoryX =
-        Math.cos(
-          currentAngle
-        ) *
-        orbitWidth *
-        radius;
+    const categoryY =
+      Math.sin(
+        currentAngle
+      ) *
+      orbitHeight *
+      item.radius;
 
-      const categoryY =
-        Math.sin(
-          currentAngle
-        ) *
-        orbitHeight *
-        radius;
+    item.element.style.transform =
+      `translate3d(calc(-50% + ${categoryX.toFixed(2)}px), calc(-50% + ${categoryY.toFixed(2)}px), 0)`;
 
-      label.style.transform =
-        `translate3d(
-          calc(-50% + ${categoryX}px),
-          calc(-50% + ${categoryY}px),
-          0
-        )`;
+    /*
+      등장 클래스는 한 번만 추가합니다.
+      매 프레임 반복해서 추가하거나 제거하지 않습니다.
+    */
+    if (
+      !item.revealed &&
+      elapsed >= item.revealTime
+    ) {
+      item.revealed = true;
 
-      const boxRevealTime =
-        SETTINGS.categoryRevealTime +
-        index *
-        SETTINGS.categoryRevealInterval;
-
-      const textRevealTime =
-        boxRevealTime +
-        SETTINGS.categoryTextDelay;
-
-      if (
-  elapsed >=
-  boxRevealTime
-) {
-  label.classList.add(
-    "is-box-visible"
-  );
-}
+      item.element.classList.add(
+        "is-box-visible"
+      );
     }
-  );
+  }
 }
 
 function showAllCategoryLabels() {
-  categoryLabels.forEach(
-    (label) => {
-      label.classList.add(
-        "is-box-visible"
-      );
-    }
-  );
-}
+  categoryItems.forEach(
+    (item) => {
+      item.revealed = true;
 
-function resetCategoryLabels() {
-  categoryLabels.forEach(
-    (label) => {
-      label.classList.remove(
+      item.element.classList.add(
         "is-box-visible"
-      );
-
-      label.style.removeProperty(
-        "transform"
       );
     }
   );
@@ -1433,45 +1520,38 @@ function resetCategoryLabels() {
    마우스 움직임
 ========================================================= */
 
+function handlePointerMove(event) {
+  pointerTarget.x =
+    event.clientX /
+    window.innerWidth *
+    2 -
+    1;
+
+  pointerTarget.y =
+    event.clientY /
+    window.innerHeight *
+    2 -
+    1;
+}
+
+function handlePointerLeave() {
+  pointerTarget.x = 0;
+  pointerTarget.y = 0;
+}
+
 window.addEventListener(
   "pointermove",
-  (event) => {
-    pointerTarget.x =
-      event.clientX /
-      window.innerWidth *
-      2 -
-      1;
-
-    pointerTarget.y =
-      event.clientY /
-      window.innerHeight *
-      2 -
-      1;
+  handlePointerMove,
+  {
+    passive: true
   }
 );
 
 window.addEventListener(
   "pointerleave",
-  () => {
-    pointerTarget.x = 0;
-    pointerTarget.y = 0;
-  }
-);
-
-/* =========================================================
-   브라우저 탭 비활성화
-========================================================= */
-
-document.addEventListener(
-  "visibilitychange",
-  () => {
-    pageHidden =
-      document.hidden;
-
-    if (!pageHidden) {
-      previousFrameTime =
-        performance.now();
-    }
+  handlePointerLeave,
+  {
+    passive: true
   }
 );
 
@@ -1480,20 +1560,24 @@ document.addEventListener(
 ========================================================= */
 
 function animate(timestamp) {
+  if (
+    isDisposed ||
+    document.hidden
+  ) {
+    animationFrameId = null;
+    return;
+  }
+
   animationFrameId =
     requestAnimationFrame(
       animate
     );
 
-  if (pageHidden) {
-    return;
-  }
-
-  if (
-    previousFrameTime === 0
-  ) {
+  if (previousFrameTime === 0) {
     previousFrameTime =
       timestamp;
+
+    return;
   }
 
   const frameDelta =
@@ -1514,17 +1598,19 @@ function animate(timestamp) {
       frameInterval
     );
 
-  if (startTime === null) {
-    startTime =
-      timestamp;
-  }
+  /*
+    탭 복귀나 일시적인 렌더링 지연으로
+    시간이 한꺼번에 크게 점프하지 않도록 제한합니다.
+  */
+  const safeFrameDelta =
+    Math.min(
+      frameDelta,
+      100
+    );
 
-  const elapsed =
+  elapsedTime +=
     (
-      (
-        timestamp -
-        startTime
-      ) /
+      safeFrameDelta /
       1000
     ) *
     SETTINGS.animationSpeed;
@@ -1534,14 +1620,14 @@ function animate(timestamp) {
       pointerTarget.x -
       pointerCurrent.x
     ) *
-    0.035;
+    0.05;
 
   pointerCurrent.y +=
     (
       pointerTarget.y -
       pointerCurrent.y
     ) *
-    0.035;
+    0.05;
 
   camera.position.x =
     pointerCurrent.x *
@@ -1558,11 +1644,11 @@ function animate(timestamp) {
   );
 
   updateParticles(
-    elapsed
+    elapsedTime
   );
 
   updateCategoryLabels(
-    elapsed
+    elapsedTime
   );
 
   renderer.render(
@@ -1570,6 +1656,55 @@ function animate(timestamp) {
     camera
   );
 }
+
+function startAnimation() {
+  if (
+    isDisposed ||
+    document.hidden ||
+    animationFrameId !== null
+  ) {
+    return;
+  }
+
+  previousFrameTime = 0;
+
+  animationFrameId =
+    requestAnimationFrame(
+      animate
+    );
+}
+
+function stopAnimation() {
+  if (
+    animationFrameId !== null
+  ) {
+    cancelAnimationFrame(
+      animationFrameId
+    );
+
+    animationFrameId = null;
+  }
+
+  previousFrameTime = 0;
+}
+
+/* =========================================================
+   브라우저 탭 비활성화
+========================================================= */
+
+function handleVisibilityChange() {
+  if (document.hidden) {
+    stopAnimation();
+    return;
+  }
+
+  startAnimation();
+}
+
+document.addEventListener(
+  "visibilitychange",
+  handleVisibilityChange
+);
 
 /* =========================================================
    화면 크기 변경
@@ -1581,6 +1716,19 @@ function resize() {
 
   const height =
     window.innerHeight;
+
+  const currentMobileState =
+    isMobileViewport();
+
+  const currentLandscapeState =
+    width >
+    height;
+
+  const layoutModeChanged =
+    currentMobileState !==
+      previousMobileState ||
+    currentLandscapeState !==
+      previousLandscapeState;
 
   camera.aspect =
     width /
@@ -1611,25 +1759,56 @@ function resize() {
     1000 /
     getTargetFPS();
 
-  buildParticleSystem();
-  resetCategoryLabels();
+  /*
+    일반적인 데스크톱 창 크기 변경에서는
+    입자와 카테고리를 초기화하지 않습니다.
 
-  startTime = null;
-  previousFrameTime = 0;
+    모바일/데스크톱 전환 또는 화면 방향 변경 때만
+    입자를 현재 화면 크기에 맞춰 다시 구성합니다.
+    카테고리 표시 상태와 전체 시간은 유지됩니다.
+  */
+  if (layoutModeChanged) {
+    buildParticleSystem();
+
+    updateParticles(
+      elapsedTime
+    );
+
+    renderer.render(
+      scene,
+      camera
+    );
+  } else {
+    calculateWorldSize();
+  }
+
+  previousMobileState =
+    currentMobileState;
+
+  previousLandscapeState =
+    currentLandscapeState;
+
+  previousFrameTime =
+    performance.now();
+}
+
+function handleResize() {
+  window.clearTimeout(
+    resizeTimer
+  );
+
+  resizeTimer =
+    window.setTimeout(
+      resize,
+      180
+    );
 }
 
 window.addEventListener(
   "resize",
-  () => {
-    window.clearTimeout(
-      resizeTimer
-    );
-
-    resizeTimer =
-      window.setTimeout(
-        resize,
-        180
-      );
+  handleResize,
+  {
+    passive: true
   }
 );
 
@@ -1645,16 +1824,16 @@ const reducedMotion =
   ).matches;
 
 if (reducedMotion) {
-  const finalElapsed =
+  elapsedTime =
     SETTINGS.innerEndTime +
     SETTINGS.maximumJoinDuration;
 
   updateParticles(
-    finalElapsed
+    elapsedTime
   );
 
   updateCategoryLabels(
-    finalElapsed
+    elapsedTime
   );
 
   showAllCategoryLabels();
@@ -1664,36 +1843,64 @@ if (reducedMotion) {
     camera
   );
 } else {
-  animationFrameId =
-    requestAnimationFrame(
-      animate
-    );
+  /*
+    첫 프레임 전에 셰이더를 미리 준비해
+    초기 순간의 멈춤을 줄입니다.
+  */
+  renderer.compile(
+    scene,
+    camera
+  );
+
+  startAnimation();
 }
 
 /* =========================================================
    정리
 ========================================================= */
 
+function disposeIntro() {
+  if (isDisposed) {
+    return;
+  }
+
+  isDisposed = true;
+
+  stopAnimation();
+
+  window.clearTimeout(
+    resizeTimer
+  );
+
+  window.removeEventListener(
+    "pointermove",
+    handlePointerMove
+  );
+
+  window.removeEventListener(
+    "pointerleave",
+    handlePointerLeave
+  );
+
+  window.removeEventListener(
+    "resize",
+    handleResize
+  );
+
+  document.removeEventListener(
+    "visibilitychange",
+    handleVisibilityChange
+  );
+
+  disposeParticleSystem();
+
+  particleMaterial.dispose();
+  renderer.dispose();
+}
+
 window.addEventListener(
   "pagehide",
-  () => {
-    if (
-      animationFrameId !== null
-    ) {
-      cancelAnimationFrame(
-        animationFrameId
-      );
-    }
-
-    window.clearTimeout(
-      resizeTimer
-    );
-
-    disposeParticleSystem();
-
-    particleMaterial.dispose();
-    renderer.dispose();
-  },
+  disposeIntro,
   {
     once: true
   }
