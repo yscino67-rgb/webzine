@@ -75,10 +75,10 @@
   column-gap: clamp(18px, 2vw, 36px);
 
   width: 100%;
-  min-height: 110px;
+  min-height: 82px;
 
   padding:
-    24px
+    14px
     clamp(24px, 2.4vw, 40px);
 
   border: 0;
