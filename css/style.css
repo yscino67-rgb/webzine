@@ -58,6 +58,15 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "CossetteTitre";
+  src: url("../font/CossetteTitre-Regular.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* =========================================================
    기본 설정
 ========================================================= */
