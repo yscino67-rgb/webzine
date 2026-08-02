@@ -14,12 +14,16 @@
   background-color: #ffffff;
 }
 
-/* 왼쪽 7개 + 오른쪽 7개 */
+/* =========================================================
+   전체 기사 목록
+   2열이 아닌 1열 세로 목록
+========================================================= */
+
 .article-index {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
 
-  column-gap: clamp(22px, 1.6vw, 32px);
+  row-gap: clamp(18px, 1.6vw, 28px);
 
   width: 100%;
   margin:
@@ -30,17 +34,12 @@
   padding: 0;
 }
 
-/* =========================================================
-   각 세로 단
-========================================================= */
-
+/*
+  HTML에는 왼쪽·오른쪽 index-column이 두 개 있지만
+  CSS상 하나의 연속된 목록처럼 표시합니다.
+*/
 .index-column {
-  display: flex;
-  flex-direction: column;
-
-  gap: clamp(22px, 1.8vw, 30px);
-
-  min-width: 0;
+  display: contents;
 }
 
 /* =========================================================
@@ -49,29 +48,25 @@
 
 .index-item {
   display: grid;
+
   grid-template-columns:
-    74px
+    100px
     minmax(0, 1fr)
-    96px
-    110px;
+    110px
+    130px;
 
   align-items: center;
-  column-gap: clamp(14px, 1.2vw, 22px);
+  column-gap: clamp(18px, 2vw, 36px);
 
   width: 100%;
-  min-height: 72px;
+  min-height: 76px;
 
   padding:
     0
-    clamp(20px, 1.7vw, 28px);
+    clamp(24px, 2.4vw, 40px);
 
   border: 0;
 
-  /*
-    검정 배경 40%
-    opacity를 카드 전체에 주지 않고
-    배경에만 알파값을 적용합니다.
-  */
   background-color: rgba(0, 0, 0, 0.4);
   color: #ffffff;
 
@@ -93,7 +88,12 @@
 ========================================================= */
 
 .index-author {
-  font-family: "Pretendard", sans-serif;
+  min-width: 0;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
+
   font-size: 13px;
   font-weight: 500;
   line-height: 1;
@@ -109,7 +109,10 @@
   min-width: 0;
   margin: 0;
 
-  font-family: "Pretendard", sans-serif;
+  font-family:
+    "Pretendard",
+    sans-serif;
+
   font-size: clamp(14px, 1vw, 17px);
   font-weight: 500;
   line-height: 1.2;
@@ -125,9 +128,15 @@
 ========================================================= */
 
 .index-date {
-  font-family: "Pretendard", sans-serif;
-  font-size: 12px;
-  font-weight: 500;
+  min-width: 0;
+
+  font-family:
+    "Special Gothic Condensed One",
+    "Pretendard",
+    sans-serif;
+
+  font-size: 14px;
+  font-weight: 400;
   line-height: 1;
 
   white-space: nowrap;
@@ -138,16 +147,25 @@
 ========================================================= */
 
 .index-subcategory {
-  font-family: "Pretendard", sans-serif;
-  font-size: 12px;
-  font-weight: 500;
+  min-width: 0;
+
+  font-family:
+    "Special Gothic Condensed One",
+    "Pretendard",
+    sans-serif;
+
+  font-size: 15px;
+  font-weight: 400;
   line-height: 1;
 
   text-align: right;
   white-space: nowrap;
 }
 
-/* 아직 연결되지 않은 임시 카드 */
+/* =========================================================
+   빈 카드
+========================================================= */
+
 .index-item--placeholder {
   cursor: default;
   pointer-events: none;
@@ -158,7 +176,7 @@
 ========================================================= */
 
 .index-item:active {
-  transform: scale(0.99);
+  transform: scale(0.995);
 }
 
 @media (hover: hover) {
@@ -192,10 +210,15 @@
   gap: 16px;
 
   width: max-content;
+  max-width: 100%;
 
-  font-family: "Pretendard", sans-serif;
-  font-size: 18px;
-  font-weight: 500;
+  font-family:
+    "Special Gothic Condensed One",
+    "Pretendard",
+    sans-serif;
+
+  font-size: 22px;
+  font-weight: 400;
   line-height: 1;
 
   white-space: nowrap;
@@ -203,10 +226,11 @@
 
 .archive-filter a {
   display: inline-block;
+  flex: 0 0 auto;
 
   color: #111111;
 
-  letter-spacing: -0.075em;
+  letter-spacing: -0.04em;
 
   text-decoration: none;
 
@@ -217,21 +241,26 @@
 
 .archive-filter a:hover {
   opacity: 0.45;
-  letter-spacing: -0.095em;
+  letter-spacing: -0.065em;
 }
 
 .archive-filter-arrow {
   display: inline-block;
+  flex: 0 0 auto;
 
-  margin-left: -6px;
+  margin-left: -5px;
 
   color: #111111;
 
-  font-size: 25px;
+  font-family:
+    "Special Gothic Condensed One",
+    sans-serif;
+
+  font-size: 28px;
   font-weight: 400;
   line-height: 0.75;
 
-  transform: scaleX(1.55);
+  transform: scaleX(1.35);
   transform-origin: left center;
 }
 
@@ -240,13 +269,26 @@
 ========================================================= */
 
 @media (max-width: 1100px) {
-  .article-index {
-    grid-template-columns: 1fr;
-    row-gap: 22px;
+  .index-item {
+    grid-template-columns:
+      82px
+      minmax(0, 1fr)
+      96px
+      110px;
+
+    column-gap: 16px;
+
+    padding:
+      0
+      24px;
   }
 
-  .index-column {
-    gap: 22px;
+  .index-date {
+    font-size: 13px;
+  }
+
+  .index-subcategory {
+    font-size: 14px;
   }
 }
 
@@ -272,9 +314,7 @@
   .archive-filter {
     gap: 11px;
 
-    max-width: 100%;
-
-    font-size: 12px;
+    font-size: 16px;
 
     overflow-x: auto;
     overflow-y: hidden;
@@ -288,35 +328,27 @@
   }
 
   .archive-filter a {
-    flex: 0 0 auto;
-
-    letter-spacing: -0.06em;
+    letter-spacing: -0.035em;
   }
 
   .archive-filter-arrow {
-    flex: 0 0 auto;
+    margin-left: -3px;
 
-    margin-left: -5px;
-
-    font-size: 18px;
+    font-size: 21px;
   }
 
   .article-index {
-    grid-template-columns: 1fr;
+    row-gap: 14px;
 
     margin-top: 42px;
   }
 
-  .index-column {
-    gap: 14px;
-  }
-
   .index-item {
     grid-template-columns:
-      52px
+      48px
       minmax(0, 1fr)
-      70px
-      78px;
+      66px
+      72px;
 
     column-gap: 8px;
 
@@ -335,8 +367,11 @@
     font-size: 11px;
   }
 
-  .index-date,
+  .index-date {
+    font-size: 10px;
+  }
+
   .index-subcategory {
-    font-size: 9px;
+    font-size: 11px;
   }
 }
