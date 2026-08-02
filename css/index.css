@@ -4,7 +4,7 @@
 
 :root {
   /* 메뉴가 펼쳐지고 접히는 속도 */
-  --archive-animation-duration: 600ms;
+  --archive-animation-duration: 800ms;
 
   /* 열렸을 때 검정 네모 크기 */
   --archive-square-open-scale: 1;
