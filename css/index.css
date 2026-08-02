@@ -3,13 +3,13 @@
 ========================================================= */
 
 :root {
-  /* 열기와 닫기에서 완전히 동일하게 사용하는 시간 */
+  /* 열기·닫기 공통 애니메이션 시간 */
   --archive-animation-duration: 800ms;
 
-  /* 열기와 닫기에서 완전히 동일하게 사용하는 움직임 */
+  /* 열기·닫기 공통 움직임 */
   --archive-animation-easing: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* 열렸을 때 검정 네모 크기: 1이면 크기 변화 없음 */
+  /* 열린 상태의 네모 크기: 1이면 크기 변화 없음 */
   --archive-square-open-scale: 1;
 }
 
@@ -49,6 +49,10 @@
   padding: 0;
 }
 
+/*
+  HTML에 index-column이 여러 개 있어도
+  하나의 연속된 목록처럼 표시
+*/
 .index-column {
   display: contents;
 }
@@ -200,7 +204,7 @@
 }
 
 /* =========================================================
-   아카이브 상단 필터
+   아카이브 상단 헤더
 ========================================================= */
 
 .archive-header {
@@ -216,14 +220,42 @@
   pointer-events: auto;
 }
 
+/* =========================================================
+   아카이브 상단 필터
+========================================================= */
+
 .archive-filter {
+  position: relative;
+
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 
   width: max-content;
   max-width: 100%;
 
+  min-height: 66px;
+
   white-space: nowrap;
+}
+
+/*
+  ALL부터 검정 네모까지 이어지는 상단 가로선.
+  메뉴가 펼쳐지면 부모 너비가 늘어나면서 선도 함께 늘어납니다.
+*/
+.archive-filter::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+
+  width: 100%;
+  height: 2px;
+
+  background-color: #111111;
+
+  pointer-events: none;
 }
 
 /* =========================================================
@@ -231,8 +263,13 @@
 ========================================================= */
 
 .archive-filter-all {
+  position: relative;
+  z-index: 1;
+
   display: inline-block;
   flex: 0 0 auto;
+
+  margin-top: -2px;
 
   color: #111111;
 
@@ -241,10 +278,11 @@
     "Pretendard",
     sans-serif;
 
-  font-size: 40px;
+  /* ALL만 크게 */
+  font-size: 64px;
   font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.03em;
+  line-height: 0.94;
+  letter-spacing: -0.045em;
 
   text-decoration: none;
 
@@ -256,18 +294,23 @@
 ========================================================= */
 
 .archive-filter-items {
+  position: relative;
+  z-index: 1;
+
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 
   gap: 16px;
 
   /*
-    닫힌 상태의 실제 너비.
-    JS가 열린 상태의 정확한 너비를 계산합니다.
+    닫힌 상태에서는 너비 0.
+    script.js에서 실제 메뉴 너비를 계산해
+    --archive-menu-width에 넣습니다.
   */
   width: 0;
   min-width: 0;
 
+  margin-top: 11px;
   margin-left: 0;
 
   opacity: 0;
@@ -275,7 +318,7 @@
   overflow: hidden;
 
   /*
-    열기와 닫기 모두 이 한 transition만 사용합니다.
+    열기와 닫기 모두 같은 transition을 사용합니다.
   */
   transition:
     width
@@ -293,7 +336,7 @@
 .archive-filter.is-open .archive-filter-items {
   width: var(--archive-menu-width, 0px);
 
-  margin-left: 12px;
+  margin-left: 22px;
 
   opacity: 1;
 }
@@ -322,8 +365,8 @@
 }
 
 /*
-  개별 글자에는 별도 opacity, 이동, 지연을 주지 않습니다.
-  전체 메뉴 영역과 네모가 하나의 끈처럼 같은 속도로 왕복합니다.
+  개별 메뉴에는 별도의 이동이나 지연을 주지 않습니다.
+  전체 메뉴 영역이 하나의 끈처럼 열리고 닫힙니다.
 */
 
 /* =========================================================
@@ -331,16 +374,21 @@
 ========================================================= */
 
 .archive-filter-toggle {
+  position: relative;
+  z-index: 1;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
   flex: 0 0 auto;
 
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
 
-  margin-left: 12px;
+  margin-top: 8px;
+  margin-left: 16px;
+
   padding: 0;
 
   background: transparent;
@@ -356,8 +404,8 @@
 .archive-filter-toggle span {
   display: block;
 
-  width: 13px;
-  height: 13px;
+  width: 15px;
+  height: 15px;
 
   background-color: #111111;
 
@@ -437,6 +485,7 @@
 
   .archive-filter {
     max-width: 100%;
+    min-height: 47px;
 
     overflow-x: auto;
     overflow-y: hidden;
@@ -449,16 +498,27 @@
     display: none;
   }
 
+  .archive-filter::before {
+    height: 1.5px;
+  }
+
+  /* 모바일에서도 ALL을 크게 */
   .archive-filter-all {
-    font-size: 28px;
+    margin-top: -1px;
+
+    font-size: 44px;
+    line-height: 0.94;
+    letter-spacing: -0.04em;
   }
 
   .archive-filter-items {
     gap: 11px;
+
+    margin-top: 8px;
   }
 
   .archive-filter.is-open .archive-filter-items {
-    margin-left: 9px;
+    margin-left: 15px;
   }
 
   .archive-filter-items a {
@@ -467,15 +527,16 @@
   }
 
   .archive-filter-toggle {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
 
-    margin-left: 9px;
+    margin-top: 6px;
+    margin-left: 10px;
   }
 
   .archive-filter-toggle span {
-    width: 10px;
-    height: 10px;
+    width: 11px;
+    height: 11px;
   }
 
   .article-index {
