@@ -9,7 +9,7 @@
 
   /* 작은 메뉴와 네모의 세로 위치 */
   --archive-small-menu-offset-y: 0px;
-  --archive-square-offset-y: -1px;
+  --archive-square-offset-y: -1.5px;
 }
 
 /* =========================================================
