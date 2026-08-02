@@ -135,10 +135,12 @@ select {
   position: relative;
   z-index: 1002;
 
-  display: block;
-  flex: 0 0 var(--logo-width);
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
-  width: var(--logo-width);
+  width: auto;
+  flex: 0 0 auto;
 
   line-height: 0;
 }
@@ -146,22 +148,23 @@ select {
 .site-logo img {
   display: block;
 
-  width: 100%;
+  width: var(--logo-width);
   height: auto;
-  max-width: 100%;
+  flex: 0 0 auto;
 }
 
-/* 텍스트 로고를 사용하는 페이지 대응 */
-.site-logo span {
+.site-logo-name {
   display: block;
 
   color: #000000;
 
+  font-family: "Pretendard", sans-serif;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1;
-}
 
+  white-space: nowrap;
+}
 /* =========================================================
    햄버거 메뉴 버튼
 ========================================================= */
@@ -403,6 +406,9 @@ select {
   :root {
     --logo-width: 45px;
     --menu-icon-width: 34px;
+     .site-logo-name {
+    font-size: 15px;
+     }
   }
 
   .site-header {
