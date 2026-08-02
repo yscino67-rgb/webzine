@@ -248,27 +248,58 @@
 }
 
 /* =========================================================
-   세로로 긴 > 문자
+   세로로 길고 얇은 > 화살표
 ========================================================= */
 
 .archive-filter-arrow {
+  position: relative;
+
   display: inline-block;
   flex: 0 0 auto;
 
-  margin-left: -4px;
+  width: 20px;
+  height: 42px;
 
-  color: #111111;
+  margin-left: -3px;
 
-  font-family:
-    "Special Gothic Condensed One",
-    sans-serif;
+  font-size: 0;
+  line-height: 0;
+}
 
-  font-size: 35px;
-  font-weight: 400;
-  line-height: 0.75;
+/* 위쪽 대각선 */
+.archive-filter-arrow::before {
+  content: "";
 
-  transform: scaleY(10);
-  transform-origin: center;
+  position: absolute;
+  top: 7px;
+  left: 3px;
+
+  width: 20px;
+  height: 2px;
+
+  background-color: #111111;
+  border-radius: 999px;
+
+  transform: rotate(48deg);
+  transform-origin: left center;
+}
+
+/* 아래쪽 대각선 */
+.archive-filter-arrow::after {
+  content: "";
+
+  position: absolute;
+  bottom: 7px;
+  left: 3px;
+
+  width: 20px;
+  height: 2px;
+
+  background-color: #111111;
+  border-radius: 999px;
+
+  transform: rotate(-48deg);
+  transform-origin: left center;
 }
 
 /* =========================================================
@@ -339,11 +370,26 @@
   }
 
   .archive-filter-arrow {
+    width: 14px;
+    height: 30px;
+
     margin-left: -2px;
+  }
 
-    font-size: 25px;
+  .archive-filter-arrow::before {
+    top: 5px;
+    left: 2px;
 
-    transform: scaleY(1.5);
+    width: 14px;
+    height: 1.5px;
+  }
+
+  .archive-filter-arrow::after {
+    bottom: 5px;
+    left: 2px;
+
+    width: 14px;
+    height: 1.5px;
   }
 
   .article-index {
