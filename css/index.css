@@ -26,6 +26,7 @@
   row-gap: clamp(18px, 1.6vw, 28px);
 
   width: 100%;
+
   margin:
     clamp(70px, 5vw, 90px)
     auto
@@ -74,7 +75,6 @@
   box-shadow: none;
 
   text-decoration: none;
-
   overflow: hidden;
 
   transition:
@@ -132,14 +132,13 @@
   min-width: 0;
 
   font-family:
-    "Special Gothic Condensed One",
+    "CossetteTitre",
     "Pretendard",
     sans-serif;
 
   font-size: 16px;
   font-weight: 400;
   line-height: 1;
-
   letter-spacing: 0;
 
   white-space: nowrap;
@@ -153,14 +152,13 @@
   min-width: 0;
 
   font-family:
-    "Special Gothic Condensed One",
+    "CossetteTitre",
     "Pretendard",
     sans-serif;
 
   font-size: 17px;
   font-weight: 400;
   line-height: 1;
-
   letter-spacing: 0;
 
   text-align: right;
@@ -187,7 +185,6 @@
 @media (hover: hover) {
   .index-item:not(.index-item--placeholder):hover {
     background-color: rgba(0, 0, 0, 0.58);
-
     transform: translateY(-2px);
   }
 }
@@ -219,7 +216,7 @@
   max-width: 100%;
 
   font-family:
-    "Special Gothic Condensed One",
+    "CossetteTitre",
     "Pretendard",
     sans-serif;
 
@@ -247,7 +244,6 @@
 
 .archive-filter a:hover {
   opacity: 0.45;
-
   letter-spacing: -0.05em;
 }
 
@@ -260,10 +256,10 @@
   color: #111111;
 
   font-family:
-    "Special Gothic Condensed One",
+    "CossetteTitre",
     sans-serif;
 
-  font-size: 31px;
+  font-size: 35px;
   font-weight: 400;
   line-height: 0.75;
 
@@ -321,7 +317,7 @@
   .archive-filter {
     gap: 11px;
 
-    font-size: 18px;
+    font-size: 21px;
 
     overflow-x: auto;
     overflow-y: hidden;
@@ -340,13 +336,11 @@
 
   .archive-filter-arrow {
     margin-left: -2px;
-
-    font-size: 23px;
+    font-size: 25px;
   }
 
   .article-index {
     row-gap: 14px;
-
     margin-top: 42px;
   }
 
