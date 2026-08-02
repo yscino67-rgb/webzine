@@ -49,6 +49,15 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Special Gothic Condensed One";
+  src: url("../font/SpecialGothicCondensedOne-Regular.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* =========================================================
    기본 설정
 ========================================================= */
@@ -62,6 +71,7 @@
 html {
   width: 100%;
   min-height: 100%;
+
   background-color: var(--background-color);
 }
 
@@ -69,6 +79,7 @@ body {
   width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
+
   margin: 0;
 
   background-color: var(--background-color);
@@ -137,6 +148,7 @@ select {
 
   display: flex;
   align-items: center;
+
   gap: 10px;
 
   width: auto;
@@ -150,6 +162,7 @@ select {
 
   width: var(--logo-width);
   height: auto;
+
   flex: 0 0 auto;
 }
 
@@ -165,6 +178,7 @@ select {
 
   white-space: nowrap;
 }
+
 /* =========================================================
    햄버거 메뉴 버튼
 ========================================================= */
@@ -233,8 +247,13 @@ select {
 .site-menu a {
   color: #000000;
 
-  font-size: 28px;
-  font-weight: 500;
+  font-family:
+    "Special Gothic Condensed One",
+    "Pretendard",
+    sans-serif;
+
+  font-size: 34px;
+  font-weight: 400;
   line-height: 1;
 
   transition: opacity 180ms ease;
@@ -264,9 +283,13 @@ select {
 .category-link {
   flex: 0 0 auto;
 
-  font-family: "Pretendard", sans-serif;
-  font-size: 18px;
-  font-weight: 500;
+  font-family:
+    "Special Gothic Condensed One",
+    "Pretendard",
+    sans-serif;
+
+  font-size: 22px;
+  font-weight: 400;
   line-height: 1;
   letter-spacing: -0.01em;
 
@@ -317,7 +340,7 @@ select {
   }
 
   .category-link {
-    font-size: 13px;
+    font-size: 17px;
   }
 
   .article-page {
@@ -370,6 +393,7 @@ select {
 
   .article-image {
     width: 100%;
+
     aspect-ratio: 5 / 3;
   }
 
@@ -397,7 +421,6 @@ select {
   }
 }
 
-
 /* =========================================================
    모바일
 ========================================================= */
@@ -406,17 +429,18 @@ select {
   :root {
     --logo-width: 45px;
     --menu-icon-width: 34px;
-     .site-logo-name {
-    font-size: 15px;
-     }
   }
 
   .site-header {
     padding: 20px;
   }
 
-  .site-logo span {
-    font-size: 14px;
+  .site-logo {
+    gap: 8px;
+  }
+
+  .site-logo-name {
+    font-size: 15px;
   }
 
   .site-menu {
@@ -429,6 +453,6 @@ select {
   }
 
   .site-menu a {
-    font-size: 24px;
+    font-size: 30px;
   }
 }

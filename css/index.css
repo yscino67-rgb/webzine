@@ -16,7 +16,7 @@
 
 /* =========================================================
    전체 기사 목록
-   2열이 아닌 1열 세로 목록
+   1열 세로 목록
 ========================================================= */
 
 .article-index {
@@ -35,8 +35,8 @@
 }
 
 /*
-  HTML에는 왼쪽·오른쪽 index-column이 두 개 있지만
-  CSS상 하나의 연속된 목록처럼 표시합니다.
+  HTML에 index-column이 두 개 있어도
+  화면에서는 하나의 연속된 목록처럼 표시
 */
 .index-column {
   display: contents;
@@ -52,10 +52,11 @@
   grid-template-columns:
     100px
     minmax(0, 1fr)
-    110px
+    120px
     130px;
 
   align-items: center;
+
   column-gap: clamp(18px, 2vw, 36px);
 
   width: 100%;
@@ -135,9 +136,11 @@
     "Pretendard",
     sans-serif;
 
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 1;
+
+  letter-spacing: 0;
 
   white-space: nowrap;
 }
@@ -154,9 +157,11 @@
     "Pretendard",
     sans-serif;
 
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 400;
   line-height: 1;
+
+  letter-spacing: 0;
 
   text-align: right;
   white-space: nowrap;
@@ -182,6 +187,7 @@
 @media (hover: hover) {
   .index-item:not(.index-item--placeholder):hover {
     background-color: rgba(0, 0, 0, 0.58);
+
     transform: translateY(-2px);
   }
 }
@@ -217,7 +223,7 @@
     "Pretendard",
     sans-serif;
 
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 400;
   line-height: 1;
 
@@ -230,7 +236,7 @@
 
   color: #111111;
 
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
 
   text-decoration: none;
 
@@ -241,14 +247,15 @@
 
 .archive-filter a:hover {
   opacity: 0.45;
-  letter-spacing: -0.065em;
+
+  letter-spacing: -0.05em;
 }
 
 .archive-filter-arrow {
   display: inline-block;
   flex: 0 0 auto;
 
-  margin-left: -5px;
+  margin-left: -4px;
 
   color: #111111;
 
@@ -256,11 +263,11 @@
     "Special Gothic Condensed One",
     sans-serif;
 
-  font-size: 28px;
+  font-size: 31px;
   font-weight: 400;
   line-height: 0.75;
 
-  transform: scaleX(1.35);
+  transform: scaleX(1.25);
   transform-origin: left center;
 }
 
@@ -273,7 +280,7 @@
     grid-template-columns:
       82px
       minmax(0, 1fr)
-      96px
+      100px
       110px;
 
     column-gap: 16px;
@@ -284,11 +291,11 @@
   }
 
   .index-date {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .index-subcategory {
-    font-size: 14px;
+    font-size: 15px;
   }
 }
 
@@ -314,7 +321,7 @@
   .archive-filter {
     gap: 11px;
 
-    font-size: 16px;
+    font-size: 18px;
 
     overflow-x: auto;
     overflow-y: hidden;
@@ -328,13 +335,13 @@
   }
 
   .archive-filter a {
-    letter-spacing: -0.035em;
+    letter-spacing: -0.025em;
   }
 
   .archive-filter-arrow {
-    margin-left: -3px;
+    margin-left: -2px;
 
-    font-size: 21px;
+    font-size: 23px;
   }
 
   .article-index {
@@ -368,10 +375,10 @@
   }
 
   .index-date {
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .index-subcategory {
-    font-size: 11px;
+    font-size: 12px;
   }
 }
