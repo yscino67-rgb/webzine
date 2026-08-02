@@ -29,47 +29,47 @@
   <body>
     <header class="site-header archive-header">
       <nav
-        class="archive-filter"
-        aria-label="카테고리 메뉴"
-      >
-        <a
-          class="archive-filter-all"
-          href="./archive.html?category=all"
-        >
-          ALL
-        </a>
+  class="archive-filter"
+  aria-label="카테고리 메뉴"
+>
+  <a
+    class="archive-filter-all"
+    href="./archive.html?category=all"
+  >
+    ALL
+  </a>
 
-        <button
-          class="archive-filter-toggle"
-          type="button"
-          aria-label="카테고리 메뉴 열기"
-          aria-expanded="false"
-          aria-controls="archive-filter-items"
-        >
-          <span aria-hidden="true"></span>
-        </button>
+  <div
+    class="archive-filter-items"
+    id="archive-filter-items"
+  >
+    <a href="./archive.html?category=criticism">
+      CRITICISM
+    </a>
 
-        <div
-          class="archive-filter-items"
-          id="archive-filter-items"
-        >
-          <a href="./archive.html?category=criticism">
-            CRITICISM
-          </a>
+    <a href="./archive.html?category=essay">
+      ESSAY
+    </a>
 
-          <a href="./archive.html?category=essay">
-            ESSAY
-          </a>
+    <a href="./archive.html?category=article">
+      ARTICLE
+    </a>
 
-          <a href="./archive.html?category=article">
-            ARTICLE
-          </a>
+    <a href="./archive.html?category=about">
+      ABOUT
+    </a>
+  </div>
 
-          <a href="./archive.html?category=about">
-            ABOUT
-          </a>
-        </div>
-      </nav>
+  <button
+    class="archive-filter-toggle"
+    type="button"
+    aria-label="카테고리 메뉴 열기"
+    aria-expanded="false"
+    aria-controls="archive-filter-items"
+  >
+    <span aria-hidden="true"></span>
+  </button>
+</nav>
     </header>
 
     <main class="site-main">
