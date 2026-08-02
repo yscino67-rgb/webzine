@@ -3,14 +3,13 @@
 ========================================================= */
 
 :root {
-  /* 열기·닫기 공통 애니메이션 시간 */
   --archive-animation-duration: 800ms;
-
-  /* 열기·닫기 공통 움직임 */
   --archive-animation-easing: cubic-bezier(0.22, 1, 0.36, 1);
-
-  /* 열린 상태의 네모 크기: 1이면 크기 변화 없음 */
   --archive-square-open-scale: 1;
+
+  /* 작은 메뉴와 네모의 세로 위치 */
+  --archive-small-menu-offset-y: -13px;
+  --archive-square-offset-y: -12px;
 }
 
 /* =========================================================
@@ -49,10 +48,6 @@
   padding: 0;
 }
 
-/*
-  HTML에 index-column이 여러 개 있어도
-  하나의 연속된 목록처럼 표시
-*/
 .index-column {
   display: contents;
 }
@@ -146,6 +141,7 @@
   min-width: 0;
 
   font-family:
+    "CossetteTitre",
     "Special Gothic Condensed One",
     "Pretendard",
     sans-serif;
@@ -166,6 +162,7 @@
   min-width: 0;
 
   font-family:
+    "CossetteTitre",
     "Special Gothic Condensed One",
     "Pretendard",
     sans-serif;
@@ -232,12 +229,10 @@
 
   width: max-content;
   max-width: 100%;
-
   min-height: 66px;
 
   white-space: nowrap;
 }
-
 
 /* =========================================================
    ALL
@@ -255,11 +250,11 @@
   color: #111111;
 
   font-family:
+    "CossetteTitre",
     "Special Gothic Condensed One",
     "Pretendard",
     sans-serif;
 
-  /* ALL만 크게 */
   font-size: 64px;
   font-weight: 400;
   line-height: 0.94;
@@ -283,24 +278,20 @@
 
   gap: 16px;
 
-  /*
-    닫힌 상태에서는 너비 0.
-    script.js에서 실제 메뉴 너비를 계산해
-    --archive-menu-width에 넣습니다.
-  */
   width: 0;
   min-width: 0;
 
-  margin-top: 11px;
+  margin-top: 0;
   margin-left: 0;
 
   opacity: 0;
-
   overflow: hidden;
 
   /*
-    열기와 닫기 모두 같은 transition을 사용합니다.
+    글자 크기는 유지하고 작은 메뉴 전체만 위로 이동
   */
+  transform: translateY(var(--archive-small-menu-offset-y));
+
   transition:
     width
       var(--archive-animation-duration)
@@ -313,7 +304,6 @@
       var(--archive-animation-easing);
 }
 
-/* 열린 상태 */
 .archive-filter.is-open .archive-filter-items {
   width: var(--archive-menu-width, 0px);
 
@@ -333,6 +323,7 @@
   color: #111111;
 
   font-family:
+    "CossetteTitre",
     "Special Gothic Condensed One",
     "Pretendard",
     sans-serif;
@@ -344,11 +335,6 @@
 
   text-decoration: none;
 }
-
-/*
-  개별 메뉴에는 별도의 이동이나 지연을 주지 않습니다.
-  전체 메뉴 영역이 하나의 끈처럼 열리고 닫힙니다.
-*/
 
 /* =========================================================
    검정 네모 버튼
@@ -367,15 +353,19 @@
   width: 24px;
   height: 24px;
 
-  margin-top: 8px;
+  margin-top: 0;
   margin-left: 16px;
-
   padding: 0;
 
   background: transparent;
   border: 0;
 
   cursor: pointer;
+
+  /*
+    네모도 작은 메뉴의 윗선에 맞춰 위로 이동
+  */
+  transform: translateY(var(--archive-square-offset-y));
 
   transition: opacity 180ms ease;
 
@@ -450,6 +440,11 @@
 ========================================================= */
 
 @media (max-width: 767px) {
+  :root {
+    --archive-small-menu-offset-y: -8px;
+    --archive-square-offset-y: -7px;
+  }
+
   .site-main {
     padding:
       0
@@ -479,11 +474,6 @@
     display: none;
   }
 
-  .archive-filter::before {
-    height: 1.5px;
-  }
-
-  /* 모바일에서도 ALL을 크게 */
   .archive-filter-all {
     margin-top: -1px;
 
@@ -495,7 +485,7 @@
   .archive-filter-items {
     gap: 11px;
 
-    margin-top: 8px;
+    margin-top: 0;
   }
 
   .archive-filter.is-open .archive-filter-items {
@@ -511,7 +501,7 @@
     width: 18px;
     height: 18px;
 
-    margin-top: 6px;
+    margin-top: 0;
     margin-left: 10px;
   }
 
@@ -574,7 +564,6 @@
    아카이브 페이지 폰트
 ========================================================= */
 
-/* 영어 상단 메뉴 */
 .archive-page .archive-filter-all,
 .archive-page .archive-filter-items a,
 .archive-page .index-date,
@@ -588,7 +577,6 @@
   font-weight: 400;
 }
 
-/* 한글 작성자와 제목 */
 .archive-page .index-author,
 .archive-page .index-title {
   font-family:
