@@ -403,32 +403,30 @@
 .footnote-marker {
   display: block;
 
-  width: 12px;
-  height: 12px;
-
+  width: 14px;
+  height: 14px;
   padding: 0;
 
   border: 0;
-
-  /* 완전한 네모는 0, 살짝 둥근 네모는 2px */
-  border-radius: 4;
+  border-radius: 7px;
 
   background-color: #0f9ed5;
 
   cursor: pointer;
-
   flex: 0 0 auto;
-  flex-shrink: 0;
 
   appearance: none;
   -webkit-appearance: none;
 
+  outline: none;
+
   -webkit-tap-highlight-color: transparent;
 }
 
+/* 키보드 포커스일 때만 테두리 표시 */
 .footnote-marker:focus-visible {
   outline: 1px solid #0f9ed5;
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 
 /* =========================
