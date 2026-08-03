@@ -411,7 +411,7 @@
   border: 0;
 
   /* 완전한 네모는 0, 살짝 둥근 네모는 2px */
-  border-radius: 2;
+  border-radius: 4;
 
   background-color: #0f9ed5;
 
