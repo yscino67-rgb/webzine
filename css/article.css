@@ -6,10 +6,6 @@
   width: 100%;
   min-height: 100dvh;
 
-  /*
-    고정된 상단 카테고리 메뉴 아래에서
-    기사 내용이 시작되도록 충분한 여백 확보
-  */
   padding:
     162px
     var(--page-padding)
@@ -39,9 +35,6 @@
 .article-header {
   width: 100%;
 
-  /*
-    메뉴와 기사 제목 사이 간격
-  */
   margin:
     24px
     0
@@ -220,11 +213,6 @@
 
 .article-visual {
   position: sticky;
-
-  /*
-    상단 고정 메뉴에 이미지가 가려지지 않도록
-    메뉴 높이 아래에 고정
-  */
   top: 112px;
 
   width: min(100%, 520px);
@@ -349,6 +337,45 @@
 }
 
 /* =========================
+   접합하기 제목 + 각주 네모
+========================= */
+
+.principle-heading {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 6px;
+
+  width: max-content;
+  max-width: 100%;
+}
+
+/*
+  위의 .article-principles strong {
+    display: block;
+  }
+  규칙을 덮어써서 제목과 네모를 같은 줄에 배치
+*/
+.principle-heading strong {
+  display: inline-block;
+  flex: 0 0 auto;
+
+  margin: 0;
+
+  line-height: 1.8;
+}
+
+.footnote-wrap {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+}
+
+/* =========================
    기사 하단
 ========================= */
 
@@ -376,19 +403,21 @@
 .footnote-marker {
   display: block;
 
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
 
   padding: 0;
 
   border: 0;
 
-  /* 동그라미 제거 */
-  border-radius: 2;
+  /* 완전한 네모는 0, 살짝 둥근 네모는 2px */
+  border-radius: 0;
 
   background-color: #0f9ed5;
 
   cursor: pointer;
+
+  flex: 0 0 auto;
   flex-shrink: 0;
 
   appearance: none;
@@ -408,7 +437,6 @@
 
 .footnote-popover {
   position: absolute;
-
   z-index: 20;
 
   top: calc(100% + 9px);
@@ -553,8 +581,8 @@
   }
 
   .footnote-marker {
-    width: 11px;
-    height: 11px;
+    width: 10px;
+    height: 10px;
   }
 
   .article-footer {
@@ -595,9 +623,23 @@
     line-height: 1.8;
   }
 
+  .principle-heading {
+    gap: 5px;
+  }
+
+  .footnote-marker {
+    width: 10px;
+    height: 10px;
+  }
+
   .footnote-popover {
     min-width: 0;
-    width: min(260px, calc(100vw - 40px));
+
+    width:
+      min(
+        260px,
+        calc(100vw - 40px)
+      );
 
     white-space: normal;
 
