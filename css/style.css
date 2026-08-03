@@ -17,11 +17,8 @@
   --category-menu-size: 30px;
   --category-menu-letter-spacing: -0.03em;
 
-  /* 기사 페이지 고정 메뉴 높이 */
-  --article-navigation-height: 90px;
-
-  /* 메뉴와 기사 제목 사이 거리 */
-  --article-navigation-spacing: 72px;
+  /* 기사 상단 메뉴와 제목 사이 간격 */
+  --article-title-top-gap: 72px;
 }
 
 /* =========================================================
@@ -30,11 +27,9 @@
 
 @font-face {
   font-family: "Pretendard";
-
   src:
     url("../font/Pretendard-Medium.otf")
     format("opentype");
-
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -42,11 +37,9 @@
 
 @font-face {
   font-family: "Pretendard";
-
   src:
     url("../font/Pretendard-SemiBold.otf")
     format("opentype");
-
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -54,11 +47,9 @@
 
 @font-face {
   font-family: "BookkMyungjo";
-
   src:
     url("../font/BookkMyungjo_Light.ttf")
     format("truetype");
-
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -66,11 +57,9 @@
 
 @font-face {
   font-family: "BookkMyungjo";
-
   src:
     url("../font/BookkMyungjo_Bold.ttf")
     format("truetype");
-
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -78,11 +67,9 @@
 
 @font-face {
   font-family: "Special Gothic Condensed One";
-
   src:
     url("../font/SpecialGothicCondensedOne-Regular.ttf")
     format("truetype");
-
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -90,11 +77,9 @@
 
 @font-face {
   font-family: "CossetteTitre";
-
   src:
     url("../font/CossetteTitre-Regular.ttf")
     format("truetype");
-
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -326,12 +311,12 @@ select {
 }
 
 /* =========================================================
-   기사 페이지 고정 카테고리 메뉴
+   일반 페이지 카테고리 내비게이션
 ========================================================= */
 
 .category-navigation {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
 
   gap: var(--category-menu-gap);
@@ -343,59 +328,6 @@ select {
 
   white-space: nowrap;
 }
-
-.article-page .category-navigation {
-  position: fixed;
-
-  top: 0;
-  left: 0;
-  z-index: 900;
-
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-
-  gap: var(--category-menu-gap);
-
-  width: 100%;
-  max-width: none;
-  min-height: var(--article-navigation-height);
-
-  margin: 0;
-
-  padding:
-    28px
-    44px
-    24px;
-
-  background-color: #ffffff;
-
-  white-space: nowrap;
-
-  overflow-x: auto;
-  overflow-y: hidden;
-
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-
-  /*
-    스크롤되는 기사 내용이
-    메뉴 아래에서 자연스럽게 잘리도록 처리
-  */
-  box-shadow:
-    0
-    4px
-    12px
-    rgba(0, 0, 0, 0.025);
-}
-
-.article-page .category-navigation::-webkit-scrollbar {
-  display: none;
-}
-
-/* =========================================================
-   기사 페이지 카테고리 링크
-========================================================= */
 
 .category-link {
   display: inline-block;
@@ -432,25 +364,85 @@ select {
 }
 
 /* =========================================================
-   고정 메뉴 아래 기사 콘텐츠 여백
+   기사 페이지 상단 메뉴
 
-   article.css가 뒤에서 로드되더라도
-   상단 여백이 유지되도록 padding-top만 우선 적용
+   sticky이므로 문서 흐름을 차지하여
+   기사 제목과 겹치지 않습니다.
 ========================================================= */
 
-.article-page {
-  padding-top:
+.article-page .category-navigation {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  gap: var(--category-menu-gap);
+
+  width:
     calc(
-      var(--article-navigation-height) +
-      var(--article-navigation-spacing)
-    ) !important;
+      100% +
+      var(--page-padding) +
+      var(--page-padding)
+    );
+
+  max-width: none;
+
+  margin:
+    0
+    calc(-1 * var(--page-padding));
+
+  padding:
+    28px
+    44px
+    24px;
+
+  background-color: #ffffff;
+
+  white-space: nowrap;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+
+  /*
+    흰색 메뉴 영역이 본문을 완전히 가리도록
+    아래쪽 여백까지 배경으로 확보
+  */
+  isolation: isolate;
 }
 
-/*
-  기사 제목 자체에도 약간의 위쪽 공간을 확보
-*/
+.article-page .category-navigation::after {
+  content: "";
+
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: -1;
+
+  width: 100%;
+  height: 16px;
+
+  background-color: #ffffff;
+
+  pointer-events: none;
+}
+
+.article-page .category-navigation::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================================================
+   메뉴와 기사 제목 사이 간격
+========================================================= */
+
 .article-page .article-header {
-  margin-top: 18px;
+  margin-top:
+    var(--article-title-top-gap);
 }
 
 /* =========================================================
@@ -481,14 +473,14 @@ select {
     --category-menu-gap: 11px;
     --category-menu-size: 20px;
 
-    --article-navigation-height: 66px;
-    --article-navigation-spacing: 45px;
+    --article-title-top-gap: 52px;
   }
 
   .category-navigation {
     justify-content: flex-start;
 
-    gap: var(--category-menu-gap);
+    gap:
+      var(--category-menu-gap);
 
     width: max-content;
     max-width: 100%;
@@ -515,40 +507,31 @@ select {
   }
 
   .article-page .category-navigation {
-    min-height:
-      var(--article-navigation-height);
+    width:
+      calc(
+        100% +
+        var(--page-padding) +
+        var(--page-padding)
+      );
+
+    margin:
+      0
+      calc(-1 * var(--page-padding));
 
     padding:
       20px
-      22px
+      var(--page-padding)
       18px;
-
-    box-shadow:
-      0
-      4px
-      10px
-      rgba(0, 0, 0, 0.025);
   }
 
-  .article-page {
-    padding-top:
-      calc(
-        var(--article-navigation-height) +
-        var(--article-navigation-spacing)
-      ) !important;
-
-    padding-right:
-      var(--page-padding);
-
-    padding-bottom:
-      60px;
-
-    padding-left:
-      var(--page-padding);
+  .article-page .category-navigation::after {
+    height: 12px;
   }
 
   .article-page .article-header {
-    margin-top: 0;
+    margin-top:
+      var(--article-title-top-gap);
+
     margin-bottom: 42px;
   }
 
@@ -636,8 +619,7 @@ select {
     --category-menu-gap: 10px;
     --category-menu-size: 18px;
 
-    --article-navigation-height: 58px;
-    --article-navigation-spacing: 34px;
+    --article-title-top-gap: 42px;
   }
 
   .site-header {
@@ -676,25 +658,20 @@ select {
   }
 
   .article-page .category-navigation {
-    min-height:
-      var(--article-navigation-height);
-
     padding:
       18px
-      20px
+      var(--page-padding)
       16px;
   }
 
-  .article-page {
-    padding-top:
-      calc(
-        var(--article-navigation-height) +
-        var(--article-navigation-spacing)
-      ) !important;
+  .article-page .category-navigation::after {
+    height: 10px;
   }
 
   .article-page .article-header {
-    margin-top: 0;
+    margin-top:
+      var(--article-title-top-gap);
+
     margin-bottom: 38px;
   }
 }
