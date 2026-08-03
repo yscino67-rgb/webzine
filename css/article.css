@@ -325,7 +325,7 @@
   min-width: max-content;
   padding: 7px 10px;
 
-  background-color: #0f9ed5;
+  background-color: #000000;
   color: #ffffff;
 
   font-family: "Pretendard", sans-serif;
@@ -346,7 +346,7 @@
   left: 50%;
 
   border-right: 4px solid transparent;
-  border-bottom: 5px solid #0f9ed5;
+  border-bottom: 5px solid #000000;
   border-left: 4px solid transparent;
 
   transform: translateX(-50%);
