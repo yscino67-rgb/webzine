@@ -16,6 +16,12 @@
   --category-menu-gap: 16px;
   --category-menu-size: 30px;
   --category-menu-letter-spacing: -0.03em;
+
+  /* 기사 페이지 고정 메뉴 높이 */
+  --article-navigation-height: 90px;
+
+  /* 메뉴와 기사 제목 사이 거리 */
+  --article-navigation-spacing: 72px;
 }
 
 /* =========================================================
@@ -24,8 +30,11 @@
 
 @font-face {
   font-family: "Pretendard";
-  src: url("../font/Pretendard-Medium.otf")
+
+  src:
+    url("../font/Pretendard-Medium.otf")
     format("opentype");
+
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -33,8 +42,11 @@
 
 @font-face {
   font-family: "Pretendard";
-  src: url("../font/Pretendard-SemiBold.otf")
+
+  src:
+    url("../font/Pretendard-SemiBold.otf")
     format("opentype");
+
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -42,8 +54,11 @@
 
 @font-face {
   font-family: "BookkMyungjo";
-  src: url("../font/BookkMyungjo_Light.ttf")
+
+  src:
+    url("../font/BookkMyungjo_Light.ttf")
     format("truetype");
+
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -51,8 +66,11 @@
 
 @font-face {
   font-family: "BookkMyungjo";
-  src: url("../font/BookkMyungjo_Bold.ttf")
+
+  src:
+    url("../font/BookkMyungjo_Bold.ttf")
     format("truetype");
+
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -60,9 +78,11 @@
 
 @font-face {
   font-family: "Special Gothic Condensed One";
+
   src:
     url("../font/SpecialGothicCondensedOne-Regular.ttf")
     format("truetype");
+
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -70,9 +90,11 @@
 
 @font-face {
   font-family: "CossetteTitre";
+
   src:
     url("../font/CossetteTitre-Regular.ttf")
     format("truetype");
+
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -304,10 +326,7 @@ select {
 }
 
 /* =========================================================
-   일반 기사 페이지 카테고리 내비게이션
-
-   인덱스의 ALL 오른쪽 메뉴와
-   크기·간격·자간 통일
+   기사 페이지 고정 카테고리 메뉴
 ========================================================= */
 
 .category-navigation {
@@ -325,6 +344,59 @@ select {
   white-space: nowrap;
 }
 
+.article-page .category-navigation {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+  z-index: 900;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  gap: var(--category-menu-gap);
+
+  width: 100%;
+  max-width: none;
+  min-height: var(--article-navigation-height);
+
+  margin: 0;
+
+  padding:
+    28px
+    44px
+    24px;
+
+  background-color: #ffffff;
+
+  white-space: nowrap;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+
+  /*
+    스크롤되는 기사 내용이
+    메뉴 아래에서 자연스럽게 잘리도록 처리
+  */
+  box-shadow:
+    0
+    4px
+    12px
+    rgba(0, 0, 0, 0.025);
+}
+
+.article-page .category-navigation::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================================================
+   기사 페이지 카테고리 링크
+========================================================= */
+
 .category-link {
   display: inline-block;
   flex: 0 0 auto;
@@ -337,9 +409,12 @@ select {
     "Pretendard",
     sans-serif;
 
-  font-size: var(--category-menu-size);
+  font-size:
+    var(--category-menu-size);
+
   font-weight: 400;
   line-height: 1;
+
   letter-spacing:
     var(--category-menu-letter-spacing);
 
@@ -356,16 +431,26 @@ select {
   opacity: 0.45;
 }
 
-/*
-  기사 페이지 상단 메뉴의 시작점을
-  인덱스의 ALL 시작점과 맞춤
+/* =========================================================
+   고정 메뉴 아래 기사 콘텐츠 여백
 
-  article-page의 좌우 패딩값과
-  인덱스 헤더의 44px 차이를 보정합니다.
+   article.css가 뒤에서 로드되더라도
+   상단 여백이 유지되도록 padding-top만 우선 적용
+========================================================= */
+
+.article-page {
+  padding-top:
+    calc(
+      var(--article-navigation-height) +
+      var(--article-navigation-spacing)
+    ) !important;
+}
+
+/*
+  기사 제목 자체에도 약간의 위쪽 공간을 확보
 */
-.article-page .category-navigation {
-  margin-left:
-    calc(44px - var(--page-padding));
+.article-page .article-header {
+  margin-top: 18px;
 }
 
 /* =========================================================
@@ -395,6 +480,9 @@ select {
 
     --category-menu-gap: 11px;
     --category-menu-size: 20px;
+
+    --article-navigation-height: 66px;
+    --article-navigation-spacing: 45px;
   }
 
   .category-navigation {
@@ -426,22 +514,41 @@ select {
       var(--category-menu-letter-spacing);
   }
 
-  /*
-    태블릿·모바일에서는 본문 패딩과
-    메뉴 시작 위치를 동일하게 사용
-  */
   .article-page .category-navigation {
-    margin-left: 0;
+    min-height:
+      var(--article-navigation-height);
+
+    padding:
+      20px
+      22px
+      18px;
+
+    box-shadow:
+      0
+      4px
+      10px
+      rgba(0, 0, 0, 0.025);
   }
 
   .article-page {
-    padding:
-      32px
-      var(--page-padding)
+    padding-top:
+      calc(
+        var(--article-navigation-height) +
+        var(--article-navigation-spacing)
+      ) !important;
+
+    padding-right:
+      var(--page-padding);
+
+    padding-bottom:
       60px;
+
+    padding-left:
+      var(--page-padding);
   }
 
-  .article-header {
+  .article-page .article-header {
+    margin-top: 0;
     margin-bottom: 42px;
   }
 
@@ -528,6 +635,9 @@ select {
 
     --category-menu-gap: 10px;
     --category-menu-size: 18px;
+
+    --article-navigation-height: 58px;
+    --article-navigation-spacing: 34px;
   }
 
   .site-header {
@@ -563,5 +673,28 @@ select {
   .category-link {
     font-size:
       var(--category-menu-size);
+  }
+
+  .article-page .category-navigation {
+    min-height:
+      var(--article-navigation-height);
+
+    padding:
+      18px
+      20px
+      16px;
+  }
+
+  .article-page {
+    padding-top:
+      calc(
+        var(--article-navigation-height) +
+        var(--article-navigation-spacing)
+      ) !important;
+  }
+
+  .article-page .article-header {
+    margin-top: 0;
+    margin-bottom: 38px;
   }
 }
