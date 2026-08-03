@@ -373,20 +373,6 @@
    동그라미 각주
 ========================= */
 
-.principle-heading {
-  display: flex;
-  align-items: baseline;
-
-  gap: 5px;
-}
-
-.footnote-wrap {
-  position: relative;
-
-  display: inline-flex;
-  align-items: center;
-}
-
 .footnote-marker {
   display: block;
 
