@@ -6,8 +6,12 @@
   width: 100%;
   min-height: 100dvh;
 
+  /*
+    고정된 상단 카테고리 메뉴 아래에서
+    기사 내용이 시작되도록 충분한 여백 확보
+  */
   padding:
-    clamp(60px, 5vw, 90px)
+    162px
     var(--page-padding)
     100px;
 
@@ -35,7 +39,12 @@
 .article-header {
   width: 100%;
 
-  margin-bottom:
+  /*
+    메뉴와 기사 제목 사이 간격
+  */
+  margin:
+    24px
+    0
     clamp(55px, 5vw, 85px);
 
   text-align: center;
@@ -211,7 +220,12 @@
 
 .article-visual {
   position: sticky;
-  top: 36px;
+
+  /*
+    상단 고정 메뉴에 이미지가 가려지지 않도록
+    메뉴 높이 아래에 고정
+  */
+  top: 112px;
 
   width: min(100%, 520px);
   min-width: 0;
@@ -471,4 +485,138 @@
 
 .footnote-popover[hidden] {
   display: none;
+}
+
+/* =========================
+   태블릿
+========================= */
+
+@media (max-width: 899px) {
+  .article-page {
+    padding:
+      120px
+      var(--page-padding)
+      60px;
+  }
+
+  .article-header {
+    margin:
+      18px
+      0
+      42px;
+  }
+
+  .article-title {
+    font-size:
+      clamp(24px, 6.5vw, 34px);
+
+    line-height: 1.25;
+
+    transform: none;
+  }
+
+  .article-layout {
+    display: flex;
+    flex-direction: column;
+
+    gap: 42px;
+  }
+
+  .article-copy {
+    width: 100%;
+    max-width: none;
+  }
+
+  .article-body {
+    font-size:
+      clamp(16px, 4.2vw, 19px);
+
+    line-height: 1.85;
+  }
+
+  .article-body > p {
+    margin-bottom: 32px;
+  }
+
+  .article-visual {
+    position: static;
+
+    order: -1;
+
+    width: 100%;
+
+    margin: 0;
+  }
+
+  .article-image {
+    width: 100%;
+
+    aspect-ratio: 5 / 3;
+  }
+
+  .article-caption {
+    font-size: 11px;
+  }
+
+  .article-principles {
+    margin-top: 40px;
+  }
+
+  .article-principles li {
+    grid-template-columns:
+      36px
+      minmax(0, 1fr);
+  }
+
+  .footnote-marker {
+    width: 11px;
+    height: 11px;
+  }
+
+  .article-footer {
+    margin-top: 60px;
+  }
+}
+
+/* =========================
+   모바일
+========================= */
+
+@media (max-width: 767px) {
+  .article-page {
+    padding:
+      105px
+      var(--page-padding)
+      60px;
+  }
+
+  .article-header {
+    margin:
+      16px
+      0
+      38px;
+  }
+
+  .article-title {
+    font-size:
+      clamp(24px, 7vw, 32px);
+
+    line-height: 1.3;
+  }
+
+  .article-body {
+    font-size:
+      clamp(16px, 4.2vw, 19px);
+
+    line-height: 1.8;
+  }
+
+  .footnote-popover {
+    min-width: 0;
+    width: min(260px, calc(100vw - 40px));
+
+    white-space: normal;
+
+    text-align: left;
+  }
 }
