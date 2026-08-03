@@ -370,7 +370,7 @@
 }
 
 /* =========================
-   동그라미 각주
+   네모 각주 버튼
 ========================= */
 
 .footnote-marker {
@@ -382,25 +382,23 @@
   padding: 0;
 
   border: 0;
-  border-radius: 50%;
+
+  /* 동그라미 제거 */
+  border-radius: 2;
 
   background-color: #0f9ed5;
 
   cursor: pointer;
-
   flex-shrink: 0;
 
   appearance: none;
   -webkit-appearance: none;
 
-  -webkit-tap-highlight-color:
-    transparent;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .footnote-marker:focus-visible {
-  outline:
-    1px solid #0f9ed5;
-
+  outline: 1px solid #0f9ed5;
   outline-offset: 3px;
 }
 
