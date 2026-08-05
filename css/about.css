@@ -73,6 +73,35 @@
 }
 
 /* =========================================================
+   제목 영역
+========================================================= */
+
+.about-title-area {
+  width: 100%;
+
+  margin-bottom:
+    clamp(64px, 7vw, 100px);
+
+  text-align: center;
+}
+
+.about-title {
+  margin:
+    0
+    0
+    34px;
+
+  font-family:
+    "CossetteTitre",
+    "Special Gothic Condensed One",
+    "Pretendard",
+    sans-serif;
+
+  font-size:
+    clamp(54px, 6vw, 92px);
+
+
+/* =========================================================
    본문 섹션
 ========================================================= */
 
