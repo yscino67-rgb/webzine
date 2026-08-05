@@ -5,31 +5,418 @@
 
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
 
-    <meta
-      name="theme-color"
-      content="#ffffff"
-    />
+    <meta name="theme-color" content="#ffffff" />
 
     <title>횡단 CMS</title>
 
-    <!-- 즉시 실제 CMS 경로로 이동 -->
-    <meta
-      http-equiv="refresh"
-      content="0; url=./editor/"
+    <link
+      rel="stylesheet"
+      href="./admin.css?v=1"
     />
-
-    <script>
-      window.location.replace("./editor/");
-    </script>
   </head>
 
   <body>
-    <p>
-      CMS로 이동 중입니다.
-      <a href="./editor/">직접 이동</a>
-    </p>
+    <!-- 로그인 화면 -->
+    <main
+      class="admin-login"
+      id="login-view"
+    >
+      <form
+        class="login-panel"
+        id="login-form"
+      >
+        <p class="admin-eyebrow">
+          HWENGDAN CMS
+        </p>
+
+        <h1>관리자 로그인</h1>
+
+        <label for="admin-password">
+          비밀번호
+        </label>
+
+        <input
+          id="admin-password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          required
+        />
+
+        <button type="submit">
+          로그인
+        </button>
+
+        <p
+          class="form-message"
+          id="login-message"
+          aria-live="polite"
+        ></p>
+      </form>
+    </main>
+
+    <!-- CMS 화면 -->
+    <main
+      class="admin-app"
+      id="admin-view"
+      hidden
+    >
+      <header class="admin-header">
+        <a
+          class="admin-brand"
+          href="/"
+          target="_blank"
+          rel="noopener"
+        >
+          횡단 CMS
+        </a>
+
+        <div class="admin-header-actions">
+          <a
+            href="/html/archive.html"
+            target="_blank"
+            rel="noopener"
+          >
+            사이트 보기
+          </a>
+
+          <button
+            type="button"
+            id="logout-button"
+          >
+            로그아웃
+          </button>
+        </div>
+      </header>
+
+      <div class="admin-layout">
+        <!-- 게시글 목록 -->
+        <aside class="post-sidebar">
+          <div class="sidebar-header">
+            <h2>게시글</h2>
+
+            <button
+              type="button"
+              id="new-post-button"
+            >
+              새 글
+            </button>
+          </div>
+
+          <div
+            class="post-list"
+            id="post-list"
+          ></div>
+        </aside>
+
+        <!-- 글쓰기 -->
+        <section class="post-editor">
+          <form id="post-form">
+            <input
+              type="hidden"
+              id="post-id"
+            />
+
+            <div class="editor-heading">
+              <div>
+                <p class="admin-eyebrow">
+                  POST EDITOR
+                </p>
+
+                <h1 id="editor-title">
+                  새 게시글
+                </h1>
+              </div>
+
+              <div class="editor-actions">
+                <button
+                  class="delete-button"
+                  type="button"
+                  id="delete-post-button"
+                  hidden
+                >
+                  삭제
+                </button>
+
+                <button
+                  class="save-button"
+                  type="submit"
+                >
+                  저장
+                </button>
+              </div>
+            </div>
+
+            <div class="field-grid">
+              <label class="field field--wide">
+                <span>제목</span>
+
+                <input
+                  type="text"
+                  id="post-title"
+                  required
+                />
+              </label>
+
+              <label class="field">
+                <span>작성자</span>
+
+                <input
+                  type="text"
+                  id="post-author"
+                  required
+                />
+              </label>
+
+              <label class="field">
+                <span>작성일</span>
+
+                <input
+                  type="date"
+                  id="post-date"
+                  required
+                />
+              </label>
+
+              <label class="field">
+                <span>카테고리</span>
+
+                <select id="post-category">
+                  <option value="criticism">
+                    CRITICISM
+                  </option>
+
+                  <option value="interview">
+                    INTERVIEW
+                  </option>
+
+                  <option value="essay">
+                    ESSAY
+                  </option>
+
+                  <option value="article">
+                    ARTICLE
+                  </option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>세부 카테고리</span>
+
+                <input
+                  type="text"
+                  id="post-subcategory"
+                  placeholder="CRITICISM"
+                />
+              </label>
+
+              <label class="field field--wide">
+                <span>대표 이미지 주소</span>
+
+                <input
+                  type="text"
+                  id="post-thumbnail"
+                  placeholder="/images/uploads/example.jpg"
+                />
+              </label>
+
+              <label class="field">
+                <span>이미지 설명</span>
+
+                <input
+                  type="text"
+                  id="post-image-caption"
+                />
+              </label>
+
+              <label class="field">
+                <span>이미지 출처</span>
+
+                <input
+                  type="text"
+                  id="post-image-source"
+                />
+              </label>
+
+              <label class="checkbox-field">
+                <input
+                  type="checkbox"
+                  id="post-published"
+                  checked
+                />
+
+                <span>사이트에 공개</span>
+              </label>
+            </div>
+
+            <section class="body-editor-section">
+              <div class="body-editor-label">
+                본문
+              </div>
+
+              <div
+                class="editor-toolbar"
+                role="toolbar"
+                aria-label="본문 서식"
+              >
+                <button
+                  type="button"
+                  data-command="bold"
+                  aria-label="굵게"
+                >
+                  <strong>B</strong>
+                </button>
+
+                <button
+                  type="button"
+                  data-command="italic"
+                  aria-label="기울임"
+                >
+                  <em>I</em>
+                </button>
+
+                <button
+                  type="button"
+                  data-command="underline"
+                  aria-label="밑줄"
+                >
+                  <u>U</u>
+                </button>
+
+                <button
+                  type="button"
+                  data-command="strikeThrough"
+                  aria-label="취소선"
+                >
+                  <s>S</s>
+                </button>
+
+                <button
+                  type="button"
+                  data-block="p"
+                >
+                  P
+                </button>
+
+                <button
+                  type="button"
+                  data-block="h2"
+                >
+                  H2
+                </button>
+
+                <button
+                  type="button"
+                  data-block="blockquote"
+                >
+                  “ ”
+                </button>
+
+                <button
+                  type="button"
+                  data-command="insertUnorderedList"
+                  aria-label="글머리표"
+                >
+                  • LIST
+                </button>
+
+                <button
+                  type="button"
+                  data-command="insertOrderedList"
+                  aria-label="번호 목록"
+                >
+                  1. LIST
+                </button>
+
+                <button
+                  type="button"
+                  data-command="justifyLeft"
+                >
+                  LEFT
+                </button>
+
+                <button
+                  type="button"
+                  data-command="justifyCenter"
+                >
+                  CENTER
+                </button>
+
+                <button
+                  type="button"
+                  data-command="justifyRight"
+                >
+                  RIGHT
+                </button>
+
+                <button
+                  type="button"
+                  id="link-button"
+                >
+                  LINK
+                </button>
+
+                <label class="color-tool">
+                  글자색
+
+                  <input
+                    type="color"
+                    id="text-color"
+                    value="#111111"
+                  />
+                </label>
+
+                <label class="color-tool">
+                  배경색
+
+                  <input
+                    type="color"
+                    id="background-color"
+                    value="#fff2a8"
+                  />
+                </label>
+
+                <button
+                  type="button"
+                  data-command="undo"
+                >
+                  UNDO
+                </button>
+
+                <button
+                  type="button"
+                  data-command="redo"
+                >
+                  REDO
+                </button>
+              </div>
+
+              <div
+                class="body-editor"
+                id="body-editor"
+                contenteditable="true"
+                role="textbox"
+                aria-multiline="true"
+                data-placeholder="본문을 입력하세요."
+              ></div>
+            </section>
+
+            <p
+              class="form-message"
+              id="save-message"
+              aria-live="polite"
+            ></p>
+          </form>
+        </section>
+      </div>
+    </main>
+
+    <script
+      src="./admin.js?v=1"
+      defer
+    ></script>
   </body>
 </html>
