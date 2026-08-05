@@ -100,6 +100,30 @@
   font-size:
     clamp(54px, 6vw, 92px);
 
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+}
+
+.about-introduction {
+  max-width: 760px;
+
+  margin:
+    0
+    auto;
+
+  font-size:
+    clamp(20px, 1.65vw, 28px);
+
+  font-weight: 600;
+  line-height: 1.7;
+  letter-spacing: -0.025em;
+
+  text-align: center;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
 
 /* =========================================================
    본문 섹션
