@@ -1,18 +1,42 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="utf-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
+  <head>
+    <meta charset="UTF-8" />
 
-  <title>Webzine 글쓰기</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
 
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-</head>
+    <meta
+      name="theme-color"
+      content="#ffffff"
+    />
 
-<body>
-  <script src="https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js"></script>
-</body>
+    <title>횡단 CMS</title>
+
+    <!-- CMS 사용자 정의 디자인 -->
+    <link
+      rel="stylesheet"
+      href="./admin.css?v=1"
+    />
+
+    <!-- Netlify Identity -->
+    <script
+      src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+    ></script>
+  </head>
+
+  <body>
+    <!-- Decap CMS -->
+    <script
+      src="https://unpkg.com/decap-cms@3.8.4/dist/decap-cms.js"
+    ></script>
+
+    <!-- CMS 사용자 정의 기능 -->
+    <script
+      src="./admin.js?v=1"
+      defer
+    ></script>
+  </body>
 </html>

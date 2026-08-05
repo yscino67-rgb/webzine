@@ -1,0 +1,86 @@
+/* =========================================================
+   횡단 CMS 기본 디자인
+========================================================= */
+
+@font-face {
+  font-family: "Pretendard";
+  src:
+    url("../../font/Pretendard-Medium.otf")
+    format("opentype");
+
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src:
+    url("../../font/Pretendard-SemiBold.otf")
+    format("opentype");
+
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --cms-background: #ffffff;
+  --cms-text: #111111;
+  --cms-border: rgba(17, 17, 17, 0.18);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+
+  margin: 0;
+
+  background-color: var(--cms-background);
+  color: var(--cms-text);
+
+  font-family:
+    "Pretendard",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Apple SD Gothic Neo",
+    sans-serif;
+
+  font-weight: 500;
+
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 입력창 및 버튼 폰트 */
+button,
+input,
+textarea,
+select,
+[contenteditable="true"] {
+  font-family:
+    "Pretendard",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Apple SD Gothic Neo",
+    sans-serif !important;
+}
+
+/* CMS 버튼과 입력창 각진 형태 */
+button,
+input,
+textarea,
+select {
+  border-radius: 0 !important;
+}
+
+/* 본문 편집 영역 */
+[contenteditable="true"] {
+  line-height: 1.8 !important;
+  letter-spacing: -0.02em !important;
+}
