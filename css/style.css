@@ -85,6 +85,26 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "KoPubWorldDotum";
+  src:
+    url("../font/KoPubWorld%20Dotum%20Medium.ttf")
+    format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "KoPubWorldDotum";
+  src:
+    url("../font/KoPubWorld%20Dotum%20Bold.ttf")
+    format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* =========================================================
    기본 설정
 ========================================================= */
@@ -206,7 +226,7 @@ select {
   color: #000000;
 
   font-family:
-    "Pretendard",
+     "KoPubWorldDotum",
     sans-serif;
 
   font-size: 27px;
