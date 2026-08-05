@@ -41,85 +41,148 @@
 }
 
 /* =========================================================
-   기사 정렬 버튼 영역
+   기사 정렬표
 ========================================================= */
 
 .archive-sort {
-  display: flex;
+  display: grid;
+
+  grid-template-columns:
+    100px
+    minmax(0, 1fr)
+    120px
+    130px;
+
   align-items: center;
-  justify-content: flex-end;
+
+  column-gap:
+    clamp(
+      18px,
+      2vw,
+      36px
+    );
 
   width: 100%;
+  min-height: 48px;
 
   margin:
     clamp(54px, 4vw, 74px)
     0
-    14px;
+    0;
 
-  padding: 0;
+  padding:
+    0
+    clamp(
+      24px,
+      2.4vw,
+      40px
+    );
+
+  background-color: #111111;
+  color: #ffffff;
+
+  border: 0;
 }
 
 /* =========================================================
-   기사 정렬 버튼
+   정렬표 고정 글자
+========================================================= */
+
+.archive-sort-label {
+  display: block;
+
+  min-width: 0;
+
+  color: #ffffff;
+
+  font-family:
+    "CossetteTitre",
+    "Special Gothic Condensed One",
+    "Pretendard",
+    sans-serif;
+
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1;
+
+  white-space: nowrap;
+}
+
+.archive-sort-date {
+  text-align: left;
+}
+
+.archive-sort-category {
+  text-align: right;
+}
+
+/* =========================================================
+   바뀌는 정렬 버튼
 ========================================================= */
 
 .archive-sort-button {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 
-  min-width: 112px;
-  min-height: 38px;
+  width: max-content;
+  min-width: 0;
+  min-height: 48px;
 
-  padding:
-    9px
-    16px;
+  margin: 0;
+  padding: 0;
 
-  background-color: #111111;
+  background-color: transparent;
   color: #ffffff;
 
-  border: 1px solid #111111;
+  border: 0;
   border-radius: 0;
 
   font-family:
     "Pretendard",
     sans-serif;
 
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   line-height: 1;
 
+  text-align: left;
   white-space: nowrap;
 
   cursor: pointer;
 
-  transition:
-    background-color 160ms ease,
-    color 160ms ease,
-    opacity 160ms ease;
-
   appearance: none;
   -webkit-appearance: none;
+
+  transition:
+    opacity 160ms ease;
 
   -webkit-tap-highlight-color:
     transparent;
 }
 
-.archive-sort-button:active {
+/*
+  마우스를 올려도 배경과 글자색은 그대로 유지합니다.
+*/
+.archive-sort-button:hover {
+  background-color: transparent;
+  color: #ffffff;
+
   opacity: 0.55;
 }
 
-.archive-sort-button:focus-visible {
-  outline: 1px solid #111111;
-  outline-offset: 3px;
+.archive-sort-button:active {
+  background-color: transparent;
+  color: #ffffff;
+
+  opacity: 0.35;
 }
 
-@media (hover: hover) {
-  .archive-sort-button:hover {
-    background-color: #ffffff;
-    color: #111111;
-  }
+.archive-sort-button:focus-visible {
+  outline: 1px solid #ffffff;
+  outline-offset: 4px;
 }
+
 
 /* =========================================================
    로딩·오류·빈 결과
@@ -695,6 +758,28 @@
       24px;
   }
 
+  .archive-sort {
+    grid-template-columns:
+      82px
+      minmax(0, 1fr)
+      100px
+      110px;
+
+    column-gap: 16px;
+
+    padding:
+      0
+      24px;
+  }
+
+  .archive-sort-label {
+    font-size: 13px;
+  }
+
+  .archive-sort-button {
+    font-size: 13px;
+  }
+
   .index-date {
     font-size: 14px;
   }
@@ -710,11 +795,8 @@
 
 @media (max-width: 767px) {
   :root {
-    --archive-small-menu-offset-y:
-      0px;
-
-    --archive-square-offset-y:
-      0px;
+    --archive-small-menu-offset-y: 0px;
+    --archive-square-offset-y: 0px;
   }
 
   /* =======================================================
@@ -814,7 +896,6 @@
     margin: 0;
 
     opacity: 0;
-
     overflow: hidden;
 
     transform: none;
@@ -831,7 +912,6 @@
     margin-left: 16px;
 
     opacity: 1;
-
     overflow: visible;
   }
 
@@ -881,33 +961,107 @@
   }
 
   /* =======================================================
-     모바일 정렬 버튼
+     모바일 정렬표
   ======================================================= */
 
   .archive-sort {
-    display: flex;
+    display: grid;
+
+    grid-template-columns:
+      56px
+      minmax(0, 1fr)
+      48px
+      66px;
+
     align-items: center;
-    justify-content: flex-end;
+
+    column-gap: 8px;
 
     width: 100%;
+    min-height: 42px;
 
     margin:
       34px
       0
+      0;
+
+    padding:
+      0
       10px;
 
-    padding: 0;
+    background-color: #111111;
+    color: #ffffff;
+  }
+
+  .archive-sort-label {
+    min-width: 0;
+
+    color: #ffffff;
+
+    font-size: 10px;
+    line-height: 1;
+
+    white-space: nowrap;
+  }
+
+  .archive-sort-date {
+    text-align: left;
+  }
+
+  .archive-sort-category {
+    text-align: right;
   }
 
   .archive-sort-button {
-    min-width: 96px;
-    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
 
-    padding:
-      8px
-      13px;
+    width: max-content;
+    max-width: 100%;
 
-    font-size: 12px;
+    min-width: 0;
+    min-height: 42px;
+
+    margin: 0;
+    padding: 0;
+
+    background-color: transparent;
+    color: #ffffff;
+
+    border: 0;
+    border-radius: 0;
+
+    font-size: 11px;
+    line-height: 1;
+
+    text-align: left;
+    white-space: nowrap;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .archive-sort-button:hover,
+  .archive-sort-button:active {
+    background-color: transparent;
+    color: #ffffff;
+  }
+
+  .archive-sort-button:hover {
+    opacity: 0.65;
+  }
+
+  .archive-sort-button:active {
+    opacity: 0.4;
+  }
+
+  .archive-sort-button:focus-visible {
+    outline: 1px solid #ffffff;
+    outline-offset: -4px;
   }
 
   /* =======================================================
@@ -993,7 +1147,6 @@
     grid-area: title;
 
     min-width: 0;
-
     margin: 0;
 
     font-size:
@@ -1036,7 +1189,6 @@
     line-height: 1.3;
 
     text-align: right;
-
     white-space: nowrap;
   }
 
@@ -1058,7 +1210,6 @@
     line-height: 1;
 
     text-align: left;
-
     white-space: nowrap;
   }
 
@@ -1092,10 +1243,7 @@
    움직임 최소화 설정
 ========================================================= */
 
-@media (
-  prefers-reduced-motion:
-  reduce
-) {
+@media (prefers-reduced-motion: reduce) {
   .archive-filter-items,
   .archive-filter-toggle span,
   .archive-sort-button,
