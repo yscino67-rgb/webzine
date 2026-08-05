@@ -15,59 +15,86 @@
 
     <title>Magazine Article</title>
 
+    <!-- 공통 스타일 -->
     <link
       rel="stylesheet"
-      href="../css/style.css?v=13"
+      href="../css/style.css?v=14"
     />
 
+    <!-- 아카이브 상단바 스타일 재사용 -->
     <link
       rel="stylesheet"
-      href="../css/article.css?v=13"
+      href="../css/index.css?v=14"
+    />
+
+    <!-- 기사 상세 전용 스타일 -->
+    <link
+      rel="stylesheet"
+      href="../css/article.css?v=14"
     />
   </head>
 
   <body class="article-detail-page">
-    <header class="site-header">
+    <!-- =====================================================
+         아카이브와 같은 형식의 기사 상단바
+         기사 페이지에서는 기본적으로 펼쳐진 상태
+    ====================================================== -->
+
+    <header
+      class="site-header archive-header article-archive-header"
+    >
       <nav
-        class="category-navigation"
+        class="archive-filter is-open"
         aria-label="카테고리 메뉴"
+        data-default-open="true"
       >
         <a
-          href="./archive.html?category=criticism"
-          class="category-link"
+          class="archive-filter-all"
+          href="./archive.html?category=all"
         >
-          CRITICISM
+          ALL
         </a>
 
-        <a
-          href="./archive.html?category=interview"
-          class="category-link"
+        <div
+          class="archive-filter-items"
+          id="archive-filter-items"
         >
-          INTERVIEW
-        </a>
+          <a href="./archive.html?category=criticism">
+            CRITICISM
+          </a>
 
-        <a
-          href="./archive.html?category=essay"
-          class="category-link"
-        >
-          ESSAY
-        </a>
+          <a href="./archive.html?category=interview">
+            INTERVIEW
+          </a>
 
-        <a
-          href="./archive.html?category=article"
-          class="category-link"
-        >
-          ARTICLE
-        </a>
+          <a href="./archive.html?category=essay">
+            ESSAY
+          </a>
 
-        <a
-          href="./about.html"
-          class="category-link"
+          <a href="./archive.html?category=article">
+            ARTICLE
+          </a>
+
+          <a href="./about.html">
+            ABOUT
+          </a>
+        </div>
+
+        <button
+          class="archive-filter-toggle"
+          type="button"
+          aria-label="카테고리 메뉴 닫기"
+          aria-expanded="true"
+          aria-controls="archive-filter-items"
         >
-          ABOUT
-        </a>
+          <span aria-hidden="true"></span>
+        </button>
       </nav>
     </header>
+
+    <!-- =====================================================
+         기사 내용
+    ====================================================== -->
 
     <main class="article-page">
       <article
@@ -82,12 +109,12 @@
     </main>
 
     <script
-      src="../script.js?v=13"
+      src="../script.js?v=14"
       defer
     ></script>
 
     <script
-      src="../article.js?v=1"
+      src="../article.js?v=2"
       defer
     ></script>
   </body>

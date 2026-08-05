@@ -1,13 +1,50 @@
-/* =========================
+/* =========================================================
    기사 상세 페이지
-========================= */
+========================================================= */
+
+.article-detail-page {
+  background-color: #ffffff;
+}
+
+/*
+  기사 페이지 헤더는 아카이브 페이지와 마찬가지로
+  문서 흐름 안에 배치합니다.
+
+  style.css의 .site-header { position: fixed; }를 덮어씁니다.
+*/
+.article-detail-page .article-archive-header {
+  position: relative;
+  top: auto;
+  left: auto;
+
+  z-index: 1000;
+
+  width: 100%;
+
+  background-color: #ffffff;
+}
+
+/*
+  기사 페이지는 상단 메뉴가 처음부터 펼쳐져 있으므로
+  실제 메뉴 너비 계산 전에도 메뉴가 보이도록 합니다.
+*/
+.article-detail-page
+  .archive-filter.is-open
+  .archive-filter-items {
+  opacity: 1;
+}
+
+/* =========================================================
+   기사 전체 영역
+========================================================= */
 
 .article-page {
   width: 100%;
+  min-height: 100vh;
   min-height: 100dvh;
 
   padding:
-    162px
+    clamp(52px, 5vw, 86px)
     var(--page-padding)
     100px;
 
@@ -28,17 +65,34 @@
   margin: 0 auto;
 }
 
-/* =========================
+/* =========================================================
+   로딩 및 오류 메시지
+========================================================= */
+
+.article-loading,
+.article-error {
+  margin: 0;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+/* =========================================================
    기사 제목
-========================= */
+========================================================= */
 
 .article-header {
   width: 100%;
 
   margin:
-    24px
     0
-    clamp(55px, 5vw, 85px);
+    0
+    clamp(58px, 6vw, 92px);
 
   text-align: center;
 }
@@ -46,29 +100,30 @@
 .article-title {
   display: inline-block;
 
-  max-width: 100%;
+  max-width: min(100%, 1100px);
+
   margin: 0;
+
+  color: #111111;
 
   font-family:
     "Pretendard",
     sans-serif;
 
   font-size:
-    clamp(24px, 2.4vw, 40px);
+    clamp(28px, 2.55vw, 44px);
 
   font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -0.03em;
+  line-height: 1.28;
+  letter-spacing: -0.035em;
 
   text-align: center;
 
   word-break: keep-all;
   overflow-wrap: break-word;
-
-  transform: translateX(14px);
 }
 
-/* 카테고리 표시를 사용할 경우 */
+/* 카테고리 정보가 출력될 경우 */
 .article-category {
   margin:
     0
@@ -76,19 +131,21 @@
     18px;
 
   font-family:
+    "CossetteTitre",
+    "Special Gothic Condensed One",
     "Pretendard",
     sans-serif;
 
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 400;
   line-height: 1;
 
-  text-align: left;
+  text-align: center;
 }
 
-/* =========================
-   본문 + 이미지 2단
-========================= */
+/* =========================================================
+   본문 + 오른쪽 이미지
+========================================================= */
 
 .article-layout {
   display: grid;
@@ -105,9 +162,9 @@
   width: 100%;
 }
 
-/* =========================
-   왼쪽 기사 본문
-========================= */
+/* =========================================================
+   왼쪽 본문
+========================================================= */
 
 .article-copy {
   width: 100%;
@@ -126,6 +183,8 @@
 
   margin: 0;
   padding: 0;
+
+  color: #111111;
 
   font-family:
     "Pretendard",
@@ -157,11 +216,76 @@
   margin-top: 0;
 }
 
-/* =========================
-   인용문
-========================= */
+.article-body > p:last-child {
+  margin-bottom: 0;
+}
 
-.article-quote {
+/* CMS 글자색 유지 */
+.article-body span[style*="color"],
+.article-body font[color] {
+  color: inherit;
+}
+
+/*
+  인라인 style="color: ..."는 브라우저가 직접 적용하므로
+  별도 색상 덮어쓰기를 하지 않습니다.
+*/
+
+/* =========================================================
+   CMS 본문 제목
+========================================================= */
+
+.article-body h2 {
+  margin:
+    54px
+    0
+    24px;
+
+  font-size:
+    clamp(22px, 1.65vw, 30px);
+
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.03em;
+
+  word-break: keep-all;
+}
+
+/* =========================================================
+   CMS 목록
+========================================================= */
+
+.article-body ul,
+.article-body ol {
+  margin:
+    0
+    0
+    38px;
+
+  padding-left: 1.5em;
+}
+
+.article-body li {
+  margin-bottom: 10px;
+}
+
+/* =========================================================
+   CMS 링크
+========================================================= */
+
+.article-body a {
+  color: inherit;
+
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* =========================================================
+   인용문
+========================================================= */
+
+.article-quote,
+.article-body blockquote {
   margin:
     0
     0
@@ -176,7 +300,8 @@
     sans-serif;
 }
 
-.article-quote p {
+.article-quote p,
+.article-body blockquote p {
   margin: 0;
 
   font-family:
@@ -190,7 +315,8 @@
   text-justify: inter-word;
 }
 
-.article-quote cite {
+.article-quote cite,
+.article-body blockquote cite {
   display: block;
 
   margin-top: 18px;
@@ -207,13 +333,14 @@
   text-align: right;
 }
 
-/* =========================
+/* =========================================================
    오른쪽 이미지
-========================= */
+========================================================= */
 
 .article-visual {
   position: sticky;
-  top: 112px;
+
+  top: 38px;
 
   width: min(100%, 520px);
   min-width: 0;
@@ -256,7 +383,6 @@
   overflow-wrap: break-word;
 }
 
-/* 이미지가 아직 없을 때 */
 .article-image-placeholder {
   display: flex;
   align-items: center;
@@ -280,9 +406,9 @@
   text-align: center;
 }
 
-/* =========================
+/* =========================================================
    횡단하기 / 해부하기 / 접합하기
-========================= */
+========================================================= */
 
 .article-principles {
   display: flex;
@@ -336,9 +462,9 @@
   font-weight: 500;
 }
 
-/* =========================
-   접합하기 제목 + 각주 네모
-========================= */
+/* =========================================================
+   접합하기 제목 + 각주 버튼
+========================================================= */
 
 .principle-heading {
   display: inline-flex;
@@ -350,12 +476,6 @@
   max-width: 100%;
 }
 
-/*
-  위의 .article-principles strong {
-    display: block;
-  }
-  규칙을 덮어써서 제목과 네모를 같은 줄에 배치
-*/
 .principle-heading strong {
   display: inline-block;
   flex: 0 0 auto;
@@ -375,16 +495,15 @@
   flex: 0 0 auto;
 }
 
-/* =========================
+/* =========================================================
    기사 하단
-========================= */
+========================================================= */
 
 .article-footer {
   margin-top: 80px;
   padding-top: 18px;
 
-  border-top:
-    1px solid #111111;
+  border-top: 1px solid #111111;
 }
 
 .back-link {
@@ -396,23 +515,25 @@
   font-weight: 500;
 }
 
-/* =========================
+/* =========================================================
    네모 각주 버튼
-========================= */
+========================================================= */
 
 .footnote-marker {
   display: block;
 
   width: 14px;
   height: 14px;
+
   padding: 0;
+
+  background-color: #0f9ed5;
 
   border: 0;
   border-radius: 4px;
 
-  background-color: #0f9ed5;
-
   cursor: pointer;
+
   flex: 0 0 auto;
 
   appearance: none;
@@ -420,21 +541,22 @@
 
   outline: none;
 
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color:
+    transparent;
 }
 
-/* 키보드 포커스일 때만 테두리 표시 */
 .footnote-marker:focus-visible {
   outline: 1px solid #0f9ed5;
   outline-offset: 2px;
 }
 
-/* =========================
+/* =========================================================
    각주 말풍선
-========================= */
+========================================================= */
 
 .footnote-popover {
   position: absolute;
+
   z-index: 20;
 
   top: calc(100% + 9px);
@@ -471,7 +593,6 @@
     rgba(0, 0, 0, 0.14);
 }
 
-/* 말풍선 꼬리 */
 .footnote-popover::before {
   content: "";
 
@@ -494,35 +615,30 @@
 }
 
 .footnote-popover[hidden] {
-  display: none;
+  display: none !important;
 }
 
-/* =========================
+/* =========================================================
    태블릿
-========================= */
+========================================================= */
 
 @media (max-width: 899px) {
   .article-page {
     padding:
-      120px
+      42px
       var(--page-padding)
       60px;
   }
 
   .article-header {
-    margin:
-      18px
-      0
-      42px;
+    margin-bottom: 44px;
   }
 
   .article-title {
     font-size:
       clamp(24px, 6.5vw, 34px);
 
-    line-height: 1.25;
-
-    transform: none;
+    line-height: 1.28;
   }
 
   .article-layout {
@@ -554,6 +670,7 @@
     order: -1;
 
     width: 100%;
+    max-width: none;
 
     margin: 0;
   }
@@ -588,23 +705,27 @@
   }
 }
 
-/* =========================
+/* =========================================================
    모바일
-========================= */
+========================================================= */
 
 @media (max-width: 767px) {
+  .article-detail-page .article-archive-header {
+    padding:
+      20px
+      20px
+      14px;
+  }
+
   .article-page {
     padding:
-      105px
+      34px
       var(--page-padding)
       60px;
   }
 
   .article-header {
-    margin:
-      16px
-      0
-      38px;
+    margin-bottom: 38px;
   }
 
   .article-title {
@@ -623,11 +744,6 @@
 
   .principle-heading {
     gap: 5px;
-  }
-
-  .footnote-marker {
-    width: 10px;
-    height: 10px;
   }
 
   .footnote-popover {
