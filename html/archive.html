@@ -8,18 +8,21 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
 
-    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="theme-color"
+      content="#ffffff"
+    />
 
     <title>Magazine Archive</title>
 
     <link
       rel="stylesheet"
-      href="../css/style.css?v=13"
+      href="../css/style.css?v=17"
     />
 
     <link
       rel="stylesheet"
-      href="../css/index.css?v=13"
+      href="../css/index.css?v=17"
     />
   </head>
 
@@ -45,7 +48,7 @@
           </a>
 
           <a href="./archive.html?category=interview">
-             INTERVIEW
+            INTERVIEW
           </a>
 
           <a href="./archive.html?category=essay">
@@ -74,6 +77,22 @@
     </header>
 
     <main class="site-main">
+      <!-- 정렬 버튼 -->
+      <section
+        class="archive-sort"
+        aria-label="기사 정렬"
+      >
+        <button
+          class="archive-sort-button"
+          id="archive-sort-button"
+          type="button"
+          aria-label="현재 정렬: 최신순. 눌러서 다음 정렬 방식으로 변경"
+        >
+          최신순
+        </button>
+      </section>
+
+      <!-- 기사 목록 -->
       <section
         class="article-index"
         id="article-index"
@@ -87,12 +106,12 @@
     </main>
 
     <script
-      src="../script.js?v=13"
+      src="../script.js?v=17"
       defer
     ></script>
 
     <script
-      src="../archive.js?v=1"
+      src="../archive.js?v=2"
       defer
     ></script>
   </body>
