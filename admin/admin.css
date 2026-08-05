@@ -1,9 +1,16 @@
+/* =========================================================
+   관리자 페이지 폰트
+========================================================= */
+
 @font-face {
   font-family: "Pretendard";
   src:
     url("../font/Pretendard-Medium.otf")
     format("opentype");
+
   font-weight: 500;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -11,16 +18,31 @@
   src:
     url("../font/Pretendard-SemiBold.otf")
     format("opentype");
+
   font-weight: 600;
+  font-style: normal;
+  font-display: swap;
 }
+
+/* =========================================================
+   전역 변수
+========================================================= */
 
 :root {
   --background: #ffffff;
   --surface: #f4f4f4;
   --line: #d8d8d8;
+
   --text: #111111;
   --muted: #777777;
+
+  --header-height: 72px;
+  --sidebar-width: 300px;
 }
+
+/* =========================================================
+   기본 설정
+========================================================= */
 
 *,
 *::before,
@@ -28,103 +50,233 @@
   box-sizing: border-box;
 }
 
-html,
-body {
+/*
+  로그인 전·후 화면 전환
+
+  HTML의 hidden 속성이 붙으면
+  기존 display:grid 또는 display:block보다
+  우선하여 반드시 숨깁니다.
+*/
+[hidden] {
+  display: none !important;
+}
+
+html {
+  width: 100%;
   min-height: 100%;
+
+  background-color: var(--background);
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+
   margin: 0;
 
-  background: var(--background);
+  background-color: var(--background);
   color: var(--text);
 
   font-family:
     "Pretendard",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Apple SD Gothic Neo",
     sans-serif;
+
+  font-weight: 500;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }
 
 button {
+  padding: 0;
+
   color: inherit;
-  background: transparent;
+  background-color: transparent;
+
   border: 0;
 
   cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
 }
+
+input,
+select,
+textarea,
+[contenteditable="true"] {
+  color: var(--text);
+
+  border-radius: 0;
+
+  outline: none;
+}
+
+/* =========================================================
+   관리자 로그인 화면
+========================================================= */
 
 .admin-login {
   display: grid;
   place-items: center;
 
+  width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
+
   padding: 24px;
+
+  background-color: var(--background);
 }
 
 .login-panel {
   width: min(420px, 100%);
+
   padding: 42px;
+
+  background-color: #ffffff;
 
   border: 1px solid var(--line);
 }
 
 .login-panel h1 {
-  margin: 8px 0 42px;
+  margin:
+    8px
+    0
+    42px;
 
   font-size: 30px;
   font-weight: 600;
+  line-height: 1.2;
+
+  letter-spacing: -0.03em;
 }
 
 .login-panel label {
   display: block;
+
   margin-bottom: 10px;
 
   font-size: 13px;
+  line-height: 1.4;
 }
 
 .login-panel input {
+  display: block;
+
   width: 100%;
   height: 48px;
-  padding: 0 14px;
+
+  padding:
+    0
+    14px;
+
+  background-color: #ffffff;
 
   border: 1px solid var(--line);
-  border-radius: 0;
+}
+
+.login-panel input:focus {
+  border-color: #111111;
 }
 
 .login-panel button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   width: 100%;
   height: 48px;
+
   margin-top: 14px;
 
-  background: #111111;
+  background-color: #111111;
   color: #ffffff;
+
+  font-weight: 600;
 }
+
+.login-panel button:hover {
+  opacity: 0.82;
+}
+
+/* =========================================================
+   공통 작은 영문 표시
+========================================================= */
 
 .admin-eyebrow {
   margin: 0;
 
   font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+
   letter-spacing: 0.08em;
 }
 
+/* =========================================================
+   CMS 전체 화면
+========================================================= */
+
+.admin-app {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  background-color: var(--background);
+}
+
+/* =========================================================
+   CMS 상단 헤더
+========================================================= */
+
 .admin-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  height: 72px;
-  padding: 0 28px;
+  width: 100%;
+  height: var(--header-height);
+
+  padding:
+    0
+    28px;
+
+  background-color:
+    rgba(255, 255, 255, 0.98);
 
   border-bottom: 1px solid var(--line);
 }
 
 .admin-brand {
+  display: inline-block;
+
   color: inherit;
 
   font-size: 20px;
   font-weight: 600;
+  line-height: 1;
 
   text-decoration: none;
 }
@@ -138,31 +290,83 @@ button {
   font-size: 13px;
 }
 
-.admin-header-actions a {
+.admin-header-actions a,
+.admin-header-actions button {
   color: inherit;
-  text-decoration: none;
+
+  font-size: 13px;
+  font-weight: 500;
 }
+
+.admin-header-actions a:hover,
+.admin-header-actions button:hover {
+  opacity: 0.45;
+}
+
+/* =========================================================
+   CMS 본문 구조
+========================================================= */
 
 .admin-layout {
   display: grid;
 
   grid-template-columns:
-    300px
+    var(--sidebar-width)
     minmax(0, 1fr);
 
-  min-height: calc(100vh - 72px);
+  width: 100%;
+
+  min-height:
+    calc(
+      100vh -
+      var(--header-height)
+    );
+
+  min-height:
+    calc(
+      100dvh -
+      var(--header-height)
+    );
 }
 
+/* =========================================================
+   왼쪽 게시글 목록
+========================================================= */
+
 .post-sidebar {
+  position: sticky;
+  top: var(--header-height);
+
+  align-self: start;
+
+  width: 100%;
+  height:
+    calc(
+      100vh -
+      var(--header-height)
+    );
+
+  height:
+    calc(
+      100dvh -
+      var(--header-height)
+    );
+
   padding: 22px;
 
+  background-color: #ffffff;
+
   border-right: 1px solid var(--line);
+
+  overflow-y: auto;
 }
 
 .sidebar-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  gap: 16px;
 
   margin-bottom: 22px;
 }
@@ -171,15 +375,27 @@ button {
   margin: 0;
 
   font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
 }
 
 .sidebar-header button {
-  padding: 8px 11px;
+  flex: 0 0 auto;
 
-  background: #111111;
+  padding:
+    8px
+    11px;
+
+  background-color: #111111;
   color: #ffffff;
 
   font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.sidebar-header button:hover {
+  opacity: 0.78;
 }
 
 .post-list {
@@ -190,17 +406,29 @@ button {
 }
 
 .post-list-item {
+  display: block;
+
   width: 100%;
+
   padding: 14px;
+
+  background-color: #ffffff;
+  color: var(--text);
 
   border: 1px solid var(--line);
 
   text-align: left;
 }
 
+.post-list-item:hover {
+  border-color: #111111;
+}
+
 .post-list-item.is-active {
-  background: #111111;
+  background-color: #111111;
   color: #ffffff;
+
+  border-color: #111111;
 }
 
 .post-list-title {
@@ -208,6 +436,10 @@ button {
 
   font-size: 13px;
   font-weight: 600;
+  line-height: 1.45;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .post-list-meta {
@@ -216,13 +448,38 @@ button {
   margin-top: 8px;
 
   font-size: 10px;
+  font-weight: 500;
+  line-height: 1.4;
+
   opacity: 0.65;
 }
 
+/* =========================================================
+   오른쪽 글쓰기 영역
+========================================================= */
+
 .post-editor {
+  width: 100%;
+  min-width: 0;
+
   padding:
     clamp(28px, 4vw, 64px);
+
+  background-color: #ffffff;
 }
+
+.post-editor form {
+  width: 100%;
+  max-width: 1400px;
+
+  margin:
+    0
+    auto;
+}
+
+/* =========================================================
+   에디터 상단 제목 및 버튼
+========================================================= */
 
 .editor-heading {
   display: flex;
@@ -235,79 +492,155 @@ button {
 }
 
 .editor-heading h1 {
-  margin: 8px 0 0;
+  margin:
+    8px
+    0
+    0;
 
   font-size:
     clamp(27px, 3vw, 44px);
 
   font-weight: 600;
+  line-height: 1.15;
+
+  letter-spacing: -0.035em;
 }
 
 .editor-actions {
   display: flex;
+  align-items: center;
 
   gap: 10px;
+
+  flex: 0 0 auto;
 }
 
 .editor-actions button {
   min-width: 90px;
-  padding: 12px 18px;
+
+  padding:
+    12px
+    18px;
+
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
 }
 
 .save-button {
-  background: #111111;
+  background-color: #111111;
   color: #ffffff;
 }
 
+.save-button:hover {
+  opacity: 0.8;
+}
+
 .delete-button {
+  background-color: #ffffff;
+
   border: 1px solid var(--line);
 }
+
+.delete-button:hover {
+  border-color: #111111;
+}
+
+/* =========================================================
+   기본 입력 필드
+========================================================= */
 
 .field-grid {
   display: grid;
 
   grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
 
-  gap: 24px 18px;
+  gap:
+    24px
+    18px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
 
+  min-width: 0;
+
   gap: 9px;
 }
 
 .field--wide {
-  grid-column: 1 / -1;
+  grid-column:
+    1 /
+    -1;
 }
 
 .field span,
 .body-editor-label {
   font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
 .field input,
 .field select {
+  display: block;
+
   width: 100%;
   min-height: 44px;
-  padding: 0 12px;
 
-  background: #ffffff;
+  padding:
+    0
+    12px;
+
+  background-color: #ffffff;
 
   border: 1px solid var(--line);
-  border-radius: 0;
 }
 
+.field input:focus,
+.field select:focus {
+  border-color: #111111;
+}
+
+.field input::placeholder {
+  color: #aaaaaa;
+}
+
+/* =========================================================
+   공개 여부 체크박스
+========================================================= */
+
 .checkbox-field {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+
+  width: max-content;
 
   gap: 8px;
 
   font-size: 12px;
+  line-height: 1.4;
+
+  cursor: pointer;
 }
+
+.checkbox-field input {
+  width: 14px;
+  height: 14px;
+
+  margin: 0;
+
+  accent-color: #111111;
+}
+
+/* =========================================================
+   본문 편집기
+========================================================= */
 
 .body-editor-section {
   margin-top: 38px;
@@ -316,6 +649,10 @@ button {
 .body-editor-label {
   margin-bottom: 9px;
 }
+
+/* =========================================================
+   본문 편집 툴바
+========================================================= */
 
 .editor-toolbar {
   display: flex;
@@ -326,24 +663,49 @@ button {
 
   padding: 9px;
 
-  background: var(--surface);
+  background-color: var(--surface);
 
-  border:
-    1px solid var(--line);
-
+  border: 1px solid var(--line);
   border-bottom: 0;
 }
 
 .editor-toolbar button {
-  min-height: 32px;
-  padding: 0 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  background: #ffffff;
+  min-height: 32px;
+
+  padding:
+    0
+    9px;
+
+  background-color: #ffffff;
 
   border: 1px solid var(--line);
 
   font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
 }
+
+.editor-toolbar button:hover {
+  color: #ffffff;
+  background-color: #111111;
+
+  border-color: #111111;
+}
+
+.editor-toolbar button:focus-visible {
+  outline:
+    1px solid #111111;
+
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   색상 선택 도구
+========================================================= */
 
 .color-tool {
   display: flex;
@@ -352,33 +714,64 @@ button {
   gap: 6px;
 
   min-height: 32px;
-  padding: 0 8px;
 
-  background: #ffffff;
+  padding:
+    0
+    8px;
+
+  background-color: #ffffff;
 
   border: 1px solid var(--line);
 
   font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+
+  cursor: pointer;
 }
 
 .color-tool input {
   width: 20px;
   height: 20px;
+
   padding: 0;
 
+  background-color: transparent;
+
   border: 0;
+
+  cursor: pointer;
 }
 
+/* =========================================================
+   본문 작성 칸
+========================================================= */
+
 .body-editor {
+  width: 100%;
   min-height: 460px;
+
   padding: 30px;
+
+  background-color: #ffffff;
+  color: var(--text);
 
   border: 1px solid var(--line);
 
   font-size: 17px;
+  font-weight: 500;
   line-height: 1.9;
 
+  letter-spacing: -0.015em;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+
   outline: none;
+}
+
+.body-editor:focus {
+  border-color: #111111;
 }
 
 .body-editor:empty::before {
@@ -386,49 +779,176 @@ button {
     attr(data-placeholder);
 
   color: #aaaaaa;
-}
 
-.body-editor blockquote {
-  margin: 0 0 32px;
+  pointer-events: none;
 }
 
 .body-editor p {
-  margin: 0 0 26px;
+  margin:
+    0
+    0
+    26px;
 }
+
+.body-editor h2 {
+  margin:
+    36px
+    0
+    18px;
+
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.body-editor blockquote {
+  margin:
+    0
+    0
+    32px;
+
+  padding:
+    0
+    0
+    0
+    18px;
+
+  border-left: 2px solid #111111;
+}
+
+.body-editor ul,
+.body-editor ol {
+  margin:
+    0
+    0
+    26px;
+
+  padding-left: 26px;
+}
+
+.body-editor a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* =========================================================
+   저장 및 오류 메시지
+========================================================= */
 
 .form-message {
   min-height: 20px;
-  margin: 14px 0 0;
+
+  margin:
+    14px
+    0
+    0;
 
   color: var(--muted);
 
   font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
 }
 
+/* =========================================================
+   태블릿
+========================================================= */
+
 @media (max-width: 900px) {
+  :root {
+    --header-height: 64px;
+  }
+
   .admin-layout {
     display: block;
+
+    min-height:
+      calc(
+        100dvh -
+        var(--header-height)
+      );
   }
 
   .post-sidebar {
+    position: static;
+
+    width: 100%;
+    height: auto;
+
+    padding:
+      18px
+      22px;
+
     border-right: 0;
     border-bottom: 1px solid var(--line);
+
+    overflow: visible;
   }
 
   .post-list {
     flex-direction: row;
 
+    padding-bottom: 5px;
+
     overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .post-list::-webkit-scrollbar {
+    display: none;
   }
 
   .post-list-item {
     min-width: 220px;
   }
+
+  .post-editor {
+    padding:
+      36px
+      22px
+      60px;
+  }
 }
 
+/* =========================================================
+   모바일
+========================================================= */
+
 @media (max-width: 600px) {
+  .admin-login {
+    align-items: center;
+
+    padding: 18px;
+  }
+
+  .login-panel {
+    padding:
+      34px
+      24px;
+  }
+
+  .login-panel h1 {
+    margin-bottom: 34px;
+
+    font-size: 27px;
+  }
+
   .admin-header {
-    padding: 0 18px;
+    padding:
+      0
+      18px;
+  }
+
+  .admin-brand {
+    font-size: 17px;
+  }
+
+  .admin-header-actions {
+    gap: 12px;
   }
 
   .admin-header-actions a {
@@ -436,15 +956,24 @@ button {
   }
 
   .post-editor {
-    padding: 28px 18px 60px;
+    padding:
+      28px
+      18px
+      60px;
   }
 
   .editor-heading {
     display: block;
+
+    margin-bottom: 34px;
   }
 
   .editor-actions {
     margin-top: 22px;
+  }
+
+  .editor-actions button {
+    flex: 1;
   }
 
   .field-grid {
@@ -455,7 +984,20 @@ button {
     grid-column: auto;
   }
 
+  .editor-toolbar {
+    align-items: stretch;
+  }
+
+  .editor-toolbar button {
+    min-height: 34px;
+  }
+
   .body-editor {
+    min-height: 380px;
+
     padding: 20px;
+
+    font-size: 16px;
+    line-height: 1.8;
   }
 }
