@@ -78,19 +78,31 @@
 
     <main class="site-main">
       <!-- 정렬 버튼 -->
-      <section
-        class="archive-sort"
-        aria-label="기사 정렬"
-      >
-        <button
-          class="archive-sort-button"
-          id="archive-sort-button"
-          type="button"
-          aria-label="현재 정렬: 최신순. 눌러서 다음 정렬 방식으로 변경"
-        >
-          최신순
-        </button>
-      </section>
+<section
+  class="archive-sort"
+  aria-label="기사 정렬 기준"
+>
+  <span class="archive-sort-label">
+    WRITER
+  </span>
+
+  <button
+    class="archive-sort-button"
+    id="archive-sort-button"
+    type="button"
+    aria-label="현재 정렬: 최신순. 눌러서 다음 정렬 방식으로 변경"
+  >
+    최신순
+  </button>
+
+  <span class="archive-sort-label archive-sort-date">
+    DATE
+  </span>
+
+  <span class="archive-sort-label archive-sort-category">
+    CATEGORY
+  </span>
+</section>
 
       <!-- 기사 목록 -->
       <section
