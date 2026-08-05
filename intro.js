@@ -1,16 +1,21 @@
 "use strict";
 
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+import * as THREE from
+  "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
 /* =========================================================
    HTML 요소
 ========================================================= */
 
 const container =
-  document.querySelector(".morph-scene");
+  document.querySelector(
+    ".morph-scene"
+  );
 
 const stage =
-  document.querySelector(".morph-stage");
+  document.querySelector(
+    ".morph-stage"
+  );
 
 const categoryElements =
   Array.from(
@@ -25,6 +30,10 @@ if (!container) {
   );
 }
 
+/*
+  모듈이 중복 실행되는 상황에서도
+  캔버스가 두 개 생기지 않도록 합니다.
+*/
 container
   .querySelectorAll("canvas")
   .forEach((canvas) => {
@@ -37,22 +46,22 @@ container
 
 const SETTINGS = {
   /*
-    모바일은 기존 값을 유지합니다.
-
-    데스크톱은 1200개에서 800개로 줄여
-    저사양 PC에서도 끊김을 완화합니다.
+    데스크톱 입자 수를 적절히 제한해서
+    글자 등장 시에도 렌더링 부하가 크게
+    증가하지 않도록 합니다.
   */
   desktopParticleCount: 800,
   desktopLowPowerParticleCount: 620,
   mobileParticleCount: 650,
 
-  /* 은하에 들어오는 입자 비율 */
   builderRatio: 0.88,
 
-  /* 전체 시간 속도 */
+  /*
+    전체 애니메이션의 기준 속도입니다.
+    입자 모임 전후에 같은 시간 기준을 사용합니다.
+  */
   animationSpeed: 1.2,
 
-  /* 입자가 은하로 모이는 시간 */
   outerBeginTime: 1.2,
   outerEndTime: 5.9,
 
@@ -65,45 +74,50 @@ const SETTINGS = {
   minimumJoinDuration: 2.7,
   maximumJoinDuration: 8.7,
 
-  /* 은하 크기 */
   galaxyRadiusXScale: 0.56,
   galaxyRadiusZScale: 0.29,
   galaxyThicknessScale: 0.032,
 
-  /* 중앙 빈 공간 */
   galaxyHoleSize: 0.3,
 
-  /* 은하 기울기 */
   galaxyTiltX: -0.28,
   galaxyTiltZ: -0.14,
 
-  /* 은하 회전 속도 */
   galaxyRotationSpeed: 0.12,
 
   /*
-    첫 번째 회색 박스 등장 시간
-
-    기존 24.5초보다 9초 빠른 설정입니다.
+    회색 박스 등장 시간
   */
   categoryRevealTime: 15.5,
 
-  /* 다음 박스가 등장하는 간격 */
   categoryRevealInterval: 2.2,
 
-  /* 카테고리 회전 속도 */
   categoryRotationSpeed: 0.12,
 
-  /* 카테고리 회전 범위 */
   categoryOrbitWidth: 0.36,
   categoryOrbitHeight: 0.14,
 
-  /* 마우스 반응 */
+  /*
+    회색 박스는 5개뿐이므로
+    데스크톱에서는 부드럽게 60FPS로 갱신합니다.
+  */
+  desktopCategoryFPS: 60,
+  mobileCategoryFPS: 30,
+
+  /*
+    일시적으로 프레임이 밀렸을 때
+    애니메이션 시간이 과하게 뒤처지는 것을 방지합니다.
+  */
+  maximumFrameDelta: 250,
+
   pointerParallaxX: 0.48,
   pointerParallaxY: 0.32
 };
 
 const PARTICLE_COLOR =
-  new THREE.Color("#000000");
+  new THREE.Color(
+    "#000000"
+  );
 
 /* =========================================================
    성능 설정
@@ -119,10 +133,12 @@ function isLowPowerDesktop() {
   }
 
   const processorCount =
-    navigator.hardwareConcurrency || 8;
+    navigator.hardwareConcurrency ||
+    8;
 
   const deviceMemory =
-    navigator.deviceMemory || 8;
+    navigator.deviceMemory ||
+    8;
 
   return (
     processorCount <= 4 ||
@@ -132,25 +148,27 @@ function isLowPowerDesktop() {
 
 function getParticleCount() {
   if (isMobileViewport()) {
-    return SETTINGS.mobileParticleCount;
+    return SETTINGS
+      .mobileParticleCount;
   }
 
   return isLowPowerDesktop()
-    ? SETTINGS.desktopLowPowerParticleCount
-    : SETTINGS.desktopParticleCount;
+    ? SETTINGS
+        .desktopLowPowerParticleCount
+    : SETTINGS
+        .desktopParticleCount;
 }
 
 function getTargetFPS() {
-  /*
-    모바일은 기존 24FPS 유지.
-
-    데스크톱은 입자 계산을 가볍게 만든 뒤
-    60FPS로 표시해 30FPS 특유의 끊겨 보이는
-    움직임을 줄입니다.
-  */
   return isMobileViewport()
-    ? 24
+    ? 30
     : 60;
+}
+
+function getCategoryTargetFPS() {
+  return isMobileViewport()
+    ? SETTINGS.mobileCategoryFPS
+    : SETTINGS.desktopCategoryFPS;
 }
 
 function getPixelRatio() {
@@ -189,13 +207,10 @@ camera.position.set(
 
 const renderer =
   new THREE.WebGLRenderer({
-    /*
-      점이 네모 형태이므로 안티앨리어싱 효과는 적고
-      GPU 사용량은 늘어납니다.
-  */
     antialias: false,
     alpha: true,
-    powerPreference: "high-performance"
+    powerPreference:
+      "high-performance"
   });
 
 renderer.setPixelRatio(
@@ -232,11 +247,13 @@ const particleMaterial =
     transparent: true,
     depthTest: true,
     depthWrite: false,
-    blending: THREE.NormalBlending,
+    blending:
+      THREE.NormalBlending,
 
     uniforms: {
       uPixelRatio: {
-        value: getPixelRatio()
+        value:
+          getPixelRatio()
       }
     },
 
@@ -317,7 +334,7 @@ const particleMaterial =
   });
 
 /* =========================================================
-   미리 계산하는 고정 회전값
+   고정 회전값
 ========================================================= */
 
 const COS_GALAXY_TILT_X =
@@ -377,6 +394,13 @@ let frameInterval =
   1000 /
   getTargetFPS();
 
+let categoryFrameInterval =
+  1000 /
+  getCategoryTargetFPS();
+
+let previousCategoryUpdateTime =
+  0;
+
 let previousMobileState =
   isMobileViewport();
 
@@ -385,6 +409,24 @@ let previousLandscapeState =
   window.innerHeight;
 
 let isDisposed = false;
+
+/*
+  화면 크기를 매 프레임 DOM에서 읽지 않고
+  리사이즈 때만 갱신합니다.
+*/
+let cachedStageWidth =
+  window.innerWidth;
+
+let cachedStageHeight =
+  window.innerHeight;
+
+let cachedCategoryOrbitWidth =
+  cachedStageWidth *
+  SETTINGS.categoryOrbitWidth;
+
+let cachedCategoryOrbitHeight =
+  cachedStageHeight *
+  SETTINGS.categoryOrbitHeight;
 
 const pointerTarget = {
   x: 0,
@@ -396,10 +438,6 @@ const pointerCurrent = {
   y: 0
 };
 
-/*
-  매 입자마다 새 객체를 만들지 않고
-  같은 객체를 반복 사용합니다.
-*/
 const orbitOutput = {
   x: 0,
   y: 0,
@@ -412,10 +450,10 @@ const galaxyOutput = {
   z: 0
 };
 
-/*
-  카테고리별 숫자 값을 매 프레임
-  dataset에서 다시 읽지 않도록 저장합니다.
-*/
+/* =========================================================
+   카테고리 설정
+========================================================= */
+
 const categoryItems =
   categoryElements.map(
     (element, index) => {
@@ -433,9 +471,11 @@ const categoryItems =
           ) || 1,
 
         revealTime:
-          SETTINGS.categoryRevealTime +
+          SETTINGS
+            .categoryRevealTime +
           index *
-          SETTINGS.categoryRevealInterval,
+          SETTINGS
+            .categoryRevealInterval,
 
         revealed:
           element.classList.contains(
@@ -567,15 +607,18 @@ function calculateWorldSize() {
 
   galaxyRadiusX =
     baseSize *
-    SETTINGS.galaxyRadiusXScale;
+    SETTINGS
+      .galaxyRadiusXScale;
 
   galaxyRadiusZ =
     baseSize *
-    SETTINGS.galaxyRadiusZScale;
+    SETTINGS
+      .galaxyRadiusZScale;
 
   galaxyThickness =
     baseSize *
-    SETTINGS.galaxyThicknessScale;
+    SETTINGS
+      .galaxyThicknessScale;
 
   cloudRadiusX =
     visibleWidth *
@@ -590,6 +633,24 @@ function calculateWorldSize() {
       galaxyRadiusX * 2.3,
       4
     );
+}
+
+function updateCategoryStageSize() {
+  cachedStageWidth =
+    stage?.clientWidth ||
+    window.innerWidth;
+
+  cachedStageHeight =
+    stage?.clientHeight ||
+    window.innerHeight;
+
+  cachedCategoryOrbitWidth =
+    cachedStageWidth *
+    SETTINGS.categoryOrbitWidth;
+
+  cachedCategoryOrbitHeight =
+    cachedStageHeight *
+    SETTINGS.categoryOrbitHeight;
 }
 
 /* =========================================================
@@ -689,7 +750,8 @@ function createGalaxyTargets(count) {
 
       radialProgress =
         randomBetween(
-          SETTINGS.galaxyHoleSize +
+          SETTINGS
+            .galaxyHoleSize +
             0.07,
           0.7
         );
@@ -795,6 +857,7 @@ function disposeParticleSystem() {
 
 function buildParticleSystem() {
   disposeParticleSystem();
+
   calculateWorldSize();
 
   const mobile =
@@ -872,7 +935,8 @@ function buildParticleSystem() {
     let target = null;
 
     let joinStart =
-      Number.POSITIVE_INFINITY;
+      Number
+        .POSITIVE_INFINITY;
 
     if (isBuilder) {
       target =
@@ -888,8 +952,10 @@ function buildParticleSystem() {
       ) {
         joinStart =
           randomBetween(
-            SETTINGS.outerBeginTime,
-            SETTINGS.outerEndTime
+            SETTINGS
+              .outerBeginTime,
+            SETTINGS
+              .outerEndTime
           );
       } else if (
         target.layer ===
@@ -897,14 +963,18 @@ function buildParticleSystem() {
       ) {
         joinStart =
           randomBetween(
-            SETTINGS.middleBeginTime,
-            SETTINGS.middleEndTime
+            SETTINGS
+              .middleBeginTime,
+            SETTINGS
+              .middleEndTime
           );
       } else {
         joinStart =
           randomBetween(
-            SETTINGS.innerBeginTime,
-            SETTINGS.innerEndTime
+            SETTINGS
+              .innerBeginTime,
+            SETTINGS
+              .innerEndTime
           );
       }
     }
@@ -942,12 +1012,15 @@ function buildParticleSystem() {
         source.z,
 
       target,
+
       joinStart,
 
       joinDuration:
         randomBetween(
-          SETTINGS.minimumJoinDuration,
-          SETTINGS.maximumJoinDuration
+          SETTINGS
+            .minimumJoinDuration,
+          SETTINGS
+            .maximumJoinDuration
         ),
 
       phase:
@@ -974,41 +1047,43 @@ function buildParticleSystem() {
           : 1,
 
       sourceSize,
+
       targetSize
     });
 
     const positionIndex =
       index * 3;
 
-    /*
-      첫 렌더링부터 올바른 위치가 보이도록
-      초기 위치를 바로 채웁니다.
-    */
-    positions[positionIndex] =
-      source.x;
+    positions[
+      positionIndex
+    ] = source.x;
 
-    positions[positionIndex + 1] =
-      source.y;
+    positions[
+      positionIndex + 1
+    ] = source.y;
 
-    positions[positionIndex + 2] =
-      source.z;
+    positions[
+      positionIndex + 2
+    ] = source.z;
 
     sizes[index] =
       sourceSize;
 
-    /*
-      색상과 투명도는 변하지 않으므로
-      생성할 때 한 번만 저장합니다.
-    */
     opacities[index] = 1;
 
-    colors[positionIndex] =
+    colors[
+      positionIndex
+    ] =
       PARTICLE_COLOR.r;
 
-    colors[positionIndex + 1] =
+    colors[
+      positionIndex + 1
+    ] =
       PARTICLE_COLOR.g;
 
-    colors[positionIndex + 2] =
+    colors[
+      positionIndex + 2
+    ] =
       PARTICLE_COLOR.b;
   }
 
@@ -1047,10 +1122,6 @@ function buildParticleSystem() {
     THREE.DynamicDrawUsage
   );
 
-  /*
-    투명도와 색상은 매 프레임 바뀌지 않으므로
-    StaticDrawUsage를 사용합니다.
-  */
   opacityAttribute.setUsage(
     THREE.StaticDrawUsage
   );
@@ -1203,7 +1274,8 @@ function calculateGalaxyPosition(
 ) {
   const rotationAngle =
     elapsed *
-    SETTINGS.galaxyRotationSpeed +
+    SETTINGS
+      .galaxyRotationSpeed +
     target.angleOffset;
 
   const cosRotation =
@@ -1276,10 +1348,6 @@ function updateParticles(elapsed) {
     return;
   }
 
-  /*
-    모든 입자에서 동일한 Z축 회전값은
-    프레임마다 한 번만 계산합니다.
-  */
   const frameAngleZ =
     Math.sin(
       elapsed * 0.14
@@ -1412,13 +1480,19 @@ function updateParticles(elapsed) {
     const positionIndex =
       index * 3;
 
-    positions[positionIndex] =
+    positions[
+      positionIndex
+    ] =
       currentX;
 
-    positions[positionIndex + 1] =
+    positions[
+      positionIndex + 1
+    ] =
       currentY;
 
-    positions[positionIndex + 2] =
+    positions[
+      positionIndex + 2
+    ] =
       currentZ;
 
     sizes[index] =
@@ -1429,33 +1503,35 @@ function updateParticles(elapsed) {
       );
   }
 
-  /*
-    실제로 바뀌는 위치와 크기만 GPU에 전송합니다.
-  */
-  positionAttribute.needsUpdate = true;
-  sizeAttribute.needsUpdate = true;
+  positionAttribute
+    .needsUpdate = true;
+
+  sizeAttribute
+    .needsUpdate = true;
 }
 
 /* =========================================================
    카테고리 위치 및 등장
 ========================================================= */
 
-function updateCategoryLabels(elapsed) {
-  const stageWidth =
-    stage?.clientWidth ||
-    window.innerWidth;
+function updateCategoryLabels(
+  elapsed,
+  forceUpdate = false
+) {
+  const currentTime =
+    performance.now();
 
-  const stageHeight =
-    stage?.clientHeight ||
-    window.innerHeight;
+  if (
+    !forceUpdate &&
+    currentTime -
+      previousCategoryUpdateTime <
+      categoryFrameInterval
+  ) {
+    return;
+  }
 
-  const orbitWidth =
-    stageWidth *
-    SETTINGS.categoryOrbitWidth;
-
-  const orbitHeight =
-    stageHeight *
-    SETTINGS.categoryOrbitHeight;
+  previousCategoryUpdateTime =
+    currentTime;
 
   for (
     let index = 0;
@@ -1468,38 +1544,54 @@ function updateCategoryLabels(elapsed) {
     const currentAngle =
       item.baseAngle +
       elapsed *
-      SETTINGS.categoryRotationSpeed;
+      SETTINGS
+        .categoryRotationSpeed;
 
     const categoryX =
       Math.cos(
         currentAngle
       ) *
-      orbitWidth *
+      cachedCategoryOrbitWidth *
       item.radius;
 
     const categoryY =
       Math.sin(
         currentAngle
       ) *
-      orbitHeight *
+      cachedCategoryOrbitHeight *
       item.radius;
 
-    item.element.style.transform =
-      `translate3d(calc(-50% + ${categoryX.toFixed(2)}px), calc(-50% + ${categoryY.toFixed(2)}px), 0)`;
+    const roundedX =
+      Math.round(
+        categoryX * 10
+      ) / 10;
+
+    const roundedY =
+      Math.round(
+        categoryY * 10
+      ) / 10;
+
+    item.element
+      .style
+      .transform =
+        `translate3d(calc(-50% + ${roundedX}px), calc(-50% + ${roundedY}px), 0)`;
 
     /*
-      등장 클래스는 한 번만 추가합니다.
-      매 프레임 반복해서 추가하거나 제거하지 않습니다.
+      클래스는 나타나는 순간 단 한 번만 추가합니다.
+      이후에는 제거하거나 다시 추가하지 않습니다.
     */
     if (
       !item.revealed &&
-      elapsed >= item.revealTime
+      elapsed >=
+        item.revealTime
     ) {
       item.revealed = true;
 
-      item.element.classList.add(
-        "is-box-visible"
-      );
+      item.element
+        .classList
+        .add(
+          "is-box-visible"
+        );
     }
   }
 }
@@ -1509,9 +1601,11 @@ function showAllCategoryLabels() {
     (item) => {
       item.revealed = true;
 
-      item.element.classList.add(
-        "is-box-visible"
-      );
+      item.element
+        .classList
+        .add(
+          "is-box-visible"
+        );
     }
   );
 }
@@ -1539,22 +1633,6 @@ function handlePointerLeave() {
   pointerTarget.y = 0;
 }
 
-window.addEventListener(
-  "pointermove",
-  handlePointerMove,
-  {
-    passive: true
-  }
-);
-
-window.addEventListener(
-  "pointerleave",
-  handlePointerLeave,
-  {
-    passive: true
-  }
-);
-
 /* =========================================================
    애니메이션
 ========================================================= */
@@ -1565,6 +1643,7 @@ function animate(timestamp) {
     document.hidden
   ) {
     animationFrameId = null;
+
     return;
   }
 
@@ -1573,7 +1652,9 @@ function animate(timestamp) {
       animate
     );
 
-  if (previousFrameTime === 0) {
+  if (
+    previousFrameTime === 0
+  ) {
     previousFrameTime =
       timestamp;
 
@@ -1599,13 +1680,15 @@ function animate(timestamp) {
     );
 
   /*
-    탭 복귀나 일시적인 렌더링 지연으로
-    시간이 한꺼번에 크게 점프하지 않도록 제한합니다.
+    기존 100ms 제한보다 넉넉하게 적용해
+    프레임이 잠시 밀려도 전체 진행 속도가
+    갑자기 느려지지 않도록 합니다.
   */
   const safeFrameDelta =
     Math.min(
       frameDelta,
-      100
+      SETTINGS
+        .maximumFrameDelta
     );
 
   elapsedTime +=
@@ -1631,11 +1714,13 @@ function animate(timestamp) {
 
   camera.position.x =
     pointerCurrent.x *
-    SETTINGS.pointerParallaxX;
+    SETTINGS
+      .pointerParallaxX;
 
   camera.position.y =
     -pointerCurrent.y *
-    SETTINGS.pointerParallaxY;
+    SETTINGS
+      .pointerParallaxY;
 
   camera.lookAt(
     0,
@@ -1689,22 +1774,18 @@ function stopAnimation() {
 }
 
 /* =========================================================
-   브라우저 탭 비활성화
+   탭 비활성화
 ========================================================= */
 
 function handleVisibilityChange() {
   if (document.hidden) {
     stopAnimation();
+
     return;
   }
 
   startAnimation();
 }
-
-document.addEventListener(
-  "visibilitychange",
-  handleVisibilityChange
-);
 
 /* =========================================================
    화면 크기 변경
@@ -1734,7 +1815,8 @@ function resize() {
     width /
     height;
 
-  camera.updateProjectionMatrix();
+  camera
+    .updateProjectionMatrix();
 
   const pixelRatio =
     getPixelRatio();
@@ -1759,28 +1841,31 @@ function resize() {
     1000 /
     getTargetFPS();
 
-  /*
-    일반적인 데스크톱 창 크기 변경에서는
-    입자와 카테고리를 초기화하지 않습니다.
+  categoryFrameInterval =
+    1000 /
+    getCategoryTargetFPS();
 
-    모바일/데스크톱 전환 또는 화면 방향 변경 때만
-    입자를 현재 화면 크기에 맞춰 다시 구성합니다.
-    카테고리 표시 상태와 전체 시간은 유지됩니다.
-  */
   if (layoutModeChanged) {
     buildParticleSystem();
 
     updateParticles(
       elapsedTime
     );
-
-    renderer.render(
-      scene,
-      camera
-    );
   } else {
     calculateWorldSize();
   }
+
+  updateCategoryStageSize();
+
+  updateCategoryLabels(
+    elapsedTime,
+    true
+  );
+
+  renderer.render(
+    scene,
+    camera
+  );
 
   previousMobileState =
     currentMobileState;
@@ -1804,6 +1889,26 @@ function handleResize() {
     );
 }
 
+/* =========================================================
+   이벤트 연결
+========================================================= */
+
+window.addEventListener(
+  "pointermove",
+  handlePointerMove,
+  {
+    passive: true
+  }
+);
+
+window.addEventListener(
+  "pointerleave",
+  handlePointerLeave,
+  {
+    passive: true
+  }
+);
+
 window.addEventListener(
   "resize",
   handleResize,
@@ -1812,11 +1917,23 @@ window.addEventListener(
   }
 );
 
+document.addEventListener(
+  "visibilitychange",
+  handleVisibilityChange
+);
+
 /* =========================================================
    시작
 ========================================================= */
 
 buildParticleSystem();
+
+updateCategoryStageSize();
+
+updateCategoryLabels(
+  elapsedTime,
+  true
+);
 
 const reducedMotion =
   window.matchMedia(
@@ -1826,14 +1943,16 @@ const reducedMotion =
 if (reducedMotion) {
   elapsedTime =
     SETTINGS.innerEndTime +
-    SETTINGS.maximumJoinDuration;
+    SETTINGS
+      .maximumJoinDuration;
 
   updateParticles(
     elapsedTime
   );
 
   updateCategoryLabels(
-    elapsedTime
+    elapsedTime,
+    true
   );
 
   showAllCategoryLabels();
@@ -1843,10 +1962,6 @@ if (reducedMotion) {
     camera
   );
 } else {
-  /*
-    첫 프레임 전에 셰이더를 미리 준비해
-    초기 순간의 멈춤을 줄입니다.
-  */
   renderer.compile(
     scene,
     camera
@@ -1856,7 +1971,7 @@ if (reducedMotion) {
 }
 
 /* =========================================================
-   정리
+   완전 종료 시 정리
 ========================================================= */
 
 function disposeIntro() {
@@ -1895,13 +2010,96 @@ function disposeIntro() {
   disposeParticleSystem();
 
   particleMaterial.dispose();
+
   renderer.dispose();
+}
+
+/* =========================================================
+   뒤로가기 및 앞으로가기 대응
+========================================================= */
+
+function handlePageHide(event) {
+  /*
+    뒤로가기용 BFCache에 페이지가 보관되는 경우에는
+    Three.js 자원을 없애지 않고 애니메이션만 멈춥니다.
+  */
+  if (event.persisted) {
+    stopAnimation();
+
+    return;
+  }
+
+  /*
+    페이지가 완전히 종료될 때만 자원을 폐기합니다.
+  */
+  disposeIntro();
+}
+
+function handlePageShow(event) {
+  /*
+    일반 최초 진입은 기존 시작 코드가 담당합니다.
+  */
+  if (!event.persisted) {
+    return;
+  }
+
+  /*
+    BFCache에서 뒤로가기로 복원되었을 때
+    기존 Three.js 상태를 다시 렌더링하고 재생합니다.
+  */
+  previousFrameTime = 0;
+
+  updateCategoryStageSize();
+
+  camera.aspect =
+    window.innerWidth /
+    window.innerHeight;
+
+  camera
+    .updateProjectionMatrix();
+
+  const pixelRatio =
+    getPixelRatio();
+
+  renderer.setPixelRatio(
+    pixelRatio
+  );
+
+  renderer.setSize(
+    window.innerWidth,
+    window.innerHeight,
+    false
+  );
+
+  particleMaterial
+    .uniforms
+    .uPixelRatio
+    .value =
+      pixelRatio;
+
+  updateParticles(
+    elapsedTime
+  );
+
+  updateCategoryLabels(
+    elapsedTime,
+    true
+  );
+
+  renderer.render(
+    scene,
+    camera
+  );
+
+  startAnimation();
 }
 
 window.addEventListener(
   "pagehide",
-  disposeIntro,
-  {
-    once: true
-  }
+  handlePageHide
+);
+
+window.addEventListener(
+  "pageshow",
+  handlePageShow
 );

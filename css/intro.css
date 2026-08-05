@@ -5,13 +5,18 @@
 :root {
   --intro-background: #ffffff;
 
-  /* 카테고리 바 */
   --galaxy-category-background: #e2e2e2;
   --galaxy-category-text: #000000;
 
-  /* 카테고리 바 애니메이션 */
-  --galaxy-category-duration: 3000ms;
-  --galaxy-category-easing: cubic-bezier(0.16, 1, 0.3, 1);
+  --galaxy-category-duration: 2200ms;
+
+  --galaxy-category-easing:
+    cubic-bezier(
+      0.16,
+      1,
+      0.3,
+      1
+    );
 }
 
 *,
@@ -27,7 +32,8 @@ body {
 
   margin: 0;
 
-  background-color: var(--intro-background);
+  background-color:
+    var(--intro-background);
 }
 
 body.intro-body {
@@ -62,7 +68,8 @@ body.intro-body {
   margin: 0;
   padding: 0;
 
-  background-color: var(--intro-background);
+  background-color:
+    var(--intro-background);
 
   overflow: hidden;
 }
@@ -171,7 +178,7 @@ body.intro-body {
 }
 
 /* =========================================================
-   개별 카테고리 바
+   개별 카테고리
 ========================================================= */
 
 .galaxy-category {
@@ -192,12 +199,11 @@ body.intro-body {
     0
     13px;
 
-  color: var(--galaxy-category-text);
-  background-color: var(--galaxy-category-background);
+  color:
+    var(--galaxy-category-text);
 
-  /*
-    인덱스·아카이브 상단 메뉴와 같은 영어 서체
-  */
+  background-color: transparent;
+
   font-family:
     "Pretendard",
     sans-serif;
@@ -212,68 +218,146 @@ body.intro-body {
 
   opacity: 0;
 
+  transform:
+    translate3d(
+      -50%,
+      -50%,
+      0
+    );
+
+  transform-origin:
+    center center;
+
   /*
-    중앙에서 양옆으로 펼쳐지는 형태
+    부모 요소는 위치 이동만 담당합니다.
+
+    기존처럼 같은 요소에 transform과
+    clip-path 애니메이션을 동시에 적용하지 않아
+    회색 박스 깜빡임을 줄입니다.
   */
-  clip-path: inset(0 50% 0 50%);
-
-  transform: translate(-50%, -50%);
-
-  transform-origin: center;
-
   will-change:
     transform,
-    clip-path,
     opacity;
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 
   pointer-events: none;
 
   transition:
-    opacity 180ms linear,
-    clip-path
-      var(--galaxy-category-duration)
-      var(--galaxy-category-easing),
-    color 180ms ease,
-    background-color 180ms ease;
+    opacity 160ms linear,
+    color 180ms ease;
 
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color:
+    transparent;
 }
 
-/* 텍스트는 바와 함께 표시 */
+/* =========================================================
+   회색 박스 배경
+========================================================= */
+
+.galaxy-category::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+  z-index: -1;
+
+  background-color:
+    var(
+      --galaxy-category-background
+    );
+
+  /*
+    clip-path 대신 scaleX를 사용합니다.
+    GPU 처리 안정성이 더 높고 깜빡임이 적습니다.
+  */
+  transform:
+    translateZ(0)
+    scaleX(0);
+
+  transform-origin:
+    center center;
+
+  will-change: transform;
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  transition:
+    transform
+    var(
+      --galaxy-category-duration
+    )
+    var(
+      --galaxy-category-easing
+    ),
+    background-color
+    180ms
+    ease;
+}
+
+/* =========================================================
+   카테고리 글자
+========================================================= */
+
 .galaxy-category span {
+  position: relative;
+  z-index: 1;
+
   display: block;
 
   font: inherit;
   line-height: inherit;
 
-  opacity: 1;
-  transform: none;
+  opacity: 0;
+
+  transform:
+    translate3d(
+      0,
+      2px,
+      0
+    );
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  transition:
+    opacity 220ms ease,
+    transform 300ms ease;
 }
 
 /* =========================================================
    카테고리 표시 상태
 ========================================================= */
 
-/*
-  현재 intro.js가 is-box-visible을 사용하는 경우
-*/
-.galaxy-category.is-box-visible {
+.galaxy-category.is-box-visible,
+.galaxy-category.is-visible {
   opacity: 1;
-
-  clip-path: inset(0 0 0 0);
 
   pointer-events: auto;
 }
 
-/*
-  이전 코드에서 is-visible을 사용하는 경우도 호환
-*/
-.galaxy-category.is-visible {
+.galaxy-category.is-box-visible::before,
+.galaxy-category.is-visible::before {
+  transform:
+    translateZ(0)
+    scaleX(1);
+}
+
+.galaxy-category.is-box-visible span,
+.galaxy-category.is-visible span {
   opacity: 1;
 
-  clip-path: inset(0 0 0 0);
+  transform:
+    translate3d(
+      0,
+      0,
+      0
+    );
 
-  pointer-events: auto;
+  transition-delay: 420ms;
 }
 
 /* =========================================================
@@ -283,46 +367,26 @@ body.intro-body {
 @media (hover: hover) {
   .galaxy-category:hover {
     color: #ffffff;
+  }
+
+  .galaxy-category:hover::before {
     background-color: #000000;
   }
 }
 
 .galaxy-category:focus-visible {
   color: #ffffff;
-  background-color: #000000;
 
-  outline: 1px solid #000000;
+  outline:
+    1px
+    solid
+    #000000;
+
   outline-offset: 3px;
 }
 
-/* =========================================================
-   카테고리별 기본 위치
-   JS가 위치를 직접 지정하면 JS 값이 우선됩니다.
-========================================================= */
-
-.category-essay {
-  left: 31%;
-  top: 34%;
-}
-
-.category-article {
-  left: 69%;
-  top: 31%;
-}
-
-.category-criticism {
-  left: 19%;
-  top: 63%;
-}
-
-.category-interview {
-  left: 57%;
-  top: 70%;
-}
-
-.category-about {
-  left: 79%;
-  top: 75%;
+.galaxy-category:focus-visible::before {
+  background-color: #000000;
 }
 
 /* =========================================================
@@ -331,7 +395,8 @@ body.intro-body {
 
 @media (max-width: 767px) {
   :root {
-    --galaxy-category-duration: 2200ms;
+    --galaxy-category-duration:
+      1800ms;
   }
 
   .galaxy-category {
@@ -344,42 +409,20 @@ body.intro-body {
 
     font-size: 9px;
   }
-
-  .category-essay {
-    left: 31%;
-    top: 38%;
-  }
-
-  .category-article {
-    left: 71%;
-    top: 35%;
-  }
-
-  .category-criticism {
-    left: 16%;
-    top: 61%;
-  }
-
-  .category-interview {
-    left: 58%;
-    top: 67%;
-  }
-
-  .category-about {
-    left: 82%;
-    top: 72%;
-  }
 }
 
 /* =========================================================
-   움직임 최소화 설정 사용자
+   움직임 최소화 설정
 ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-  .galaxy-category {
-    transition:
-      opacity 180ms linear,
-      color 180ms ease,
-      background-color 180ms ease;
+  .galaxy-category,
+  .galaxy-category::before,
+  .galaxy-category span {
+    transition-duration:
+      1ms !important;
+
+    transition-delay:
+      0ms !important;
   }
 }
