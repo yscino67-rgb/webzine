@@ -6,22 +6,29 @@
   background-color: #ffffff;
 }
 
-/*
-  기사 페이지 헤더는 아카이브 페이지와 마찬가지로
-  문서 흐름 안에 배치합니다.
+/* =========================================================
+   기사 상단바 고정
+========================================================= */
 
-  style.css의 .site-header { position: fixed; }를 덮어씁니다.
-*/
 .article-detail-page .article-archive-header {
-  position: relative;
-  top: auto;
-  left: auto;
+  position: fixed;
 
+  top: 0;
+  left: 0;
   z-index: 1000;
 
   width: 100%;
 
   background-color: #ffffff;
+}
+
+/*
+  고정된 상단바 아래에서 기사 내용이 시작되도록
+  헤더 높이만큼 여백을 확보합니다.
+*/
+.article-detail-page .article-page {
+  padding-top:
+    clamp(150px, 12vw, 190px);
 }
 
 /*
@@ -44,7 +51,7 @@
   min-height: 100dvh;
 
   padding:
-    clamp(52px, 5vw, 86px)
+    clamp(150px, 12vw, 190px)
     var(--page-padding)
     100px;
 
@@ -717,12 +724,30 @@
       14px;
   }
 
+  @media (max-width: 767px) {
+  .article-detail-page .article-archive-header {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+
+    padding:
+      20px
+      20px
+      14px;
+
+    background-color: #ffffff;
+  }
+
   .article-page {
     padding:
-      34px
+      112px
       var(--page-padding)
       60px;
   }
+}
 
   .article-header {
     margin-bottom: 38px;
