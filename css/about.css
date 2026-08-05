@@ -1,0 +1,421 @@
+/* =========================================================
+   ABOUT 페이지 기본 설정
+========================================================= */
+
+.about-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  margin: 0;
+
+  background-color: #ffffff;
+  color: #111111;
+
+  font-family:
+    "Pretendard",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Apple SD Gothic Neo",
+    sans-serif;
+}
+
+/* =========================================================
+   고정 상단 메뉴
+========================================================= */
+
+.about-page .about-header {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+  z-index: 1000;
+
+  width: 100%;
+
+  background-color: #ffffff;
+}
+
+/*
+  ABOUT 페이지에서는 메뉴가 처음부터 펼쳐진 상태로 보입니다.
+*/
+.about-page
+  .archive-filter.is-open
+  .archive-filter-items {
+  opacity: 1;
+}
+
+/* =========================================================
+   ABOUT 전체 영역
+========================================================= */
+
+.about-main {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  padding:
+    clamp(170px, 14vw, 230px)
+    var(--page-padding)
+    110px;
+
+  background-color: #ffffff;
+}
+
+/*
+  이미지 열 없이 글만 중앙에 배치합니다.
+*/
+.about-content {
+  width: min(100%, 900px);
+
+  margin:
+    0
+    auto;
+}
+
+/* =========================================================
+   제목 영역
+========================================================= */
+
+.about-title-area {
+  width: 100%;
+
+  margin-bottom:
+    clamp(64px, 7vw, 100px);
+
+  text-align: center;
+}
+
+.about-title {
+  margin:
+    0
+    0
+    34px;
+
+  font-family:
+    "CossetteTitre",
+    "Special Gothic Condensed One",
+    "Pretendard",
+    sans-serif;
+
+  font-size:
+    clamp(54px, 6vw, 92px);
+
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+}
+
+.about-introduction {
+  max-width: 760px;
+
+  margin:
+    0
+    auto;
+
+  font-size:
+    clamp(20px, 1.65vw, 28px);
+
+  font-weight: 600;
+  line-height: 1.7;
+  letter-spacing: -0.025em;
+
+  text-align: center;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* =========================================================
+   본문 섹션
+========================================================= */
+
+.about-section {
+  width: 100%;
+
+  margin-bottom:
+    clamp(66px, 7vw, 96px);
+}
+
+.about-section:last-of-type {
+  margin-bottom: 0;
+}
+
+.about-section-title {
+  display: flex;
+  align-items: baseline;
+
+  gap: 11px;
+
+  margin:
+    0
+    0
+    28px;
+
+  font-size:
+    clamp(22px, 1.8vw, 30px);
+
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.03em;
+
+  word-break: keep-all;
+}
+
+.about-section-title span {
+  flex: 0 0 auto;
+
+  font-size: 11px;
+  line-height: 1;
+
+  transform: translateY(-3px);
+}
+
+.about-section p {
+  margin:
+    0
+    0
+    34px;
+
+  font-size:
+    clamp(17px, 1.2vw, 21px);
+
+  font-weight: 500;
+  line-height: 1.95;
+  letter-spacing: -0.02em;
+
+  text-align: justify;
+  text-align-last: left;
+  text-justify: inter-word;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.about-section p:last-child {
+  margin-bottom: 0;
+}
+
+/* =========================================================
+   번호 목록
+========================================================= */
+
+.about-list {
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+
+  counter-reset: about-list;
+}
+
+.about-list li {
+  position: relative;
+
+  margin-bottom: 22px;
+
+  padding-left: 38px;
+
+  counter-increment: about-list;
+
+  font-size:
+    clamp(17px, 1.2vw, 21px);
+
+  font-weight: 500;
+  line-height: 1.9;
+  letter-spacing: -0.02em;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.about-list li:last-child {
+  margin-bottom: 0;
+}
+
+.about-list li::before {
+  content:
+    counter(about-list)
+    ".";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  font-weight: 600;
+}
+
+.about-list strong {
+  font-weight: 600;
+}
+
+/* =========================================================
+   문장 안 작은 검정 점
+========================================================= */
+
+.about-note-marker {
+  display: inline-block;
+
+  margin-left: 2px;
+
+  font-size: 8px;
+  line-height: 1;
+
+  vertical-align: super;
+}
+
+/* =========================================================
+   하단 링크
+========================================================= */
+
+.about-footer {
+  margin-top:
+    clamp(80px, 8vw, 120px);
+
+  padding-top: 18px;
+
+  border-top: 1px solid #111111;
+}
+
+.about-back-link {
+  color: inherit;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  text-decoration: none;
+}
+
+/* =========================================================
+   태블릿
+========================================================= */
+
+@media (max-width: 899px) {
+  .about-main {
+    padding:
+      145px
+      var(--page-padding)
+      80px;
+  }
+
+  .about-content {
+    width: min(100%, 760px);
+  }
+
+  .about-title-area {
+    margin-bottom: 64px;
+  }
+
+  .about-title {
+    font-size:
+      clamp(52px, 10vw, 76px);
+  }
+
+  .about-introduction {
+    font-size:
+      clamp(19px, 3vw, 24px);
+  }
+
+  .about-section {
+    margin-bottom: 66px;
+  }
+
+  .about-section p,
+  .about-list li {
+    font-size:
+      clamp(16px, 2.4vw, 19px);
+  }
+}
+
+/* =========================================================
+   모바일
+========================================================= */
+
+@media (max-width: 767px) {
+  .about-page .about-header {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    z-index: 1000;
+
+    width: 100%;
+
+    padding:
+      calc(
+        env(safe-area-inset-top, 0px) +
+        18px
+      )
+      18px
+      16px;
+
+    background-color: #ffffff;
+  }
+
+  .about-main {
+    padding:
+      calc(
+        env(safe-area-inset-top, 0px) +
+        145px
+      )
+      20px
+      70px;
+  }
+
+  .about-content {
+    width: 100%;
+  }
+
+  .about-title-area {
+    margin-bottom: 58px;
+  }
+
+  .about-title {
+    margin-bottom: 28px;
+
+    font-size:
+      clamp(50px, 16vw, 70px);
+  }
+
+  .about-introduction {
+    font-size:
+      clamp(19px, 5.5vw, 24px);
+
+    line-height: 1.65;
+  }
+
+  .about-section {
+    margin-bottom: 58px;
+  }
+
+  .about-section-title {
+    gap: 9px;
+
+    margin-bottom: 22px;
+
+    font-size:
+      clamp(21px, 6vw, 26px);
+  }
+
+  .about-section-title span {
+    font-size: 9px;
+  }
+
+  .about-section p,
+  .about-list li {
+    font-size:
+      clamp(16px, 4.3vw, 18px);
+
+    line-height: 1.85;
+
+    text-align: left;
+  }
+
+  .about-list li {
+    padding-left: 31px;
+  }
+
+  .about-footer {
+    margin-top: 70px;
+  }
+}
