@@ -1,5 +1,9 @@
 "use strict";
 
+/* =========================================================
+   DOM 요소
+========================================================= */
+
 const loginView =
   document.getElementById(
     "login-view"
@@ -55,8 +59,16 @@ const saveMessage =
     "save-message"
   );
 
+/* =========================================================
+   상태값
+========================================================= */
+
 let posts = [];
 let selectedPostId = null;
+
+/* =========================================================
+   화면 전환
+========================================================= */
 
 function showLogin() {
   loginView.hidden = false;
@@ -67,6 +79,10 @@ function showAdmin() {
   loginView.hidden = true;
   adminView.hidden = false;
 }
+
+/* =========================================================
+   공통 함수
+========================================================= */
 
 function today() {
   return new Date()
@@ -85,6 +101,38 @@ function normalizeBody(body) {
 
   return String(body || "");
 }
+
+/*
+  서버가 JSON이 아닌 오류 페이지를 반환하더라도
+  브라우저 콘솔에서 JSON 파싱 오류로 멈추지 않도록 처리
+*/
+async function readJsonResponse(
+  response
+) {
+  const responseText =
+    await response.text();
+
+  if (!responseText) {
+    return {};
+  }
+
+  try {
+    return JSON.parse(
+      responseText
+    );
+  } catch {
+    return {
+      error:
+        response.ok
+          ? "서버 응답을 읽지 못했습니다."
+          : `서버 오류가 발생했습니다. 상태 코드: ${response.status}`
+    };
+  }
+}
+
+/* =========================================================
+   새 글 작성 화면 초기화
+========================================================= */
 
 function clearEditor() {
   selectedPostId = null;
@@ -137,8 +185,14 @@ function clearEditor() {
 
   deleteButton.hidden = true;
 
+  saveMessage.textContent = "";
+
   renderPostList();
 }
+
+/* =========================================================
+   기존 글 불러오기
+========================================================= */
 
 function loadPostIntoEditor(post) {
   selectedPostId = post.id;
@@ -162,7 +216,8 @@ function loadPostIntoEditor(post) {
   document.getElementById(
     "post-category"
   ).value =
-    post.category || "criticism";
+    post.category ||
+    "criticism";
 
   document.getElementById(
     "post-subcategory"
@@ -190,16 +245,25 @@ function loadPostIntoEditor(post) {
     post.published !== false;
 
   bodyEditor.innerHTML =
-    normalizeBody(post.body);
+    normalizeBody(
+      post.body
+    );
 
   document.getElementById(
     "editor-title"
-  ).textContent = "게시글 수정";
+  ).textContent =
+    "게시글 수정";
 
   deleteButton.hidden = false;
 
+  saveMessage.textContent = "";
+
   renderPostList();
 }
+
+/* =========================================================
+   게시글 목록 출력
+========================================================= */
 
 function renderPostList() {
   postList.innerHTML = "";
@@ -231,26 +295,52 @@ function renderPostList() {
       );
     }
 
-    button.innerHTML = `
-      <span class="post-list-title">
-        ${post.title}
-      </span>
+    const title =
+      document.createElement(
+        "span"
+      );
 
-      <span class="post-list-meta">
-        ${post.author} · ${post.date}
-      </span>
-    `;
+    title.className =
+      "post-list-title";
+
+    title.textContent =
+      post.title ||
+      "제목 없음";
+
+    const meta =
+      document.createElement(
+        "span"
+      );
+
+    meta.className =
+      "post-list-meta";
+
+    meta.textContent =
+      `${post.author || "작성자 없음"} · ${post.date || ""}`;
+
+    button.append(
+      title,
+      meta
+    );
 
     button.addEventListener(
       "click",
       () => {
-        loadPostIntoEditor(post);
+        loadPostIntoEditor(
+          post
+        );
       }
     );
 
-    postList.appendChild(button);
+    postList.appendChild(
+      button
+    );
   });
 }
+
+/* =========================================================
+   로그인 상태 확인
+========================================================= */
 
 async function checkSession() {
   try {
@@ -264,18 +354,33 @@ async function checkSession() {
       );
 
     const data =
-      await response.json();
+      await readJsonResponse(
+        response
+      );
 
-    if (data.authenticated) {
+    if (
+      response.ok &&
+      data.authenticated
+    ) {
       showAdmin();
+
       await loadPosts();
     } else {
       showLogin();
     }
-  } catch {
+  } catch (error) {
+    console.error(
+      "세션 확인 실패:",
+      error
+    );
+
     showLogin();
   }
 }
+
+/* =========================================================
+   게시글 목록 불러오기
+========================================================= */
 
 async function loadPosts() {
   saveMessage.textContent =
@@ -291,7 +396,9 @@ async function loadPosts() {
     );
 
   const data =
-    await response.json();
+    await readJsonResponse(
+      response
+    );
 
   if (!response.ok) {
     throw new Error(
@@ -311,6 +418,10 @@ async function loadPosts() {
   saveMessage.textContent = "";
 }
 
+/* =========================================================
+   로그인
+========================================================= */
+
 loginForm.addEventListener(
   "submit",
   async (event) => {
@@ -324,64 +435,95 @@ loginForm.addEventListener(
         "admin-password"
       ).value;
 
-    const response =
-      await fetch(
-        "/api/login",
-        {
-          method: "POST",
+    try {
+      const response =
+        await fetch(
+          "/api/login",
+          {
+            method: "POST",
 
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
 
-          credentials:
-            "same-origin",
+            credentials:
+              "same-origin",
 
-          body: JSON.stringify({
-            password
-          })
-        }
-      );
+            body:
+              JSON.stringify({
+                password
+              })
+          }
+        );
 
-    const data =
-      await response.json();
+      const data =
+        await readJsonResponse(
+          response
+        );
 
-    if (!response.ok) {
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+          "로그인하지 못했습니다."
+        );
+      }
+
       loginMessage.textContent =
-        data.error ||
+        "";
+
+      showAdmin();
+
+      await loadPosts();
+    } catch (error) {
+      loginMessage.textContent =
+        error.message ||
         "로그인하지 못했습니다.";
-
-      return;
     }
-
-    loginMessage.textContent = "";
-
-    showAdmin();
-    await loadPosts();
   }
 );
+
+/* =========================================================
+   로그아웃
+========================================================= */
 
 logoutButton.addEventListener(
   "click",
   async () => {
-    await fetch(
-      "/api/logout",
-      {
-        method: "POST",
-        credentials:
-          "same-origin"
-      }
-    );
+    try {
+      await fetch(
+        "/api/logout",
+        {
+          method: "POST",
 
-    window.location.reload();
+          credentials:
+            "same-origin"
+        }
+      );
+    } finally {
+      window.location.reload();
+    }
   }
 );
+
+/* =========================================================
+   새 글 버튼
+========================================================= */
 
 newPostButton.addEventListener(
   "click",
   clearEditor
 );
+
+/* =========================================================
+   게시글 저장
+
+   저장 버튼
+   → GitHub posts.json 자동 수정
+   → GitHub 자동 커밋
+   → Vercel 자동 배포
+   → 사이트 자동 반영
+========================================================= */
 
 postForm.addEventListener(
   "submit",
@@ -397,48 +539,84 @@ postForm.addEventListener(
       ).value ||
       createPostId();
 
+    const title =
+      document.getElementById(
+        "post-title"
+      ).value.trim();
+
+    const author =
+      document.getElementById(
+        "post-author"
+      ).value.trim();
+
+    const date =
+      document.getElementById(
+        "post-date"
+      ).value;
+
+    if (!title) {
+      saveMessage.textContent =
+        "제목을 입력해 주세요.";
+
+      return;
+    }
+
+    if (!author) {
+      saveMessage.textContent =
+        "작성자를 입력해 주세요.";
+
+      return;
+    }
+
+    if (!date) {
+      saveMessage.textContent =
+        "작성일을 입력해 주세요.";
+
+      return;
+    }
+
+    const category =
+      document.getElementById(
+        "post-category"
+      ).value;
+
+    const subcategoryInput =
+      document.getElementById(
+        "post-subcategory"
+      ).value.trim();
+
     const post = {
       id,
 
-      title:
-        document.getElementById(
-          "post-title"
-        ).value,
+      title,
 
-      author:
-        document.getElementById(
-          "post-author"
-        ).value,
+      author,
 
-      date:
-        document.getElementById(
-          "post-date"
-        ).value,
+      date,
 
-      category:
-        document.getElementById(
-          "post-category"
-        ).value,
+      category,
 
       subcategory:
-        document.getElementById(
-          "post-subcategory"
-        ).value,
+        subcategoryInput ||
+        category.toUpperCase(),
 
       thumbnail:
         document.getElementById(
           "post-thumbnail"
-        ).value,
+        ).value.trim(),
+
+      imageAlt:
+        title,
 
       imageCaption:
         document.getElementById(
           "post-image-caption"
-        ).value,
+        ).value.trim(),
 
       imageSource:
         document.getElementById(
           "post-image-source"
-        ).value,
+        ).value.trim(),
 
       published:
         document.getElementById(
@@ -464,15 +642,18 @@ postForm.addEventListener(
             credentials:
               "same-origin",
 
-            body: JSON.stringify({
-              action: "save",
-              post
-            })
+            body:
+              JSON.stringify({
+                action: "save",
+                post
+              })
           }
         );
 
       const data =
-        await response.json();
+        await readJsonResponse(
+          response
+        );
 
       if (!response.ok) {
         throw new Error(
@@ -481,86 +662,211 @@ postForm.addEventListener(
         );
       }
 
-      posts = data.posts;
+      posts =
+        Array.isArray(data.posts)
+          ? data.posts
+          : posts;
+
       selectedPostId = id;
 
       renderPostList();
 
-      const saved =
+      const savedPost =
         posts.find(
           (item) =>
             item.id === id
         );
 
-      if (saved) {
-        loadPostIntoEditor(saved);
+      if (savedPost) {
+        loadPostIntoEditor(
+          savedPost
+        );
       }
 
-      saveMessage.textContent =
-        "저장되었습니다. Vercel 재배포 후 사이트에 반영됩니다.";
+      /*
+        사이트 이동은 강제하지 않습니다.
+
+        저장 직후 Vercel 배포가 시작되므로
+        즉시 기사 페이지로 이동하면 이전 내용이
+        잠깐 보일 수 있습니다.
+
+        대신 아래 확인 링크를 제공합니다.
+      */
+
+      const articleUrl =
+        `/html/article.html?id=${encodeURIComponent(id)}`;
+
+      const archiveUrl =
+        "/html/archive.html";
+
+      saveMessage.innerHTML = "";
+
+      const messageText =
+        document.createElement(
+          "span"
+        );
+
+      messageText.textContent =
+        post.published
+          ? "저장되었습니다. 잠시 후 사이트에 자동 반영됩니다. "
+          : "비공개 상태로 저장되었습니다. ";
+
+      const articleLink =
+        document.createElement(
+          "a"
+        );
+
+      articleLink.href =
+        articleUrl;
+
+      articleLink.target =
+        "_blank";
+
+      articleLink.rel =
+        "noopener";
+
+      articleLink.textContent =
+        "글 확인하기";
+
+      articleLink.style.textDecoration =
+        "underline";
+
+      articleLink.style.textUnderlineOffset =
+        "3px";
+
+      const separator =
+        document.createTextNode(
+          " · "
+        );
+
+      const archiveLink =
+        document.createElement(
+          "a"
+        );
+
+      archiveLink.href =
+        archiveUrl;
+
+      archiveLink.target =
+        "_blank";
+
+      archiveLink.rel =
+        "noopener";
+
+      archiveLink.textContent =
+        "목록 확인하기";
+
+      archiveLink.style.textDecoration =
+        "underline";
+
+      archiveLink.style.textUnderlineOffset =
+        "3px";
+
+      saveMessage.append(
+        messageText,
+        articleLink,
+        separator,
+        archiveLink
+      );
     } catch (error) {
+      console.error(
+        "게시글 저장 실패:",
+        error
+      );
+
       saveMessage.textContent =
-        error.message;
+        error.message ||
+        "저장에 실패했습니다.";
     }
   }
 );
 
+/* =========================================================
+   게시글 삭제
+========================================================= */
+
 deleteButton.addEventListener(
   "click",
   async () => {
-    if (!selectedPostId) return;
+    if (!selectedPostId) {
+      return;
+    }
 
     const confirmed =
       window.confirm(
         "이 게시글을 삭제할까요?"
       );
 
-    if (!confirmed) return;
+    if (!confirmed) {
+      return;
+    }
 
     saveMessage.textContent =
       "삭제 중입니다.";
 
-    const response =
-      await fetch(
-        "/api/posts",
-        {
-          method: "POST",
+    try {
+      const response =
+        await fetch(
+          "/api/posts",
+          {
+            method: "POST",
 
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
 
-          credentials:
-            "same-origin",
+            credentials:
+              "same-origin",
 
-          body: JSON.stringify({
-            action: "delete",
-            id: selectedPostId
-          })
-        }
+            body:
+              JSON.stringify({
+                action:
+                  "delete",
+
+                id:
+                  selectedPostId
+              })
+          }
+        );
+
+      const data =
+        await readJsonResponse(
+          response
+        );
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+          "삭제에 실패했습니다."
+        );
+      }
+
+      posts =
+        Array.isArray(data.posts)
+          ? data.posts
+          : [];
+
+      clearEditor();
+
+      saveMessage.textContent =
+        "삭제되었습니다. 잠시 후 사이트에서도 자동으로 삭제됩니다.";
+    } catch (error) {
+      console.error(
+        "게시글 삭제 실패:",
+        error
       );
 
-    const data =
-      await response.json();
-
-    if (!response.ok) {
       saveMessage.textContent =
-        data.error ||
+        error.message ||
         "삭제에 실패했습니다.";
-
-      return;
     }
-
-    posts = data.posts;
-    clearEditor();
-
-    saveMessage.textContent =
-      "삭제되었습니다.";
   }
 );
 
-/* 편집기 툴바 */
+/* =========================================================
+   편집기 툴바
+========================================================= */
 
 document
   .querySelectorAll(
@@ -582,7 +888,9 @@ document
   });
 
 document
-  .querySelectorAll("[data-block]")
+  .querySelectorAll(
+    "[data-block]"
+  )
   .forEach((button) => {
     button.addEventListener(
       "click",
@@ -598,8 +906,14 @@ document
     );
   });
 
+/* =========================================================
+   글자색
+========================================================= */
+
 document
-  .getElementById("text-color")
+  .getElementById(
+    "text-color"
+  )
   .addEventListener(
     "input",
     (event) => {
@@ -612,6 +926,10 @@ document
       bodyEditor.focus();
     }
   );
+
+/* =========================================================
+   글자 배경색
+========================================================= */
 
 document
   .getElementById(
@@ -630,8 +948,14 @@ document
     }
   );
 
+/* =========================================================
+   링크 삽입
+========================================================= */
+
 document
-  .getElementById("link-button")
+  .getElementById(
+    "link-button"
+  )
   .addEventListener(
     "click",
     () => {
@@ -640,7 +964,9 @@ document
           "링크 주소를 입력하세요."
         );
 
-      if (!url) return;
+      if (!url) {
+        return;
+      }
 
       document.execCommand(
         "createLink",
@@ -651,6 +977,10 @@ document
       bodyEditor.focus();
     }
   );
+
+/* =========================================================
+   카테고리 변경 시 세부 카테고리 자동 입력
+========================================================= */
 
 document
   .getElementById(
@@ -664,12 +994,14 @@ document
           "post-subcategory"
         );
 
-      if (!subcategory.value) {
-        subcategory.value =
-          event.target.value
-            .toUpperCase();
-      }
+      subcategory.value =
+        event.target.value
+          .toUpperCase();
     }
   );
+
+/* =========================================================
+   실행
+========================================================= */
 
 checkSession();
