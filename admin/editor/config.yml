@@ -2,15 +2,50 @@ backend:
   name: git-gateway
   branch: main
 
+locale: "ko"
+
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
+
+publish_mode: simple_publish
 
 collections:
   - name: "posts"
     label: "게시글"
+    label_singular: "게시글"
+
     folder: "content/posts"
     create: true
+
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+
+    extension: "md"
+    format: "frontmatter"
+
+    summary: "{{title}} · {{author}} · {{date}}"
+
+    sortable_fields:
+      - "date"
+      - "title"
+      - "author"
+      - "category"
+
+    view_filters:
+      - label: "비평"
+        field: "category"
+        pattern: "criticism"
+
+      - label: "인터뷰"
+        field: "category"
+        pattern: "interview"
+
+      - label: "에세이"
+        field: "category"
+        pattern: "essay"
+
+      - label: "아티클"
+        field: "category"
+        pattern: "article"
 
     fields:
       - label: "제목"
@@ -24,7 +59,63 @@ collections:
       - label: "작성일"
         name: "date"
         widget: "datetime"
+        date_format: "YYYY.MM.DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+
+      - label: "카테고리"
+        name: "category"
+        widget: "select"
+
+        options:
+          - label: "CRITICISM"
+            value: "criticism"
+
+          - label: "INTERVIEW"
+            value: "interview"
+
+          - label: "ESSAY"
+            value: "essay"
+
+          - label: "ARTICLE"
+            value: "article"
+
+      - label: "세부 카테고리"
+        name: "subcategory"
+        widget: "string"
+        required: false
+        hint: "예: FILM, VIDEO, BOOK"
+
+      - label: "대표 이미지"
+        name: "thumbnail"
+        widget: "image"
+        required: false
+
+      - label: "이미지 설명"
+        name: "image_caption"
+        widget: "string"
+        required: false
+
+      - label: "이미지 출처"
+        name: "image_source"
+        widget: "string"
+        required: false
+
+      - label: "게시 여부"
+        name: "published"
+        widget: "boolean"
+        default: true
 
       - label: "본문"
         name: "body"
         widget: "markdown"
+
+        modes:
+          - "rich_text"
+          - "raw"
+
+        editor_components:
+          - "image"
+          - "code-block"
+
+        hint: "굵게, 기울임, 취소선, 제목, 인용문, 목록, 링크, 이미지를 사용할 수 있습니다. 밑줄과 글자색은 RAW 모드에서 HTML을 입력하세요."
