@@ -704,43 +704,95 @@ textarea,
 }
 
 /* =========================================================
-   색상 선택 도구
+   글자색 선택 도구
 ========================================================= */
 
-.color-tool {
-  display: flex;
+.text-color-tool {
+  display: inline-flex;
   align-items: center;
 
-  gap: 6px;
+  gap: 7px;
 
   min-height: 32px;
 
   padding:
     0
-    8px;
+    9px;
 
   background-color: #ffffff;
 
   border: 1px solid var(--line);
+}
+
+.text-color-label {
+  margin-right: 2px;
 
   font-size: 10px;
   font-weight: 500;
   line-height: 1;
 
-  cursor: pointer;
+  white-space: nowrap;
 }
 
-.color-tool input {
+.editor-toolbar .text-color-button {
+  position: relative;
+
+  display: block;
+
   width: 20px;
+  min-width: 20px;
   height: 20px;
+  min-height: 20px;
 
   padding: 0;
 
-  background-color: transparent;
+  border: 1px solid #bcbcbc;
+  border-radius: 50%;
 
-  border: 0;
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease;
+}
 
-  cursor: pointer;
+.editor-toolbar .text-color-button:hover {
+  transform: scale(1.12);
+
+  border-color: #777777;
+
+  box-shadow:
+    0
+    0
+    0
+    2px
+    #ffffff,
+    0
+    0
+    0
+    3px
+    #999999;
+}
+
+.editor-toolbar .text-color-button:focus-visible {
+  outline:
+    2px solid #111111;
+
+  outline-offset: 2px;
+}
+
+.text-color-button--black {
+  background-color: #111111 !important;
+}
+
+.text-color-button--red {
+  background-color: #e12727 !important;
+}
+
+.text-color-button--blue {
+  background-color: #2457d6 !important;
+}
+
+.text-color-button--green {
+  background-color: #16834b !important;
 }
 
 /* =========================================================

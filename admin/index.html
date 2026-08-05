@@ -8,13 +8,16 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
 
-    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="theme-color"
+      content="#ffffff"
+    />
 
     <title>횡단 CMS</title>
 
     <link
       rel="stylesheet"
-      href="./admin.css?v=1"
+      href="./admin.css?v=2"
     />
   </head>
 
@@ -259,6 +262,7 @@
 
               <div
                 class="editor-toolbar"
+                id="editor-toolbar"
                 role="toolbar"
                 aria-label="본문 서식"
               >
@@ -266,6 +270,7 @@
                   type="button"
                   data-command="bold"
                   aria-label="굵게"
+                  title="굵게"
                 >
                   <strong>B</strong>
                 </button>
@@ -274,6 +279,7 @@
                   type="button"
                   data-command="italic"
                   aria-label="기울임"
+                  title="기울임"
                 >
                   <em>I</em>
                 </button>
@@ -282,6 +288,7 @@
                   type="button"
                   data-command="underline"
                   aria-label="밑줄"
+                  title="밑줄"
                 >
                   <u>U</u>
                 </button>
@@ -290,6 +297,7 @@
                   type="button"
                   data-command="strikeThrough"
                   aria-label="취소선"
+                  title="취소선"
                 >
                   <s>S</s>
                 </button>
@@ -297,6 +305,7 @@
                 <button
                   type="button"
                   data-block="p"
+                  title="본문"
                 >
                   P
                 </button>
@@ -304,6 +313,7 @@
                 <button
                   type="button"
                   data-block="h2"
+                  title="중간 제목"
                 >
                   H2
                 </button>
@@ -311,6 +321,7 @@
                 <button
                   type="button"
                   data-block="blockquote"
+                  title="인용문"
                 >
                   “ ”
                 </button>
@@ -359,25 +370,47 @@
                   LINK
                 </button>
 
-                <label class="color-tool">
-                  글자색
+                <!-- 글자색 4종 -->
+                <div
+                  class="text-color-tool"
+                  aria-label="글자색"
+                >
+                  <span class="text-color-label">
+                    글자색
+                  </span>
 
-                  <input
-                    type="color"
-                    id="text-color"
-                    value="#111111"
-                  />
-                </label>
+                  <button
+                    type="button"
+                    class="text-color-button text-color-button--black"
+                    data-text-color="#111111"
+                    aria-label="검정색"
+                    title="검정색"
+                  ></button>
 
-                <label class="color-tool">
-                  배경색
+                  <button
+                    type="button"
+                    class="text-color-button text-color-button--red"
+                    data-text-color="#e12727"
+                    aria-label="빨간색"
+                    title="빨간색"
+                  ></button>
 
-                  <input
-                    type="color"
-                    id="background-color"
-                    value="#fff2a8"
-                  />
-                </label>
+                  <button
+                    type="button"
+                    class="text-color-button text-color-button--blue"
+                    data-text-color="#2457d6"
+                    aria-label="파란색"
+                    title="파란색"
+                  ></button>
+
+                  <button
+                    type="button"
+                    class="text-color-button text-color-button--green"
+                    data-text-color="#16834b"
+                    aria-label="초록색"
+                    title="초록색"
+                  ></button>
+                </div>
 
                 <button
                   type="button"
@@ -415,7 +448,7 @@
     </main>
 
     <script
-      src="./admin.js?v=1"
+      src="./admin.js?v=2"
       defer
     ></script>
   </body>

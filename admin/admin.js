@@ -44,6 +44,11 @@ const bodyEditor =
     "body-editor"
   );
 
+const editorToolbar =
+  document.getElementById(
+    "editor-toolbar"
+  );
+
 const newPostButton =
   document.getElementById(
     "new-post-button"
@@ -65,6 +70,14 @@ const saveMessage =
 
 let posts = [];
 let selectedPostId = null;
+
+/*
+  본문에서 마지막으로 선택한 글자 범위를 저장합니다.
+
+  툴바의 색상 버튼을 누르면 브라우저가 본문의 선택 영역을
+  해제할 수 있으므로, 선택 영역을 별도로 기억했다가 복원합니다.
+*/
+let savedEditorRange = null;
 
 /* =========================================================
    화면 전환
@@ -103,8 +116,8 @@ function normalizeBody(body) {
 }
 
 /*
-  서버가 JSON이 아닌 오류 페이지를 반환하더라도
-  브라우저 콘솔에서 JSON 파싱 오류로 멈추지 않도록 처리
+  서버가 JSON 대신 오류 문구나 HTML을 반환해도
+  JSON 파싱 오류로 전체 코드가 멈추지 않도록 처리합니다.
 */
 async function readJsonResponse(
   response
@@ -131,11 +144,122 @@ async function readJsonResponse(
 }
 
 /* =========================================================
+   본문 선택 영역 관리
+========================================================= */
+
+/*
+  현재 선택 영역이 본문 편집기 안에 있는지 확인합니다.
+*/
+function isSelectionInsideEditor() {
+  const selection =
+    window.getSelection();
+
+  if (
+    !selection ||
+    selection.rangeCount === 0
+  ) {
+    return false;
+  }
+
+  const range =
+    selection.getRangeAt(0);
+
+  const commonNode =
+    range.commonAncestorContainer;
+
+  const targetElement =
+    commonNode.nodeType ===
+    Node.ELEMENT_NODE
+      ? commonNode
+      : commonNode.parentElement;
+
+  return Boolean(
+    targetElement &&
+    (
+      targetElement === bodyEditor ||
+      bodyEditor.contains(
+        targetElement
+      )
+    )
+  );
+}
+
+/*
+  본문에서 선택한 글자 범위를 저장합니다.
+*/
+function saveEditorSelection() {
+  const selection =
+    window.getSelection();
+
+  if (
+    !selection ||
+    selection.rangeCount === 0 ||
+    !isSelectionInsideEditor()
+  ) {
+    return;
+  }
+
+  savedEditorRange =
+    selection
+      .getRangeAt(0)
+      .cloneRange();
+}
+
+/*
+  색상 버튼 등을 누르기 전 저장한 선택 영역을 복원합니다.
+*/
+function restoreEditorSelection() {
+  bodyEditor.focus();
+
+  if (!savedEditorRange) {
+    return false;
+  }
+
+  const selection =
+    window.getSelection();
+
+  if (!selection) {
+    return false;
+  }
+
+  try {
+    selection.removeAllRanges();
+
+    selection.addRange(
+      savedEditorRange
+    );
+
+    return true;
+  } catch (error) {
+    console.error(
+      "본문 선택 영역 복원 실패:",
+      error
+    );
+
+    savedEditorRange = null;
+
+    return false;
+  }
+}
+
+/*
+  본문 편집 후 현재 커서나 선택 영역을 다시 저장합니다.
+*/
+function refreshEditorSelection() {
+  window.requestAnimationFrame(
+    () => {
+      saveEditorSelection();
+    }
+  );
+}
+
+/* =========================================================
    새 글 작성 화면 초기화
 ========================================================= */
 
 function clearEditor() {
   selectedPostId = null;
+  savedEditorRange = null;
 
   document.getElementById(
     "post-id"
@@ -181,7 +305,8 @@ function clearEditor() {
 
   document.getElementById(
     "editor-title"
-  ).textContent = "새 게시글";
+  ).textContent =
+    "새 게시글";
 
   deleteButton.hidden = true;
 
@@ -191,27 +316,32 @@ function clearEditor() {
 }
 
 /* =========================================================
-   기존 글 불러오기
+   기존 글 편집기에 불러오기
 ========================================================= */
 
 function loadPostIntoEditor(post) {
   selectedPostId = post.id;
+  savedEditorRange = null;
 
   document.getElementById(
     "post-id"
-  ).value = post.id;
+  ).value =
+    post.id || "";
 
   document.getElementById(
     "post-title"
-  ).value = post.title || "";
+  ).value =
+    post.title || "";
 
   document.getElementById(
     "post-author"
-  ).value = post.author || "";
+  ).value =
+    post.author || "";
 
   document.getElementById(
     "post-date"
-  ).value = post.date || "";
+  ).value =
+    post.date || "";
 
   document.getElementById(
     "post-category"
@@ -268,74 +398,83 @@ function loadPostIntoEditor(post) {
 function renderPostList() {
   postList.innerHTML = "";
 
-  const sorted =
+  const sortedPosts =
     [...posts].sort(
-      (a, b) =>
-        new Date(b.date) -
-        new Date(a.date)
-    );
-
-  sorted.forEach((post) => {
-    const button =
-      document.createElement(
-        "button"
-      );
-
-    button.type = "button";
-
-    button.className =
-      "post-list-item";
-
-    if (
-      post.id ===
-      selectedPostId
-    ) {
-      button.classList.add(
-        "is-active"
-      );
-    }
-
-    const title =
-      document.createElement(
-        "span"
-      );
-
-    title.className =
-      "post-list-title";
-
-    title.textContent =
-      post.title ||
-      "제목 없음";
-
-    const meta =
-      document.createElement(
-        "span"
-      );
-
-    meta.className =
-      "post-list-meta";
-
-    meta.textContent =
-      `${post.author || "작성자 없음"} · ${post.date || ""}`;
-
-    button.append(
-      title,
-      meta
-    );
-
-    button.addEventListener(
-      "click",
-      () => {
-        loadPostIntoEditor(
-          post
+      (firstPost, secondPost) => {
+        return (
+          new Date(
+            secondPost.date
+          ) -
+          new Date(
+            firstPost.date
+          )
         );
       }
     );
 
-    postList.appendChild(
-      button
-    );
-  });
+  sortedPosts.forEach(
+    (post) => {
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.type = "button";
+
+      button.className =
+        "post-list-item";
+
+      if (
+        post.id ===
+        selectedPostId
+      ) {
+        button.classList.add(
+          "is-active"
+        );
+      }
+
+      const title =
+        document.createElement(
+          "span"
+        );
+
+      title.className =
+        "post-list-title";
+
+      title.textContent =
+        post.title ||
+        "제목 없음";
+
+      const meta =
+        document.createElement(
+          "span"
+        );
+
+      meta.className =
+        "post-list-meta";
+
+      meta.textContent =
+        `${post.author || "작성자 없음"} · ${post.date || ""}`;
+
+      button.append(
+        title,
+        meta
+      );
+
+      button.addEventListener(
+        "click",
+        () => {
+          loadPostIntoEditor(
+            post
+          );
+        }
+      );
+
+      postList.appendChild(
+        button
+      );
+    }
+  );
 }
 
 /* =========================================================
@@ -365,9 +504,11 @@ async function checkSession() {
       showAdmin();
 
       await loadPosts();
-    } else {
-      showLogin();
+
+      return;
     }
+
+    showLogin();
   } catch (error) {
     console.error(
       "세션 확인 실패:",
@@ -408,11 +549,14 @@ async function loadPosts() {
   }
 
   posts =
-    Array.isArray(data.posts)
+    Array.isArray(
+      data.posts
+    )
       ? data.posts
       : [];
 
   renderPostList();
+
   clearEditor();
 
   saveMessage.textContent = "";
@@ -469,13 +613,17 @@ loginForm.addEventListener(
         );
       }
 
-      loginMessage.textContent =
-        "";
+      loginMessage.textContent = "";
 
       showAdmin();
 
       await loadPosts();
     } catch (error) {
+      console.error(
+        "로그인 실패:",
+        error
+      );
+
       loginMessage.textContent =
         error.message ||
         "로그인하지 못했습니다.";
@@ -500,6 +648,11 @@ logoutButton.addEventListener(
             "same-origin"
         }
       );
+    } catch (error) {
+      console.error(
+        "로그아웃 요청 실패:",
+        error
+      );
     } finally {
       window.location.reload();
     }
@@ -519,7 +672,7 @@ newPostButton.addEventListener(
    게시글 저장
 
    저장 버튼
-   → GitHub posts.json 자동 수정
+   → GitHub posts.json 수정
    → GitHub 자동 커밋
    → Vercel 자동 배포
    → 사이트 자동 반영
@@ -663,7 +816,9 @@ postForm.addEventListener(
       }
 
       posts =
-        Array.isArray(data.posts)
+        Array.isArray(
+          data.posts
+        )
           ? data.posts
           : posts;
 
@@ -682,16 +837,6 @@ postForm.addEventListener(
           savedPost
         );
       }
-
-      /*
-        사이트 이동은 강제하지 않습니다.
-
-        저장 직후 Vercel 배포가 시작되므로
-        즉시 기사 페이지로 이동하면 이전 내용이
-        잠깐 보일 수 있습니다.
-
-        대신 아래 확인 링크를 제공합니다.
-      */
 
       const articleUrl =
         `/html/article.html?id=${encodeURIComponent(id)}`;
@@ -843,7 +988,9 @@ deleteButton.addEventListener(
       }
 
       posts =
-        Array.isArray(data.posts)
+        Array.isArray(
+          data.posts
+        )
           ? data.posts
           : [];
 
@@ -865,7 +1012,70 @@ deleteButton.addEventListener(
 );
 
 /* =========================================================
-   편집기 툴바
+   본문 선택 영역 감지
+========================================================= */
+
+document.addEventListener(
+  "selectionchange",
+  () => {
+    if (
+      document.activeElement ===
+        bodyEditor ||
+      isSelectionInsideEditor()
+    ) {
+      saveEditorSelection();
+    }
+  }
+);
+
+bodyEditor.addEventListener(
+  "mouseup",
+  saveEditorSelection
+);
+
+bodyEditor.addEventListener(
+  "keyup",
+  saveEditorSelection
+);
+
+bodyEditor.addEventListener(
+  "touchend",
+  saveEditorSelection
+);
+
+bodyEditor.addEventListener(
+  "input",
+  refreshEditorSelection
+);
+
+/* =========================================================
+   툴바 클릭 시 본문 선택 영역이 해제되는 것 방지
+========================================================= */
+
+if (editorToolbar) {
+  editorToolbar
+    .querySelectorAll(
+      "button"
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "mousedown",
+        (event) => {
+          /*
+            버튼을 눌렀을 때 브라우저 포커스가
+            본문에서 툴바로 이동하지 않도록 합니다.
+          */
+          event.preventDefault();
+        }
+      );
+    });
+}
+
+/* =========================================================
+   기본 편집 명령
+
+   굵게, 기울임, 밑줄, 취소선,
+   목록, 정렬, 실행 취소, 다시 실행
 ========================================================= */
 
 document
@@ -876,16 +1086,24 @@ document
     button.addEventListener(
       "click",
       () => {
+        restoreEditorSelection();
+
         document.execCommand(
           button.dataset.command,
           false,
           null
         );
 
-        bodyEditor.focus();
+        refreshEditorSelection();
       }
     );
   });
+
+/* =========================================================
+   문단 형식
+
+   P, H2, 인용문
+========================================================= */
 
 document
   .querySelectorAll(
@@ -895,58 +1113,77 @@ document
     button.addEventListener(
       "click",
       () => {
+        restoreEditorSelection();
+
         document.execCommand(
           "formatBlock",
           false,
           button.dataset.block
         );
 
-        bodyEditor.focus();
+        refreshEditorSelection();
       }
     );
   });
 
 /* =========================================================
    글자색
+
+   HTML에는 아래 네 가지 버튼이 있어야 합니다.
+
+   data-text-color="#111111"
+   data-text-color="#e12727"
+   data-text-color="#2457d6"
+   data-text-color="#16834b"
 ========================================================= */
 
 document
-  .getElementById(
-    "text-color"
+  .querySelectorAll(
+    "[data-text-color]"
   )
-  .addEventListener(
-    "input",
-    (event) => {
-      document.execCommand(
-        "foreColor",
-        false,
-        event.target.value
-      );
+  .forEach((button) => {
+    button.addEventListener(
+      "click",
+      () => {
+        const color =
+          button.dataset.textColor;
 
-      bodyEditor.focus();
-    }
-  );
+        if (!color) {
+          return;
+        }
 
-/* =========================================================
-   글자 배경색
-========================================================= */
+        const restored =
+          restoreEditorSelection();
 
-document
-  .getElementById(
-    "background-color"
-  )
-  .addEventListener(
-    "input",
-    (event) => {
-      document.execCommand(
-        "hiliteColor",
-        false,
-        event.target.value
-      );
+        if (!restored) {
+          saveMessage.textContent =
+            "색을 바꿀 글자를 먼저 드래그해 주세요.";
 
-      bodyEditor.focus();
-    }
-  );
+          return;
+        }
+
+        /*
+          font 태그 대신
+          style="color: ..." 형태로 저장되도록 합니다.
+        */
+        document.execCommand(
+          "styleWithCSS",
+          false,
+          true
+        );
+
+        document.execCommand(
+          "foreColor",
+          false,
+          color
+        );
+
+        saveMessage.textContent = "";
+
+        refreshEditorSelection();
+      }
+    );
+  });
 
 /* =========================================================
    링크 삽입
@@ -959,6 +1196,11 @@ document
   .addEventListener(
     "click",
     () => {
+      /*
+        prompt가 뜨기 전에 선택 영역을 저장합니다.
+      */
+      saveEditorSelection();
+
       const url =
         window.prompt(
           "링크 주소를 입력하세요."
@@ -968,13 +1210,25 @@ document
         return;
       }
 
+      const restored =
+        restoreEditorSelection();
+
+      if (!restored) {
+        saveMessage.textContent =
+          "링크를 적용할 글자를 먼저 드래그해 주세요.";
+
+        return;
+      }
+
       document.execCommand(
         "createLink",
         false,
         url
       );
 
-      bodyEditor.focus();
+      saveMessage.textContent = "";
+
+      refreshEditorSelection();
     }
   );
 
