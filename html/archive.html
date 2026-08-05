@@ -8,21 +8,18 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
 
-    <meta
-      name="theme-color"
-      content="#ffffff"
-    />
+    <meta name="theme-color" content="#ffffff" />
 
     <title>Magazine Archive</title>
 
     <link
       rel="stylesheet"
-      href="../css/style.css?v=12"
+      href="../css/style.css?v=13"
     />
 
     <link
       rel="stylesheet"
-      href="../css/index.css?v=12"
+      href="../css/index.css?v=13"
     />
   </head>
 
@@ -75,199 +72,23 @@
     <main class="site-main">
       <section
         class="article-index"
+        id="article-index"
         aria-label="기사 목록"
+        aria-live="polite"
       >
-        <div class="index-column">
-          <!-- 001 -->
-          <a
-            href="./article01.html"
-            class="index-item"
-          >
-            <span class="index-author">
-              박하나
-            </span>
-
-            <h2 class="index-title">
-              작품과 세상 사이를 오가는 비평
-            </h2>
-
-            <time
-              class="index-date"
-              datetime="2026-08-01"
-            >
-              2026.08.01
-            </time>
-
-            <span class="index-subcategory">
-              CRITICISM
-            </span>
-          </a>
-
-          <!-- 002 -->
-          <a
-            href="./article02.html"
-            class="index-item"
-          >
-            <span class="index-author">
-              박하나
-            </span>
-
-            <h2 class="index-title">
-              사운드로 재구성하는 민주주의의 역사
-              &lt;알제리 전투&gt;
-            </h2>
-
-            <time
-              class="index-date"
-              datetime="2026-08-01"
-            >
-              2026.08.01
-            </time>
-
-            <span class="index-subcategory">
-              CRITICISM
-            </span>
-          </a>
-
-          <!-- 003 -->
-          <a
-            href="#"
-            class="index-item index-item--placeholder"
-          >
-            <span class="index-author">.</span>
-            <h2 class="index-title">.</h2>
-            <time class="index-date">.</time>
-            <span class="index-subcategory">.</span>
-          </a>
-
-          <!-- 004 -->
-          <a
-            href="#"
-            class="index-item index-item--placeholder"
-          >
-            <span class="index-author">.</span>
-            <h2 class="index-title">.</h2>
-            <time class="index-date">.</time>
-            <span class="index-subcategory">.</span>
-          </a>
-
-          <!-- 005 -->
-          <a
-            href="#"
-            class="index-item index-item--placeholder"
-          >
-            <span class="index-author">.</span>
-            <h2 class="index-title">.</h2>
-            <time class="index-date">.</time>
-            <span class="index-subcategory">.</span>
-          </a>
-
-          <!-- 006 -->
-          <a
-            href="#"
-            class="index-item index-item--placeholder"
-          >
-            <span class="index-author">.</span>
-            <h2 class="index-title">.</h2>
-            <time class="index-date">.</time>
-            <span class="index-subcategory">.</span>
-          </a>
-
-          <!-- 007 -->
-          <a
-            href="#"
-            class="index-item index-item--placeholder"
-          >
-            <span class="index-author">.</span>
-            <h2 class="index-title">.</h2>
-            <time class="index-date">.</time>
-            <span class="index-subcategory">.</span>
-          </a>
-        </div>
-
-        <div class="index-column">
-          <!-- 008 -->
-          <a
-            href="#"
-            class="index-item index-item--placeholder"
-          >
-            <span class="index-author">.</span>
-            <h2 class="index-title">.</h2>
-            <time class="index-date">.</time>
-            <span class="index-subcategory">.</span>
-          </a>
-
-          <!-- 009 -->
-          <a
-            href="#"
-            class="index-item index-item--placeholder"
-          >
-            <span class="index-author">.</span>
-            <h2 class="index-title">.</h2>
-            <time class="index-date">.</time>
-            <span class="index-subcategory">.</span>
-          </a>
-
-          <!-- 010 -->
-          <a
-            href="#"
-            class="index-item index-item--placeholder"
-          >
-            <span class="index-author">.</span>
-            <h2 class="index-title">.</h2>
-            <time class="index-date">.</time>
-            <span class="index-subcategory">.</span>
-          </a>
-
-          <!-- 011 -->
-          <a
-            href="#"
-            class="index-item index-item--placeholder"
-          >
-            <span class="index-author">.</span>
-            <h2 class="index-title">.</h2>
-            <time class="index-date">.</time>
-            <span class="index-subcategory">.</span>
-          </a>
-
-          <!-- 012 -->
-          <a
-            href="#"
-            class="index-item index-item--placeholder"
-          >
-            <span class="index-author">.</span>
-            <h2 class="index-title">.</h2>
-            <time class="index-date">.</time>
-            <span class="index-subcategory">.</span>
-          </a>
-
-          <!-- 013 -->
-          <a
-            href="#"
-            class="index-item index-item--placeholder"
-          >
-            <span class="index-author">.</span>
-            <h2 class="index-title">.</h2>
-            <time class="index-date">.</time>
-            <span class="index-subcategory">.</span>
-          </a>
-
-          <!-- 014 -->
-          <a
-            href="#"
-            class="index-item index-item--placeholder"
-          >
-            <span class="index-author">.</span>
-            <h2 class="index-title">.</h2>
-            <time class="index-date">.</time>
-            <span class="index-subcategory">.</span>
-          </a>
-        </div>
+        <p class="archive-loading">
+          기사를 불러오는 중입니다.
+        </p>
       </section>
     </main>
 
     <script
-      src="../script.js?v=12"
+      src="../script.js?v=13"
+      defer
+    ></script>
+
+    <script
+      src="../archive.js?v=1"
       defer
     ></script>
   </body>
