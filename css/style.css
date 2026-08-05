@@ -9,7 +9,7 @@
   --background-color: #ffffff;
   --text-color: #111111;
 
-  --logo-width: 54px;
+  --logo-width: 81px;
   --menu-icon-width: 39px;
 
   /* 인덱스·기사 상단 메뉴 공통값 */
@@ -209,7 +209,7 @@ select {
     "Pretendard",
     sans-serif;
 
-  font-size: 18px;
+  font-size: 27px;
   font-weight: 500;
   line-height: 1;
 
@@ -613,7 +613,7 @@ select {
 
 @media (max-width: 767px) {
   :root {
-    --logo-width: 45px;
+    --logo-width: 68px;
     --menu-icon-width: 34px;
 
     --category-menu-gap: 10px;
@@ -631,7 +631,7 @@ select {
   }
 
   .site-logo-name {
-    font-size: 15px;
+    font-size: 23px;
   }
 
   .site-menu {
