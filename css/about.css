@@ -153,7 +153,8 @@
   font-size: 7px;
   line-height: 1;
 
-  transform: translateY(-2px);
+  transform:
+    translateY(-2px);
 }
 
 /* =========================================================
@@ -193,16 +194,22 @@
 /* =========================================================
    각주 전체 단위
 
-   글자 → 여백 → 네모 → 여백 → 마침표
+   글자 → 6px → 네모 → 6px → 마침표
 ========================================================= */
 
 .about-section .footnote-unit {
   display: inline-flex;
   align-items: center;
 
-  gap: 0.42em;
+  /*
+    앞 글자와 파란 네모 사이 간격
+  */
+  margin-left: 6px;
 
-  margin-left: 0.42em;
+  /*
+    파란 네모와 마침표 사이 간격
+  */
+  gap: 6px;
 
   color: inherit;
 
@@ -225,7 +232,7 @@
   justify-content: center;
 
   width: 14px;
-  height: 1em;
+  height: 21px;
 
   margin: 0;
   padding: 0;
@@ -239,8 +246,11 @@
     0
     14px;
 
-  /* 파란 네모 전체 위치 */
-  transform: translateY(1px);
+  /*
+    양수는 아래로, 음수는 위로 이동
+  */
+  transform:
+    translateY(1px);
 }
 
 /* =========================================================
@@ -463,14 +473,17 @@
     margin-top: 13px;
   }
 
+  /*
+    태블릿도 앞뒤 간격 6px 유지
+  */
   .about-section .footnote-unit {
-    gap: 0.4em;
-
-    margin-left: 0.4em;
+    margin-left: 6px;
+    gap: 6px;
   }
 
   .about-section .footnote-wrap {
     width: 12px;
+    height: 19px;
 
     flex-basis: 12px;
   }
@@ -578,17 +591,17 @@
     margin-top: 12px;
   }
 
-  /* 글자 → 여백 → 네모 → 여백 → 마침표 */
-
+  /*
+    모바일도 앞뒤 간격 6px 유지
+  */
   .about-section .footnote-unit {
-    gap: 0.38em;
-
-    margin-left: 0.38em;
+    margin-left: 6px;
+    gap: 6px;
   }
 
   .about-section .footnote-wrap {
     width: 10px;
-    height: 1em;
+    height: 18px;
 
     flex-basis: 10px;
   }
