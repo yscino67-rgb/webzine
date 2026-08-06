@@ -178,7 +178,7 @@
   font-size: 0;
   line-height: 0;
 
-  transform: translateY(1px);
+  transform: translateY(-1px);
 }
 
 /* =========================================================
