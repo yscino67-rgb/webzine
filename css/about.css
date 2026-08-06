@@ -52,9 +52,9 @@
   min-height: 100dvh;
 
   padding:
-    clamp(150px, 11vw, 190px)
+    clamp(145px, 10vw, 185px)
     var(--page-padding)
-    90px;
+    80px;
 
   background-color: #ffffff;
 }
@@ -66,12 +66,15 @@
 }
 
 /* =========================================================
-   본문 공통 서체
+   본문 공통 글자 설정
+   소개문·소제목·본문 모두 동일
 ========================================================= */
 
 .about-introduction,
 .about-section-title,
 .about-section p {
+  color: #111111;
+
   font-family:
     "Pretendard",
     sans-serif;
@@ -80,10 +83,8 @@
     clamp(17px, 1.2vw, 21px);
 
   font-weight: 500;
-  line-height: 1.8;
+  line-height: 1.75;
   letter-spacing: -0.02em;
-
-  color: #111111;
 
   text-align: left;
 
@@ -101,7 +102,7 @@
   margin:
     0
     0
-    clamp(28px, 2.5vw, 38px);
+    26px;
 
   padding: 0;
 }
@@ -116,7 +117,7 @@
   margin:
     0
     0
-    clamp(28px, 2.5vw, 40px);
+    28px;
 
   padding: 0;
 }
@@ -127,7 +128,7 @@
 
 /* =========================================================
    소제목
-   본문과 글자 크기·굵기·줄간격 동일
+   본문과 크기·굵기 동일
 ========================================================= */
 
 .about-section-title {
@@ -139,21 +140,20 @@
   margin:
     0
     0
-    8px;
+    7px;
 
   padding: 0;
 }
 
-/* 소제목 앞의 작은 점 */
+/* 소제목 앞 점 */
 
-.about-section-title span {
+.about-section-title > span {
   flex: 0 0 auto;
 
   font-size: 7px;
   line-height: 1;
 
-  transform:
-    translateY(-2px);
+  transform: translateY(-2px);
 }
 
 /* =========================================================
@@ -165,10 +165,7 @@
   padding: 0;
 }
 
-/*
-  같은 섹션 안에서 다음 문단이 이어질 때만
-  짧은 문단 간격을 줍니다.
-*/
+/* 같은 섹션 안 문단 사이 간격 */
 
 .about-section p + p {
   margin-top: 14px;
@@ -185,7 +182,8 @@
 .about-number {
   margin-left: 0.28em;
 
-  font-weight: 500;
+  font-size: inherit;
+  font-weight: inherit;
 }
 
 .about-number:first-child {
@@ -194,6 +192,7 @@
 
 /* =========================================================
    본문 속 각주 배치
+   글자 바로 옆 중앙 정렬
 ========================================================= */
 
 .about-section .footnote-wrap {
@@ -203,9 +202,14 @@
   align-items: center;
   justify-content: center;
 
-  margin-left: 4px;
+  width: 14px;
+  height: 1em;
 
-  vertical-align: middle;
+  margin-left: 5px;
+
+  vertical-align: -0.08em;
+
+  line-height: 1;
 
   flex: 0 0 auto;
 }
@@ -215,7 +219,7 @@
 ========================================================= */
 
 .about-section .footnote-marker {
-  display: inline-block;
+  display: block;
 
   width: 14px;
   height: 14px;
@@ -235,10 +239,9 @@
 
   outline: none;
 
-  vertical-align: middle;
+  flex: 0 0 auto;
 
-  -webkit-tap-highlight-color:
-    transparent;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .about-section .footnote-marker:focus-visible {
@@ -253,12 +256,11 @@
 .about-section .footnote-popover {
   position: absolute;
 
-  top: calc(100% + 9px);
+  top: calc(100% + 8px);
   left: 50%;
   z-index: 100;
 
-  min-width: max-content;
-
+  width: max-content;
   max-width:
     min(
       420px,
@@ -286,8 +288,7 @@
   text-align: left;
   white-space: nowrap;
 
-  transform:
-    translateX(-50%);
+  transform: translateX(-50%);
 
   box-shadow:
     0
@@ -315,8 +316,7 @@
   border-left:
     4px solid transparent;
 
-  transform:
-    translateX(-50%);
+  transform: translateX(-50%);
 }
 
 .about-section .footnote-popover[hidden] {
@@ -328,8 +328,7 @@
 ========================================================= */
 
 .about-footer {
-  margin-top:
-    clamp(44px, 4vw, 64px);
+  margin-top: 44px;
 
   padding-top: 18px;
 
@@ -357,9 +356,9 @@
 @media (max-width: 899px) {
   .about-main {
     padding:
-      135px
+      130px
       var(--page-padding)
-      70px;
+      68px;
   }
 
   .about-content {
@@ -373,23 +372,31 @@
       clamp(16px, 2.4vw, 19px);
 
     font-weight: 500;
-    line-height: 1.76;
+    line-height: 1.72;
   }
 
   .about-introduction {
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
 
   .about-section {
-    margin-bottom: 30px;
+    margin-bottom: 26px;
   }
 
   .about-section-title {
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
   .about-section p + p {
     margin-top: 13px;
+  }
+
+  .about-section .footnote-wrap {
+    width: 12px;
+
+    margin-left: 4px;
+
+    vertical-align: -0.06em;
   }
 
   .about-section .footnote-marker {
@@ -429,10 +436,10 @@
     padding:
       calc(
         env(safe-area-inset-top, 0px) +
-        132px
+        128px
       )
       20px
-      60px;
+      58px;
   }
 
   .about-content {
@@ -441,11 +448,6 @@
     margin: 0 auto;
   }
 
-  /*
-    모바일에서도 소제목과 본문을
-    완전히 같은 크기와 굵기로 표시합니다.
-  */
-
   .about-introduction,
   .about-section-title,
   .about-section p {
@@ -453,31 +455,30 @@
       clamp(16px, 4.3vw, 18px);
 
     font-weight: 500;
-    line-height: 1.72;
+    line-height: 1.68;
     letter-spacing: -0.02em;
 
     text-align: left;
   }
 
   .about-introduction {
-    margin-bottom: 26px;
+    margin-bottom: 22px;
   }
 
   .about-section {
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
 
   .about-section-title {
     gap: 6px;
 
-    margin-bottom: 7px;
+    margin-bottom: 6px;
   }
 
-  .about-section-title span {
+  .about-section-title > span {
     font-size: 6px;
 
-    transform:
-      translateY(-2px);
+    transform: translateY(-2px);
   }
 
   .about-section p + p {
@@ -485,7 +486,12 @@
   }
 
   .about-section .footnote-wrap {
+    width: 10px;
+    height: 1em;
+
     margin-left: 3px;
+
+    vertical-align: -0.05em;
   }
 
   .about-section .footnote-marker {
@@ -514,7 +520,7 @@
   }
 
   .about-footer {
-    margin-top: 42px;
+    margin-top: 40px;
   }
 }
 
