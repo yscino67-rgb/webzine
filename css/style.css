@@ -218,19 +218,10 @@ select {
 ========================================================= */
 
 .site-logo {
-  position: relative;
-  z-index: 1002;
-
-  display: flex;
+  display: inline-flex;
   align-items: center;
 
-  gap: 15px;
-
-  width: auto;
-
-  flex: 0 0 auto;
-
-  line-height: 0;
+  gap: 0;
 }
 
 /*
