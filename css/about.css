@@ -47,6 +47,7 @@
 
 .about-main {
   width: 100%;
+
   min-height: 100vh;
   min-height: 100dvh;
 
@@ -92,8 +93,7 @@
 }
 
 /*
-  첫 소개 문장은 본문과 같은 크기,
-  별도 볼드 없이 표시합니다.
+  첫 소개 문장은 본문과 같은 크기와 두께로 표시합니다.
 */
 .about-introduction {
   width: 100%;
@@ -141,14 +141,14 @@
   margin:
     0
     0
-    20px;
+    18px;
 
   font-family:
     "Pretendard",
     sans-serif;
 
   font-size:
-    clamp(17px, 1.25vw, 21px);
+    clamp(15px, 1vw, 18px);
 
   font-weight: 600;
   line-height: 1.5;
@@ -160,7 +160,7 @@
 .about-section-title span {
   flex: 0 0 auto;
 
-  font-size: 7px;
+  font-size: 6px;
   line-height: 1;
 
   transform:
@@ -186,90 +186,133 @@
 }
 
 /* =========================================================
-   참고문헌 번호 표시
+   본문 속 각주 배치
 ========================================================= */
 
-.reference-marker {
-  margin-left: 2px;
+.about-section .footnote-wrap {
+  position: relative;
 
-  font-size: 0.6em;
-  font-weight: 500;
-  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  vertical-align: super;
+  margin-left: 4px;
+
+  vertical-align: middle;
+
+  flex: 0 0 auto;
 }
 
 /* =========================================================
-   참고문헌
+   파란 네모 각주 버튼
 ========================================================= */
 
-.about-references {
-  width: 100%;
+.about-section .footnote-marker {
+  display: inline-block;
 
-  margin-top:
-    clamp(76px, 8vw, 110px);
-
-  padding-top: 22px;
-
-  border-top:
-    1px solid #111111;
-}
-
-.about-references-title {
-  margin:
-    0
-    0
-    20px;
-
-  font-family:
-    "Pretendard",
-    sans-serif;
-
-  font-size:
-    clamp(15px, 1vw, 18px);
-
-  font-weight: 600;
-  line-height: 1.5;
-}
-
-.about-reference-list {
-  display: flex;
-  flex-direction: column;
-
-  gap: 12px;
+  width: 14px;
+  height: 14px;
 
   margin: 0;
   padding: 0;
 
-  list-style: none;
+  background-color: #0f9ed5;
+
+  border: 0;
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  outline: none;
+
+  vertical-align: middle;
+
+  -webkit-tap-highlight-color:
+    transparent;
 }
 
-.about-reference-list li {
-  display: grid;
+.about-section .footnote-marker:focus-visible {
+  outline: 1px solid #0f9ed5;
+  outline-offset: 2px;
+}
 
-  grid-template-columns:
-    34px
-    minmax(0, 1fr);
+/* =========================================================
+   각주 말풍선
+========================================================= */
 
-  column-gap: 8px;
+.about-section .footnote-popover {
+  position: absolute;
+
+  top: calc(100% + 9px);
+  left: 50%;
+  z-index: 100;
+
+  min-width: max-content;
+  max-width:
+    min(
+      420px,
+      calc(100vw - 40px)
+    );
+
+  padding:
+    8px
+    11px;
+
+  background-color:
+    rgba(0, 0, 0, 0.82);
+
+  color: #ffffff;
 
   font-family:
     "Pretendard",
     sans-serif;
 
-  font-size:
-    clamp(13px, 0.95vw, 16px);
-
+  font-size: 11px;
   font-weight: 500;
-  line-height: 1.7;
-  letter-spacing: -0.015em;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
 
-  word-break: keep-all;
-  overflow-wrap: break-word;
+  text-align: left;
+  white-space: nowrap;
+
+  transform:
+    translateX(-50%);
+
+  box-shadow:
+    0
+    4px
+    14px
+    rgba(0, 0, 0, 0.14);
 }
 
-.reference-number {
-  white-space: nowrap;
+/* 말풍선 꼬리 */
+
+.about-section .footnote-popover::before {
+  content: "";
+
+  position: absolute;
+
+  bottom: 100%;
+  left: 50%;
+
+  border-right:
+    4px solid transparent;
+
+  border-bottom:
+    5px solid rgba(0, 0, 0, 0.82);
+
+  border-left:
+    4px solid transparent;
+
+  transform:
+    translateX(-50%);
+}
+
+.about-section .footnote-popover[hidden] {
+  display: none !important;
 }
 
 /* =========================================================
@@ -319,7 +362,14 @@
 
   .about-section-title {
     font-size:
-      clamp(17px, 2.7vw, 20px);
+      clamp(15px, 2.2vw, 18px);
+  }
+
+  .about-section .footnote-marker {
+    width: 12px;
+    height: 12px;
+
+    border-radius: 3px;
   }
 }
 
@@ -383,26 +433,60 @@
   .about-section-title {
     gap: 7px;
 
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 
     font-size:
-      clamp(17px, 4.8vw, 20px);
+      clamp(15px, 4vw, 18px);
   }
 
   .about-section-title span {
-    font-size: 6px;
+    font-size: 5px;
+
+    transform:
+      translateY(-2px);
   }
 
-  .about-reference-list li {
-    grid-template-columns:
-      30px
-      minmax(0, 1fr);
+  .about-section .footnote-wrap {
+    margin-left: 3px;
+  }
 
-    font-size:
-      clamp(13px, 3.6vw, 15px);
+  .about-section .footnote-marker {
+    width: 10px;
+    height: 10px;
+
+    border-radius: 3px;
+  }
+
+  .about-section .footnote-popover {
+    min-width: 0;
+
+    width:
+      min(
+        260px,
+        calc(100vw - 40px)
+      );
+
+    max-width:
+      calc(100vw - 40px);
+
+    white-space: normal;
+
+    font-size: 11px;
+    line-height: 1.5;
   }
 
   .about-footer {
     margin-top: 70px;
+  }
+}
+
+/* =========================================================
+   움직임 최소화
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .about-section .footnote-marker,
+  .about-section .footnote-popover {
+    transition: none;
   }
 }
