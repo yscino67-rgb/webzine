@@ -52,26 +52,25 @@
   min-height: 100dvh;
 
   padding:
-    clamp(170px, 14vw, 230px)
+    clamp(150px, 11vw, 190px)
     var(--page-padding)
-    110px;
+    90px;
 
   background-color: #ffffff;
 }
 
 .about-content {
-  width: min(100%, 900px);
+  width: min(100%, 760px);
 
-  margin:
-    0
-    auto;
+  margin: 0 auto;
 }
 
 /* =========================================================
-   공통 본문
+   본문 공통 서체
 ========================================================= */
 
 .about-introduction,
+.about-section-title,
 .about-section p {
   font-family:
     "Pretendard",
@@ -81,29 +80,30 @@
     clamp(17px, 1.2vw, 21px);
 
   font-weight: 500;
-  line-height: 1.95;
+  line-height: 1.8;
   letter-spacing: -0.02em;
 
-  text-align: justify;
-  text-align-last: left;
-  text-justify: inter-word;
+  color: #111111;
+
+  text-align: left;
 
   word-break: keep-all;
   overflow-wrap: break-word;
 }
 
-/*
-  첫 소개 문장은 본문과 같은 크기와 두께로 표시합니다.
-*/
+/* =========================================================
+   첫 소개 문장
+========================================================= */
+
 .about-introduction {
   width: 100%;
 
   margin:
     0
     0
-    clamp(66px, 7vw, 96px);
+    clamp(28px, 2.5vw, 38px);
 
-  font-weight: 500;
+  padding: 0;
 }
 
 /* =========================================================
@@ -113,58 +113,65 @@
 .about-section {
   width: 100%;
 
-  margin-bottom:
-    clamp(66px, 7vw, 96px);
-}
-
-.about-section p {
   margin:
     0
     0
-    34px;
+    clamp(28px, 2.5vw, 40px);
+
+  padding: 0;
 }
 
-.about-section p:last-child {
+.about-section:last-of-type {
   margin-bottom: 0;
 }
 
 /* =========================================================
-   작은 소제목
+   소제목
+   본문과 글자 크기·굵기·줄간격 동일
 ========================================================= */
 
 .about-section-title {
   display: flex;
   align-items: baseline;
 
-  gap: 8px;
+  gap: 7px;
 
   margin:
     0
     0
-    18px;
+    8px;
 
-  font-family:
-    "Pretendard",
-    sans-serif;
-
-  font-size:
-    clamp(15px, 1vw, 18px);
-
-  font-weight: 600;
-  line-height: 1.5;
-  letter-spacing: -0.025em;
-
-  word-break: keep-all;
+  padding: 0;
 }
+
+/* 소제목 앞의 작은 점 */
 
 .about-section-title span {
   flex: 0 0 auto;
 
-  font-size: 6px;
+  font-size: 7px;
   line-height: 1;
 
   transform:
-    translateY(-3px);
+    translateY(-2px);
+}
+
+/* =========================================================
+   본문 문단
+========================================================= */
+
+.about-section p {
+  margin: 0;
+  padding: 0;
+}
+
+/*
+  같은 섹션 안에서 다음 문단이 이어질 때만
+  짧은 문단 간격을 줍니다.
+*/
+
+.about-section p + p {
+  margin-top: 14px;
 }
 
 /* =========================================================
@@ -176,9 +183,9 @@
 }
 
 .about-number {
-  margin-left: 0.3em;
+  margin-left: 0.28em;
 
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .about-number:first-child {
@@ -251,6 +258,7 @@
   z-index: 100;
 
   min-width: max-content;
+
   max-width:
     min(
       420px,
@@ -321,7 +329,7 @@
 
 .about-footer {
   margin-top:
-    clamp(80px, 8vw, 120px);
+    clamp(44px, 4vw, 64px);
 
   padding-top: 18px;
 
@@ -331,6 +339,10 @@
 
 .about-back-link {
   color: inherit;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
 
   font-size: 12px;
   font-weight: 500;
@@ -345,24 +357,39 @@
 @media (max-width: 899px) {
   .about-main {
     padding:
-      145px
+      135px
       var(--page-padding)
-      80px;
+      70px;
   }
 
   .about-content {
-    width: min(100%, 760px);
+    width: min(100%, 720px);
   }
 
   .about-introduction,
+  .about-section-title,
   .about-section p {
     font-size:
       clamp(16px, 2.4vw, 19px);
+
+    font-weight: 500;
+    line-height: 1.76;
+  }
+
+  .about-introduction {
+    margin-bottom: 28px;
+  }
+
+  .about-section {
+    margin-bottom: 30px;
   }
 
   .about-section-title {
-    font-size:
-      clamp(15px, 2.2vw, 18px);
+    margin-bottom: 8px;
+  }
+
+  .about-section p + p {
+    margin-top: 13px;
   }
 
   .about-section .footnote-marker {
@@ -402,48 +429,59 @@
     padding:
       calc(
         env(safe-area-inset-top, 0px) +
-        145px
+        132px
       )
       20px
-      70px;
+      60px;
   }
 
   .about-content {
     width: 100%;
+
+    margin: 0 auto;
   }
 
-  .about-introduction {
-    margin-bottom: 58px;
-  }
-
-  .about-section {
-    margin-bottom: 58px;
-  }
+  /*
+    모바일에서도 소제목과 본문을
+    완전히 같은 크기와 굵기로 표시합니다.
+  */
 
   .about-introduction,
+  .about-section-title,
   .about-section p {
     font-size:
       clamp(16px, 4.3vw, 18px);
 
-    line-height: 1.85;
+    font-weight: 500;
+    line-height: 1.72;
+    letter-spacing: -0.02em;
 
     text-align: left;
   }
 
+  .about-introduction {
+    margin-bottom: 26px;
+  }
+
+  .about-section {
+    margin-bottom: 28px;
+  }
+
   .about-section-title {
-    gap: 7px;
+    gap: 6px;
 
-    margin-bottom: 16px;
-
-    font-size:
-      clamp(15px, 4vw, 18px);
+    margin-bottom: 7px;
   }
 
   .about-section-title span {
-    font-size: 5px;
+    font-size: 6px;
 
     transform:
       translateY(-2px);
+  }
+
+  .about-section p + p {
+    margin-top: 12px;
   }
 
   .about-section .footnote-wrap {
@@ -476,7 +514,7 @@
   }
 
   .about-footer {
-    margin-top: 70px;
+    margin-top: 42px;
   }
 }
 
