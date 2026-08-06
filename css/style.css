@@ -233,17 +233,6 @@ select {
   line-height: 0;
 }
 
-.site-logo img {
-  display: block;
-
-  width:
-    var(--logo-width);
-
-  height: auto;
-
-  flex: 0 0 auto;
-}
-
 /*
   SVG 옆의 '횡단' 글자에만
   KoPubWorld Dotum Medium 적용
@@ -736,10 +725,7 @@ select {
     padding: 20px;
   }
 
-  .site-logo {
-    gap: 12px;
-  }
-
+  
   /*
     모바일에서도 KoPubWorld Dotum Medium 유지
   */
