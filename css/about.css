@@ -191,8 +191,30 @@
 }
 
 /* =========================================================
-   본문 속 각주 배치
-   글자 바로 옆 중앙 정렬
+   각주 전체 단위
+
+   글자 → 여백 → 네모 → 여백 → 마침표
+========================================================= */
+
+.about-section .footnote-unit {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.42em;
+
+  margin-left: 0.42em;
+
+  color: inherit;
+
+  font: inherit;
+  line-height: inherit;
+
+  white-space: nowrap;
+  vertical-align: baseline;
+}
+
+/* =========================================================
+   파란 네모가 들어가는 자리
 ========================================================= */
 
 .about-section .footnote-wrap {
@@ -205,32 +227,53 @@
   width: 14px;
   height: 1em;
 
-  margin-left: 5px;
-
-  vertical-align: -0.08em;
+  margin: 0;
+  padding: 0;
 
   line-height: 1;
 
-  flex: 0 0 auto;
+  vertical-align: middle;
+
+  flex:
+    0
+    0
+    14px;
 }
 
 /* =========================================================
    파란 네모 각주 버튼
 ========================================================= */
 
-.about-section .footnote-marker {
+.about-page
+  button.footnote-marker {
   display: block;
 
-  width: 14px;
-  height: 14px;
+  width: 14px !important;
+  min-width: 14px !important;
+  max-width: 14px !important;
 
-  margin: 0;
-  padding: 0;
+  height: 14px !important;
+  min-height: 14px !important;
+  max-height: 14px !important;
 
-  background-color: #0f9ed5;
+  margin: 0 !important;
+  padding: 0 !important;
 
-  border: 0;
-  border-radius: 4px;
+  flex:
+    0
+    0
+    14px !important;
+
+  background-color:
+    #0f9ed5 !important;
+
+  color: transparent !important;
+
+  border: 0 !important;
+  border-radius: 4px !important;
+
+  font-size: 0 !important;
+  line-height: 0 !important;
 
   cursor: pointer;
 
@@ -239,14 +282,34 @@
 
   outline: none;
 
-  flex: 0 0 auto;
-
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color:
+    transparent;
 }
 
-.about-section .footnote-marker:focus-visible {
-  outline: 1px solid #0f9ed5;
+.about-page
+  button.footnote-marker:focus-visible {
+  outline:
+    1px solid #0f9ed5;
+
   outline-offset: 2px;
+}
+
+/* =========================================================
+   네모 뒤 마침표
+========================================================= */
+
+.about-section .footnote-period {
+  display: inline-block;
+
+  margin: 0;
+  padding: 0;
+
+  color: inherit;
+
+  font: inherit;
+  line-height: inherit;
+
+  vertical-align: baseline;
 }
 
 /* =========================================================
@@ -256,11 +319,12 @@
 .about-section .footnote-popover {
   position: absolute;
 
-  top: calc(100% + 8px);
+  top: calc(100% + 9px);
   left: 50%;
   z-index: 100;
 
   width: max-content;
+
   max-width:
     min(
       420px,
@@ -288,7 +352,8 @@
   text-align: left;
   white-space: nowrap;
 
-  transform: translateX(-50%);
+  transform:
+    translateX(-50%);
 
   box-shadow:
     0
@@ -299,7 +364,8 @@
 
 /* 말풍선 꼬리 */
 
-.about-section .footnote-popover::before {
+.about-section
+  .footnote-popover::before {
   content: "";
 
   position: absolute;
@@ -311,15 +377,18 @@
     4px solid transparent;
 
   border-bottom:
-    5px solid rgba(0, 0, 0, 0.82);
+    5px solid
+    rgba(0, 0, 0, 0.82);
 
   border-left:
     4px solid transparent;
 
-  transform: translateX(-50%);
+  transform:
+    translateX(-50%);
 }
 
-.about-section .footnote-popover[hidden] {
+.about-section
+  .footnote-popover[hidden] {
   display: none !important;
 }
 
@@ -391,19 +460,33 @@
     margin-top: 13px;
   }
 
+  .about-section .footnote-unit {
+    gap: 0.4em;
+
+    margin-left: 0.4em;
+  }
+
   .about-section .footnote-wrap {
     width: 12px;
 
-    margin-left: 4px;
-
-    vertical-align: -0.06em;
+    flex-basis: 12px;
   }
 
-  .about-section .footnote-marker {
-    width: 12px;
-    height: 12px;
+  .about-page
+    button.footnote-marker {
+    width: 12px !important;
+    min-width: 12px !important;
+    max-width: 12px !important;
 
-    border-radius: 3px;
+    height: 12px !important;
+    min-height: 12px !important;
+    max-height: 12px !important;
+
+    flex-basis:
+      12px !important;
+
+    border-radius:
+      3px !important;
   }
 }
 
@@ -423,7 +506,10 @@
 
     padding:
       calc(
-        env(safe-area-inset-top, 0px) +
+        env(
+          safe-area-inset-top,
+          0px
+        ) +
         18px
       )
       18px
@@ -435,7 +521,10 @@
   .about-main {
     padding:
       calc(
-        env(safe-area-inset-top, 0px) +
+        env(
+          safe-area-inset-top,
+          0px
+        ) +
         128px
       )
       20px
@@ -478,27 +567,44 @@
   .about-section-title > span {
     font-size: 6px;
 
-    transform: translateY(-2px);
+    transform:
+      translateY(-2px);
   }
 
   .about-section p + p {
     margin-top: 12px;
   }
 
+  /* 글자 → 여백 → 네모 → 여백 → 마침표 */
+
+  .about-section .footnote-unit {
+    gap: 0.38em;
+
+    margin-left: 0.38em;
+  }
+
   .about-section .footnote-wrap {
     width: 10px;
     height: 1em;
 
-    margin-left: 3px;
-
-    vertical-align: -0.05em;
+    flex-basis: 10px;
   }
 
-  .about-section .footnote-marker {
-    width: 10px;
-    height: 10px;
+  .about-page
+    button.footnote-marker {
+    width: 10px !important;
+    min-width: 10px !important;
+    max-width: 10px !important;
 
-    border-radius: 3px;
+    height: 10px !important;
+    min-height: 10px !important;
+    max-height: 10px !important;
+
+    flex-basis:
+      10px !important;
+
+    border-radius:
+      3px !important;
   }
 
   .about-section .footnote-popover {
