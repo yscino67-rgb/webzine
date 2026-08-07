@@ -106,10 +106,11 @@
   border: 0;
 }
 
-
 /* =========================================================
-   WRITER 자리
-   흰색 블록 두 개
+   WRITER 자리 흰색 네모 블록
+
+   FILM과 같은 중심축을 기준으로
+   위아래 한 줄로 정렬
 ========================================================= */
 
 .archive-sort-blocks {
@@ -118,21 +119,23 @@
   display: flex;
   flex-direction: column;
 
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
 
-  gap: 3px;
+  gap: 4px;
 
-  width: 20px;
+  width: 100%;
   height: 30px;
 
   margin: 0;
   padding: 0;
+
+  justify-self: center;
 }
 
 
 /* =========================================================
-   개별 흰색 네모
+   흰색 네모
 ========================================================= */
 
 .archive-sort-blocks span {
@@ -146,24 +149,24 @@
     0
     11px;
 
-  background-color:
-    #ffffff;
+  margin: 0;
 
+  background-color: #ffffff;
+
+  border: 0;
   border-radius: 3px;
 }
 
 
 /*
-  아래 네모를 조금 오른쪽으로 밀어서
-  기존 웹진의 블록 느낌을 냅니다.
+  두 번째 네모도 첫 번째 네모와
+  정확히 같은 중심축 사용
 */
 
-.archive-sort-blocks
-span:nth-child(2) {
-  margin-left: 5px;
+.archive-sort-blocks span:nth-child(2) {
+  margin-left: 0;
+  transform: none;
 }
-
-
 /* =========================================================
    CATEGORY 자리
    순환 정렬 버튼
@@ -1018,83 +1021,6 @@ a,
 
 
 /* =========================================================
-   태블릿
-========================================================= */
-
-@media (max-width: 1100px) {
-
-  .archive-sort {
-    grid-template-columns:
-      82px
-      minmax(0, 1fr)
-      100px
-      110px;
-
-    column-gap:
-      16px;
-
-    padding:
-      0
-      24px;
-  }
-
-
-  .archive-sort-button {
-    font-size:
-      13px;
-  }
-
-
-  .archive-sort-blocks {
-    width:
-      18px;
-  }
-
-
-  .index-item {
-    min-height:
-      150px;
-
-    padding:
-      22px
-      24px
-      24px;
-
-    row-gap:
-      12px;
-  }
-
-
-  .index-title {
-    font-size:
-      clamp(
-        23px,
-        2.4vw,
-        32px
-      );
-  }
-
-
-  .index-subcategory {
-    font-size:
-      15px;
-  }
-
-
-  .index-author {
-    font-size:
-      14px;
-  }
-
-
-  .index-date {
-    font-size:
-      14px;
-  }
-}
-
-
-/* =========================================================
    모바일
 ========================================================= */
 
@@ -1385,43 +1311,49 @@ a,
   }
 
 
-  /* =======================================================
-     모바일 흰색 블록
-  ======================================================= */
+@media (max-width: 767px) {
 
   .archive-sort-blocks {
-    gap:
-      2px;
+    display: flex;
+    flex-direction: column;
 
-    width:
-      15px;
+    align-items: center;
+    justify-content: center;
 
-    height:
-      24px;
+    gap: 3px;
+
+    width: 100%;
+    height: 24px;
+
+    margin: 0;
+    padding: 0;
+
+    justify-self: center;
   }
-
 
   .archive-sort-blocks span {
-    width:
+    display: block;
+
+    width: 9px;
+    height: 9px;
+
+    flex:
+      0
+      0
       9px;
 
-    height:
-      9px;
+    margin: 0;
 
-    flex-basis:
-      9px;
+    background-color: #ffffff;
 
-    border-radius:
-      2px;
+    border-radius: 2px;
   }
 
-
-  .archive-sort-blocks
-  span:nth-child(2) {
-    margin-left:
-      4px;
+  .archive-sort-blocks span:nth-child(2) {
+    margin-left: 0;
+    transform: none;
   }
-
+}
 
   /* =======================================================
      모바일 정렬 버튼
