@@ -430,19 +430,59 @@
 
 
 /* =========================================================
-   ABOUT 하단
+   ABOUT 하단 전체
 ========================================================= */
 
 .about-footer {
+  width: 100%;
+
   margin-top:
     clamp(60px, 6vw, 80px);
 
-  padding-top: 18px;
-
-  border-top:
-    1px solid #111111;
+  padding: 0;
 }
 
+/* =========================================================
+   날짜
+   선 바로 위 오른쪽
+========================================================= */
+
+.about-footer-date {
+  width: 100%;
+
+  margin:
+    0
+    0
+    12px;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+
+  text-align: right;
+}
+
+/* =========================================================
+   선 아래 영역
+========================================================= */
+
+.about-footer-bottom {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  width: 100%;
+
+  padding-top: 18px;
+
+  border-top: 1px solid #111111;
+}
 
 /* =========================================================
    ■ INDEX
@@ -453,6 +493,8 @@
   align-items: center;
 
   gap: 7px;
+
+  flex: 0 0 auto;
 
   color: #111111;
 
@@ -474,16 +516,70 @@
   width: 10px;
   height: 10px;
 
-  flex:
-    0
-    0
-    10px;
+  flex: 0 0 10px;
 
   background-color: #111111;
 
   border-radius: 3px;
 }
 
+/* =========================================================
+   발행인 / 웹디자인
+========================================================= */
+
+.about-publication-info {
+  margin: 0;
+
+  text-align: right;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.75;
+}
+
+.about-publication-info p {
+  margin: 0;
+}
+
+/* =========================================================
+   모바일
+========================================================= */
+
+@media (max-width: 767px) {
+  .about-footer {
+    margin-top: 54px;
+  }
+
+  .about-footer-date {
+    margin-bottom: 10px;
+
+    font-size: 11px;
+  }
+
+  .about-footer-bottom {
+    gap: 20px;
+
+    padding-top: 15px;
+  }
+
+  .about-back-link,
+  .about-publication-info {
+    font-size: 11px;
+  }
+
+  .about-back-link::before {
+    width: 9px;
+    height: 9px;
+
+    flex-basis: 9px;
+
+    border-radius: 3px;
+  }
+}
 
 /* =========================================================
    태블릿
