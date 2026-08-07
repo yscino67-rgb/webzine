@@ -1,20 +1,6 @@
 {
   "posts": [
     {
-      "id": "article-001",
-      "title": "작품과 세상 사이를 오가는 비평",
-      "author": "박하나",
-      "date": "2026-08-01",
-      "category": "criticism",
-      "subcategory": "CRITICISM",
-      "thumbnail": "/images/article-01.jpg",
-      "imageAlt": "작품과 세상 사이를 오가는 비평",
-      "imageCaption": "이미지 설명 수정중",
-      "imageSource": "수정중",
-      "published": true,
-      "body": "<blockquote class=\"article-quote\"><p>“영화, 소설, 만화 등 장르를 막론하고 작품을 사랑하는 사람은 대체로 작품 자체의 독해를 중시하고, 소비 환경의 분석은 ‘사회학적인 것’이라며 배제하는 경향이 있다. 지금도 문예지에는 그런 시대착오적인 비평이 넘쳐난다. 그러나 외부가 내부에 어떤 형태로 포함되는지 그 역동성을 이해하지 못하면 비평도 연구도 존재할 수 없다.”</p><cite>— 아즈마 히로키</cite></blockquote><p>이 작품과 저 영상, 이 작품과 저 사건, 이 작품과 저 사람, 이 작품과 저 역사를 연결해서 새로운 별자리를 그릴 필요가 지금 여기에 있지 않은가요?</p><p>작품과 세상 사이를 오가는 비평이 필요하다고, 또 이러한 맥락에서 고전을 현대적으로 읽는 시각이 필요하다고 제안합니다.</p><p>이 세상 모든 것은 덩어리로 존재합니다. 우리는 덩어리를 제대로 보기 위하여 분투합니다. 본 것을 적절하게 그리기 위하여 전체에서 디테일로, 또다시 전체로 오가는 텍스트를 생산합니다.</p><ol class=\"article-principles\"><li><span class=\"principle-number\">[1]</span><div bis_skin_checked=\"1\"><strong>횡단하기</strong><p>영상 film · video과 세상을 가로지릅니다.</p></div></li><li><span class=\"principle-number\">[2]</span><div bis_skin_checked=\"1\"><strong>해부하기</strong><p>노드를 이어 단면을 자릅니다.</p></div></li><li><span class=\"principle-number\">[3]</span><div bis_skin_checked=\"1\"><div class=\"principle-heading\" bis_skin_checked=\"1\"><strong style=\"\">접합하기</strong><span class=\"footnote-wrap\"><button type=\"button\" class=\"footnote-marker\" aria-label=\"접합하기 출처 보기\" aria-expanded=\"false\" aria-controls=\"footnote-article-001-1\"></button><span id=\"footnote-article-001-1\" class=\"footnote-popover\" role=\"note\" hidden=\"\">수정중</span></span></div><p>재구성합니다.</p></div></li></ol>"
-    },
-    {
       "id": "article-002",
       "title": "사운드로 재구성하는 민주주의의 역사 <알제리 전투>",
       "author": "박하나",
