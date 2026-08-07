@@ -14,39 +14,6 @@
 
 
 /* =========================================================
-   기사 고정 상단 헤더
-   횡단 + 카테고리 메뉴
-========================================================= */
-
-.article-detail-page
-.article-archive-header {
-  position: fixed;
-
-  top: 0;
-  left: 0;
-  z-index: 1000;
-
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-
-  gap: 14px;
-
-  width: 100%;
-
-  padding:
-    26px
-    44px
-    18px;
-
-  background-color: #ffffff;
-
-  pointer-events: auto;
-}
-
-
-/* =========================================================
    기사 상단 횡단
 ========================================================= */
 
@@ -1130,19 +1097,6 @@
     background-color: #ffffff;
   }
 
-  .article-detail-page
-  .article-archive-header
-  .page-brand {
-    position: static;
-
-    width: auto;
-
-    margin: 0;
-    padding: 0;
-
-    font-size: 22px;
-    line-height: 1;
-  }
 
   .article-page {
     padding:

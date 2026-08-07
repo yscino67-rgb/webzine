@@ -12,14 +12,21 @@
   --logo-width: 81px;
   --menu-icon-width: 39px;
 
-  /* 인덱스·기사 상단 메뉴 공통값 */
+  /* 상단 카테고리 메뉴 공통값 */
   --category-menu-gap: 16px;
   --category-menu-size: 30px;
   --category-menu-letter-spacing: -0.03em;
 
-  /* 기사 상단 메뉴와 제목 사이 간격 */
+  /* 공통 상단 브랜드 */
+  --masthead-left: 44px;
+  --masthead-top: 26px;
+  --masthead-brand-size: 27px;
+  --masthead-brand-menu-gap: 24px;
+
+  /* 기사 제목과 상단 메뉴 사이 */
   --article-title-top-gap: 72px;
 }
+
 
 /* =========================================================
    폰트
@@ -27,6 +34,7 @@
 
 @font-face {
   font-family: "Pretendard";
+
   src:
     url("../font/Pretendard-Medium.otf")
     format("opentype");
@@ -36,8 +44,10 @@
   font-display: swap;
 }
 
+
 @font-face {
   font-family: "Pretendard";
+
   src:
     url("../font/Pretendard-SemiBold.otf")
     format("opentype");
@@ -47,8 +57,10 @@
   font-display: swap;
 }
 
+
 @font-face {
   font-family: "BookkMyungjo";
+
   src:
     url("../font/BookkMyungjo_Light.ttf")
     format("truetype");
@@ -58,8 +70,10 @@
   font-display: swap;
 }
 
+
 @font-face {
   font-family: "BookkMyungjo";
+
   src:
     url("../font/BookkMyungjo_Bold.ttf")
     format("truetype");
@@ -69,8 +83,10 @@
   font-display: swap;
 }
 
+
 @font-face {
   font-family: "Special Gothic Condensed One";
+
   src:
     url("../font/SpecialGothicCondensedOne-Regular.ttf")
     format("truetype");
@@ -80,8 +96,10 @@
   font-display: swap;
 }
 
+
 @font-face {
   font-family: "CossetteTitre";
+
   src:
     url("../font/CossetteTitre-Regular.ttf")
     format("truetype");
@@ -91,11 +109,12 @@
   font-display: swap;
 }
 
-/*
-  로고 옆 '횡단' 글자에만 사용하는 폰트
-*/
+
+/* 로고용 */
+
 @font-face {
   font-family: "KoPubWorldDotum";
+
   src:
     url("../font/KoPubWorldDotumMedium.ttf")
     format("truetype");
@@ -105,8 +124,10 @@
   font-display: swap;
 }
 
+
 @font-face {
   font-family: "KoPubWorldDotum";
+
   src:
     url("../font/KoPubWorldDotumBold.ttf")
     format("truetype");
@@ -115,7 +136,6 @@
   font-style: normal;
   font-display: swap;
 }
-
 
 
 /* =========================================================
@@ -128,6 +148,7 @@
   box-sizing: border-box;
 }
 
+
 html {
   width: 100%;
   min-height: 100%;
@@ -136,8 +157,10 @@ html {
     var(--background-color);
 }
 
+
 body {
   width: 100%;
+
   min-height: 100vh;
   min-height: 100dvh;
 
@@ -167,11 +190,13 @@ body {
   overflow-x: hidden;
 }
 
+
 a {
   color: inherit;
 
   text-decoration: none;
 }
+
 
 button,
 input,
@@ -180,8 +205,92 @@ select {
   font: inherit;
 }
 
+
 /* =========================================================
-   고정 헤더
+   공통 고정 상단 영역
+   ARCHIVE / ARTICLE / ABOUT 모두 동일
+========================================================= */
+
+.page-masthead {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+  z-index: 1200;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  width: 100%;
+
+  margin: 0;
+
+  padding:
+    var(--masthead-top)
+    var(--masthead-left)
+    18px;
+
+  background-color: #ffffff;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   공통 횡단 로고
+========================================================= */
+
+.page-masthead
+.page-brand {
+  position: static;
+
+  display: block;
+
+  width: auto;
+  height: auto;
+
+  margin: 0;
+  padding: 0;
+
+  color: #111111;
+
+  font-family:
+    "KoPubWorldDotum",
+    "Pretendard",
+    sans-serif;
+
+  font-size:
+    var(--masthead-brand-size);
+
+  font-weight: 700;
+  line-height: 1;
+
+  letter-spacing: -0.03em;
+
+  white-space: nowrap;
+
+  pointer-events: auto;
+}
+
+
+/* =========================================================
+   로고와 ALL 메뉴 사이 간격
+========================================================= */
+
+.page-masthead
+.archive-filter {
+  margin-top:
+    var(--masthead-brand-menu-gap);
+
+  pointer-events: auto;
+}
+
+
+/* =========================================================
+   일반 고정 헤더
+   인트로 페이지 등에 사용
 ========================================================= */
 
 .site-header {
@@ -204,6 +313,7 @@ select {
   pointer-events: none;
 }
 
+
 .site-logo,
 .menu-button,
 .site-menu a,
@@ -213,8 +323,9 @@ select {
   pointer-events: auto;
 }
 
+
 /* =========================================================
-   로고
+   일반 로고
 ========================================================= */
 
 .site-logo {
@@ -224,10 +335,7 @@ select {
   gap: 0;
 }
 
-/*
-  SVG 옆의 '횡단' 글자에만
-  KoPubWorld Dotum Medium 적용
-*/
+
 .site-logo-name {
   display: block;
 
@@ -245,6 +353,7 @@ select {
   white-space: nowrap;
 }
 
+
 /* =========================================================
    햄버거 메뉴 버튼
 ========================================================= */
@@ -261,8 +370,7 @@ select {
 
   padding: 0;
 
-  background-color:
-    transparent;
+  background-color: transparent;
 
   border: 0;
 
@@ -272,6 +380,7 @@ select {
     transparent;
 }
 
+
 .menu-button img {
   display: block;
 
@@ -280,6 +389,7 @@ select {
 
   height: auto;
 }
+
 
 /* =========================================================
    슬라이드 메뉴
@@ -325,13 +435,17 @@ select {
     translateX(100%);
 
   transition:
-    transform 320ms ease;
+    transform
+    320ms
+    ease;
 }
+
 
 .site-menu.is-open {
   transform:
     translateX(0);
 }
+
 
 .site-menu a {
   color: #000000;
@@ -345,20 +459,25 @@ select {
   font-size: 34px;
   font-weight: 400;
   line-height: 1;
+
   letter-spacing: 0;
 
   transition:
-    opacity 180ms ease;
+    opacity
+    180ms
+    ease;
 
   -webkit-tap-highlight-color:
     transparent;
 }
+
 
 @media (hover: hover) {
   .site-menu a:hover {
     opacity: 0.45;
   }
 }
+
 
 /* =========================================================
    일반 페이지 카테고리 내비게이션
@@ -380,10 +499,14 @@ select {
   white-space: nowrap;
 }
 
+
 .category-link {
   display: inline-block;
 
-  flex: 0 0 auto;
+  flex:
+    0
+    0
+    auto;
 
   color: #111111;
 
@@ -405,14 +528,18 @@ select {
     );
 
   text-align: left;
+
   white-space: nowrap;
 
   transition:
-    opacity 180ms ease;
+    opacity
+    180ms
+    ease;
 
   -webkit-tap-highlight-color:
     transparent;
 }
+
 
 @media (hover: hover) {
   .category-link:hover {
@@ -420,95 +547,6 @@ select {
   }
 }
 
-/* =========================================================
-   기사 페이지 상단 메뉴
-
-   sticky이므로 문서 흐름을 차지하여
-   기사 제목과 겹치지 않습니다.
-========================================================= */
-
-.article-page
-  .category-navigation {
-  position: sticky;
-
-  top: 0;
-  z-index: 900;
-
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-
-  gap:
-    var(--category-menu-gap);
-
-  width:
-    calc(
-      100% +
-      var(--page-padding) +
-      var(--page-padding)
-    );
-
-  max-width: none;
-
-  margin:
-    0
-    calc(
-      -1 *
-      var(--page-padding)
-    );
-
-  padding:
-    28px
-    44px
-    24px;
-
-  background-color: #ffffff;
-
-  white-space: nowrap;
-
-  overflow-x: auto;
-  overflow-y: hidden;
-
-  scrollbar-width: none;
-
-  -webkit-overflow-scrolling:
-    touch;
-
-  isolation: isolate;
-}
-
-.article-page
-  .category-navigation::after {
-  content: "";
-
-  position: absolute;
-
-  top: 100%;
-  left: 0;
-  z-index: -1;
-
-  width: 100%;
-  height: 16px;
-
-  background-color: #ffffff;
-
-  pointer-events: none;
-}
-
-.article-page
-  .category-navigation::-webkit-scrollbar {
-  display: none;
-}
-
-/* =========================================================
-   메뉴와 기사 제목 사이 간격
-========================================================= */
-
-.article-page
-  .article-header {
-  margin-top:
-    var(--article-title-top-gap);
-}
 
 /* =========================================================
    메인 콘텐츠
@@ -533,8 +571,37 @@ select {
     var(--background-color);
 }
 
+
 /* =========================================================
-   태블릿 및 작은 화면
+   ARTICLE / ABOUT 콘텐츠 시작점 공통
+   고정 masthead 아래에서 시작
+========================================================= */
+
+.article-detail-page
+.article-page,
+.about-page
+.about-main {
+  padding-top:
+    clamp(
+      250px,
+      18vw,
+      310px
+    );
+}
+
+
+/* =========================================================
+   기사 타이틀 간격
+========================================================= */
+
+.article-page
+.article-header {
+  margin-top: 0;
+}
+
+
+/* =========================================================
+   태블릿
 ========================================================= */
 
 @media (max-width: 899px) {
@@ -544,12 +611,17 @@ select {
     --category-menu-gap: 11px;
     --category-menu-size: 20px;
 
+    --masthead-left: 22px;
+    --masthead-top: 22px;
+    --masthead-brand-size: 24px;
+    --masthead-brand-menu-gap: 20px;
+
     --article-title-top-gap: 52px;
   }
 
+
   .category-navigation {
-    justify-content:
-      flex-start;
+    justify-content: flex-start;
 
     gap:
       var(--category-menu-gap);
@@ -568,9 +640,11 @@ select {
       touch;
   }
 
+
   .category-navigation::-webkit-scrollbar {
     display: none;
   }
+
 
   .category-link {
     font-size:
@@ -582,40 +656,15 @@ select {
       );
   }
 
-  .article-page
-    .category-navigation {
-    width:
-      calc(
-        100% +
-        var(--page-padding) +
-        var(--page-padding)
-      );
 
-    margin:
-      0
-      calc(
-        -1 *
-        var(--page-padding)
-      );
-
-    padding:
-      20px
-      var(--page-padding)
-      18px;
+  .article-detail-page
+  .article-page,
+  .about-page
+  .about-main {
+    padding-top:
+      210px;
   }
 
-  .article-page
-    .category-navigation::after {
-    height: 12px;
-  }
-
-  .article-page
-    .article-header {
-    margin-top:
-      var(--article-title-top-gap);
-
-    margin-bottom: 42px;
-  }
 
   .article-title {
     font-size:
@@ -630,6 +679,7 @@ select {
     transform: none;
   }
 
+
   .article-layout {
     display: flex;
     flex-direction: column;
@@ -637,10 +687,12 @@ select {
     gap: 42px;
   }
 
+
   .article-copy {
     width: 100%;
     max-width: none;
   }
+
 
   .article-body {
     font-size:
@@ -653,9 +705,11 @@ select {
     line-height: 1.85;
   }
 
+
   .article-body > p {
     margin-bottom: 32px;
   }
+
 
   .article-visual {
     position: static;
@@ -667,19 +721,23 @@ select {
     margin: 0;
   }
 
+
   .article-image {
     width: 100%;
 
     aspect-ratio: 5 / 3;
   }
 
+
   .article-caption {
     font-size: 11px;
   }
 
+
   .article-principles {
     margin-top: 40px;
   }
+
 
   .article-principles li {
     grid-template-columns:
@@ -687,50 +745,19 @@ select {
       minmax(0, 1fr);
   }
 
+
   .footnote-marker {
     width: 11px;
     height: 11px;
   }
+
 
   .article-footer {
     margin-top: 60px;
   }
 }
 
-/* =========================================================
-   서브페이지 상단 브랜드
-   기존 레이아웃을 밀지 않고 블록처럼 위에 추가
-========================================================= */
 
-.page-brand {
-  width: 100%;
-
-  padding:
-    26px
-    44px
-    0;
-
-  color: #111111;
-
-  font-family:
-    "KoPubWorldDotum",
-    "Pretendard",
-    sans-serif;
-
-  font-size: 27px;
-  font-weight: 700;
-  line-height: 1;
-
-  letter-spacing: -0.03em;
-
-  background-color: #ffffff;
-}
-.archive-page .page-brand,
-.article-detail-page .page-brand,
-.about-page .page-brand {
-  position: relative;
-  z-index: 1100;
-}
 /* =========================================================
    모바일
 ========================================================= */
@@ -743,20 +770,32 @@ select {
     --category-menu-gap: 10px;
     --category-menu-size: 18px;
 
+    --masthead-left: 18px;
+    --masthead-top:
+      calc(
+        env(
+          safe-area-inset-top,
+          0px
+        ) +
+        18px
+      );
+
+    --masthead-brand-size: 22px;
+    --masthead-brand-menu-gap: 18px;
+
     --article-title-top-gap: 42px;
   }
+
 
   .site-header {
     padding: 20px;
   }
 
-  
-  /*
-    모바일에서도 KoPubWorld Dotum Medium 유지
-  */
+
   .site-logo-name {
     font-size: 23px;
   }
+
 
   .site-menu {
     width: 100%;
@@ -767,58 +806,39 @@ select {
       30px;
   }
 
+
   .site-menu a {
     font-size: 30px;
   }
+
 
   .category-navigation {
     gap:
       var(--category-menu-gap);
   }
 
+
   .category-link {
     font-size:
       var(--category-menu-size);
   }
 
-  .article-page
-    .category-navigation {
-    padding:
-      18px
-      var(--page-padding)
-      16px;
-  }
 
-  .article-page
-    .category-navigation::after {
-    height: 10px;
-  }
-
-  .article-page
-    .article-header {
-    margin-top:
-      var(--article-title-top-gap);
-
-    margin-bottom: 38px;
-  }
-}
-@media (max-width: 767px) {
-  .page-brand {
-    padding:
+  .article-detail-page
+  .article-page,
+  .about-page
+  .about-main {
+    padding-top:
       calc(
-        env(safe-area-inset-top, 0px) +
-        18px
-      )
-      18px
-      0;
-
-    font-size: 22px;
-  }
-
-  .page-brand + .site-header {
-    top: 50px;
+        env(
+          safe-area-inset-top,
+          0px
+        ) +
+        180px
+      );
   }
 }
+
 
 /* =========================================================
    움직임 최소화
