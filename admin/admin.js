@@ -926,6 +926,16 @@ function loadPostIntoEditor(
       post.body
     );
 
+    bodyEditor
+  .querySelectorAll(
+    ".footnote-period"
+  )
+  .forEach(
+    (period) => {
+      period.remove();
+    }
+  );
+
   showImagePreview(
     post.thumbnail || ""
   );
@@ -1605,21 +1615,6 @@ function insertFootnote() {
   popover.hidden = true;
 
   /* -------------------------
-     마침표
-  ------------------------- */
-
-  const period =
-    document.createElement(
-      "span"
-    );
-
-  period.className =
-    "footnote-period";
-
-  period.textContent =
-    ".";
-
-  /* -------------------------
      DOM 결합
   ------------------------- */
 
@@ -1629,10 +1624,8 @@ function insertFootnote() {
   );
 
   unit.append(
-    wrap,
-    period
-  );
-
+  wrap
+);
   /* -------------------------
      본문의 현재 커서 위치에 삽입
   ------------------------- */
