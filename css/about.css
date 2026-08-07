@@ -109,10 +109,9 @@
 .archive-filter-items {
   opacity: 1;
 }
-
-
 /* =========================================================
    ABOUT 전체
+   상단바 바로 아래에서 시작
 ========================================================= */
 
 .about-main {
@@ -121,21 +120,14 @@
   min-height: 100vh;
   min-height: 100dvh;
 
-  /*
-    횡단 한 줄 추가한 만큼
-    기존 본문 시작점에서 아래로 이동
-  */
   padding:
-    clamp(
-      185px,
-      13vw,
-      225px
-    )
+    34px
     var(--page-padding)
     80px;
 
   background-color: #ffffff;
 }
+
 
 .about-content {
   width:
@@ -148,8 +140,6 @@
     0
     auto;
 }
-
-
 /* =========================================================
    큰 ABOUT 제목
 ========================================================= */
@@ -688,107 +678,6 @@ button.footnote-marker:focus-visible {
 
 
 /* =========================================================
-   태블릿
-========================================================= */
-
-@media (max-width: 899px) {
-
-  .about-page
-  .about-header {
-    gap: 12px;
-
-    padding:
-      22px
-      var(--page-padding)
-      16px;
-  }
-
-  .about-page
-  .about-header
-  .page-brand {
-    font-size: 24px;
-  }
-
-  .about-main {
-    padding:
-      165px
-      var(--page-padding)
-      68px;
-  }
-
-  .about-content {
-    width:
-      min(
-        100%,
-        720px
-      );
-  }
-
-  .about-page-title {
-    margin-bottom: 46px;
-
-    font-size: 52px;
-  }
-
-  .about-introduction,
-  .about-section p,
-  .about-section-title {
-    font-size:
-      clamp(
-        16px,
-        2.4vw,
-        19px
-      );
-
-    line-height: 1.72;
-  }
-
-  .about-introduction,
-  .about-section {
-    margin-bottom: 46px;
-  }
-
-  .about-section
-  p + p {
-    margin-top: 32px;
-  }
-
-  .about-section-title
-  > span {
-    width: 12px;
-    min-width: 12px;
-    height: 12px;
-
-    flex-basis: 12px;
-
-    border-radius: 3px;
-  }
-
-  .about-section
-  .footnote-wrap {
-    width: 12px;
-    height: 12px;
-
-    flex-basis: 12px;
-  }
-
-  .about-page
-  button.footnote-marker {
-    width: 12px !important;
-    min-width: 12px !important;
-    max-width: 12px !important;
-
-    height: 12px !important;
-    min-height: 12px !important;
-    max-height: 12px !important;
-
-    border-radius:
-      3px !important;
-  }
-}
-
-
-/* =========================================================
    모바일
 ========================================================= */
 
@@ -838,19 +727,12 @@ button.footnote-marker:focus-visible {
     line-height: 1;
   }
 
-  .about-main {
+    .about-main {
     padding:
-      calc(
-        env(
-          safe-area-inset-top,
-          0px
-        ) +
-        155px
-      )
+      26px
       20px
       58px;
   }
-
   .about-content {
     width: 100%;
 
