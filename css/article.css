@@ -1230,6 +1230,230 @@
       60px !important;
   }
 }
+/* =========================================================
+   기사 작성자 / 소개
+========================================================= */
+
+.article-author-info {
+  width: 100%;
+
+  margin-top:
+    clamp(
+      72px,
+      7vw,
+      110px
+    );
+
+  padding: 0;
+
+  text-align: right;
+}
+
+
+/* 작성자명 */
+
+.article-author-name {
+  margin: 0;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
+
+  font-size:
+    clamp(
+      15px,
+      1.1vw,
+      18px
+    );
+
+  font-weight: 600;
+  line-height: 1.6;
+
+  text-align: right;
+}
+
+
+/* 작성자 소개 */
+
+.article-author-bio {
+  width:
+    min(
+      100%,
+      520px
+    );
+
+  margin:
+    clamp(
+      32px,
+      3vw,
+      48px
+    )
+    0
+    0
+    auto;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
+
+  font-size:
+    clamp(
+      14px,
+      1vw,
+      17px
+    );
+
+  font-weight: 500;
+  line-height: 1.8;
+
+  text-align: right;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+
+/* =========================================================
+   기사 하단
+========================================================= */
+
+.article-footer {
+  width: 100%;
+
+  margin-top:
+    clamp(
+      70px,
+      6vw,
+      100px
+    );
+
+  padding: 0;
+}
+
+
+/* 2026년 8월 */
+
+.article-footer-date {
+  width: 100%;
+
+  margin:
+    0
+    0
+    12px;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+
+  text-align: right;
+}
+
+
+/* 선 + INDEX */
+
+.article-footer-bottom {
+  display: flex;
+
+  align-items: flex-start;
+
+  width: 100%;
+
+  padding-top: 18px;
+
+  border-top:
+    1px solid #111111;
+}
+
+
+/* ■ INDEX */
+
+.back-link {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  color: #111111;
+
+  font-family:
+    "CossetteTitre",
+    "Pretendard",
+    sans-serif;
+
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+
+  text-decoration: none;
+}
+
+
+.back-link::before {
+  content: "";
+
+  display: block;
+
+  width: 10px;
+  height: 10px;
+
+  flex:
+    0
+    0
+    10px;
+
+  background-color: #111111;
+
+  border-radius: 3px;
+}
+
+
+/* =========================================================
+   모바일
+========================================================= */
+
+@media (max-width: 767px) {
+  .article-author-info {
+    margin-top: 60px;
+  }
+
+  .article-author-name {
+    font-size: 14px;
+  }
+
+  .article-author-bio {
+    margin-top: 26px;
+
+    font-size: 13px;
+  }
+
+  .article-footer {
+    margin-top: 60px;
+  }
+
+  .article-footer-date {
+    font-size: 11px;
+  }
+
+  .article-footer-bottom {
+    padding-top: 15px;
+  }
+
+  .back-link {
+    font-size: 12px;
+  }
+
+  .back-link::before {
+    width: 9px;
+    height: 9px;
+
+    flex-basis: 9px;
+  }
+}
 
 /* =========================================================
    모바일

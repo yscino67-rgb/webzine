@@ -120,70 +120,98 @@ function createAuthorMarkup(
 /* =========================================================
    기사 출력
 ========================================================= */
-
 function renderArticle(post) {
-  if (!articleDetail) return;
+  if (!articleDetail) {
+    return;
+  }
 
   document.title =
-    post.title || "Magazine Article";
+    post.title ||
+    "Magazine Article";
 
   const bodyHtml =
     Array.isArray(post.body)
       ? post.body.join("")
-      : String(post.body || "");
+      : String(
+          post.body || ""
+        );
 
-  const hasImage =
-    Boolean(
-      String(post.thumbnail || "").trim()
-    );
+  const author =
+    String(
+      post.author || ""
+    ).trim();
+
+  const authorBio =
+    String(
+      post.authorBio || ""
+    ).trim();
 
   articleDetail.innerHTML = `
     <header class="article-header">
       <h1 class="article-title">
-        ${escapeHtml(post.title || "")}
+        ${post.title || ""}
       </h1>
     </header>
 
-    <div
-      class="article-layout ${
-        hasImage
-          ? "article-layout--with-image"
-          : "article-layout--text-only"
-      }"
-    >
+    <div class="article-layout">
       <section class="article-copy">
         <div class="article-body">
           ${bodyHtml}
         </div>
 
-        ${createAuthorMarkup(post)}
+        <!-- ===============================================
+             작성자 / 작성자 소개
+        ================================================ -->
+
+        ${
+          author || authorBio
+            ? `
+              <section class="article-author-info">
+                ${
+                  author
+                    ? `
+                      <p class="article-author-name">
+                        ${author}
+                      </p>
+                    `
+                    : ""
+                }
+
+                ${
+                  authorBio
+                    ? `
+                      <p class="article-author-bio">
+                        ${authorBio}
+                      </p>
+                    `
+                    : ""
+                }
+              </section>
+            `
+            : ""
+        }
+
+        <!-- ===============================================
+             기사 하단
+        ================================================ -->
 
         <footer class="article-footer">
-  <div class="article-footer-date">
-    2026년 8월
-  </div>
+          <p class="article-footer-date">
+            2026년 8월
+          </p>
 
-  <div class="article-footer-bottom">
-    <a
-      href="./archive.html?category=all"
-      class="back-link"
-    >
-      INDEX
-    </a>
-
-    <div class="article-publication-info">
-      <p>발행인&nbsp;&nbsp;박하나</p>
-      <p>웹디자인&nbsp;&nbsp;박수연</p>
-    </div>
-  </div>
-</footer>
+          <div class="article-footer-bottom">
+            <a
+              href="./archive.html?category=all"
+              class="back-link"
+            >
+              INDEX
+            </a>
+          </div>
+        </footer>
       </section>
 
-      ${
-        hasImage
-          ? createImageMarkup(post)
-          : ""
-      }
+      ${createImageMarkup(post)}
     </div>
   `;
 
