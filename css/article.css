@@ -507,19 +507,158 @@
 ========================================================= */
 
 .article-footer {
-  margin-top: 80px;
-  padding-top: 18px;
+  width: 100%;
 
-  border-top: 1px solid #111111;
+  margin-top: 80px;
+
+  padding: 0;
 }
 
-.back-link {
+
+/* =========================================================
+   날짜
+   INDEX 선 바로 위 우측
+========================================================= */
+
+.article-footer-date {
+  width: 100%;
+
+  margin:
+    0
+    0
+    12px;
+
   font-family:
     "Pretendard",
     sans-serif;
 
   font-size: 12px;
   font-weight: 500;
+  line-height: 1.5;
+
+  text-align: right;
+}
+
+
+/* =========================================================
+   선 아래
+========================================================= */
+
+.article-footer-bottom {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  width: 100%;
+
+  padding-top: 18px;
+
+  border-top:
+    1px solid #111111;
+}
+
+
+/* =========================================================
+   ■ INDEX
+========================================================= */
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  flex: 0 0 auto;
+
+  color: #111111;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  text-decoration: none;
+}
+
+.back-link::before {
+  content: "";
+
+  display: block;
+
+  width: 10px;
+  height: 10px;
+
+  flex:
+    0
+    0
+    10px;
+
+  background-color: #111111;
+
+  border-radius: 3px;
+}
+
+
+/* =========================================================
+   발행 정보
+========================================================= */
+
+.article-publication-info {
+  margin: 0;
+
+  text-align: right;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+.article-publication-info p {
+  margin: 0;
+}
+
+
+/* =========================================================
+   모바일 기사 하단
+========================================================= */
+
+@media (max-width: 767px) {
+  .article-footer {
+    margin-top: 60px;
+  }
+
+  .article-footer-date {
+    margin-bottom: 10px;
+
+    font-size: 11px;
+  }
+
+  .article-footer-bottom {
+    gap: 20px;
+
+    padding-top: 15px;
+  }
+
+  .back-link,
+  .article-publication-info {
+    font-size: 11px;
+  }
+
+  .back-link::before {
+    width: 9px;
+    height: 9px;
+
+    flex-basis: 9px;
+  }
 }
 
 /* =========================================================

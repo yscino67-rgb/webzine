@@ -1,5 +1,5 @@
 /* =========================================================
-   ABOUT 페이지 기본 설정
+   ABOUT 페이지 기본
 ========================================================= */
 
 .about-page {
@@ -18,6 +18,7 @@
     "Apple SD Gothic Neo",
     sans-serif;
 }
+
 
 /* =========================================================
    고정 상단 메뉴
@@ -41,6 +42,7 @@
   opacity: 1;
 }
 
+
 /* =========================================================
    ABOUT 전체 영역
 ========================================================= */
@@ -62,16 +64,130 @@
 .about-content {
   width: min(100%, 760px);
 
-  margin: 0 auto;
+  margin:
+    0
+    auto;
 }
 
+
 /* =========================================================
-   소개문·소제목·본문 공통 글자 설정
+   큰 ABOUT 제목
+   인덱스의 ALL과 같은 크기
+========================================================= */
+
+.about-page-title {
+  margin:
+    0
+    0
+    clamp(48px, 5vw, 68px);
+
+  padding: 0;
+
+  color: #0f9ed5;
+
+  font-family:
+    "CossetteTitre",
+    "Special Gothic Condensed One",
+    "Pretendard",
+    sans-serif;
+
+  font-size: 64px;
+  font-weight: 400;
+  line-height: 0.94;
+  letter-spacing: -0.045em;
+
+  text-align: left;
+}
+
+
+/* =========================================================
+   본문 공통
 ========================================================= */
 
 .about-introduction,
-.about-section-title,
 .about-section p {
+  margin: 0;
+
+  padding: 0;
+
+  color: #111111;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
+
+  font-size:
+    clamp(17px, 1.2vw, 21px);
+
+  font-weight: 500;
+  line-height: 1.75;
+  letter-spacing: -0.02em;
+
+  /*
+    요청사항:
+    본문 양끝 맞춤
+  */
+  text-align: justify;
+  text-align-last: left;
+  text-justify: inter-character;
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+
+/* =========================================================
+   첫 소개 문장
+========================================================= */
+
+.about-introduction {
+  width: 100%;
+
+  /*
+    기존보다 한 줄가량 더 띄움
+  */
+  margin-bottom:
+    clamp(48px, 4vw, 58px);
+}
+
+
+/* =========================================================
+   각 섹션
+========================================================= */
+
+.about-section {
+  width: 100%;
+
+  margin:
+    0
+    0
+    clamp(48px, 4vw, 58px);
+
+  padding: 0;
+}
+
+.about-section:last-of-type {
+  margin-bottom: 0;
+}
+
+
+/* =========================================================
+   소제목
+========================================================= */
+
+.about-section-title {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin:
+    0
+    0
+    12px;
+
+  padding: 0;
+
   color: #111111;
 
   font-family:
@@ -88,68 +204,11 @@
   text-align: left;
 
   word-break: keep-all;
-  overflow-wrap: break-word;
 }
 
-/* =========================================================
-   첫 소개 문장
-========================================================= */
-
-.about-introduction {
-  width: 100%;
-
-  margin:
-    0
-    0
-    26px;
-
-  padding: 0;
-}
-
-/* =========================================================
-   본문 섹션
-========================================================= */
-
-.about-section {
-  width: 100%;
-
-  margin:
-    0
-    0
-    28px;
-
-  padding: 0;
-}
-
-.about-section:last-of-type {
-  margin-bottom: 0;
-}
-
-/* =========================================================
-   소제목
-========================================================= */
-
-.about-section-title {
-  display: flex;
-
-  /*
-    글자 기준선이 아니라 실제 박스 중앙을 기준으로 정렬합니다.
-  */
-  align-items: center;
-
-  gap: 7px;
-
-  margin:
-    0
-    0
-    7px;
-
-  padding: 0;
-}
 
 /* =========================================================
    소제목 앞 검정 네모
-   파란 각주 네모와 같은 크기·라운딩
 ========================================================= */
 
 .about-section-title > span {
@@ -157,54 +216,36 @@
 
   width: 14px;
   min-width: 14px;
-  max-width: 14px;
-
   height: 14px;
-  min-height: 14px;
-  max-height: 14px;
-
-  margin: 0;
-  padding: 0;
 
   flex:
     0
     0
     14px;
 
+  margin: 0;
+  padding: 0;
+
   background-color: #111111;
 
   border: 0;
   border-radius: 4px;
-
-  color: transparent;
-
-  font-size: 0;
-  line-height: 0;
-
-  /*
-    align-items: center가 중앙 정렬을 담당하므로
-    별도의 translateY를 사용하지 않습니다.
-  */
-  transform: none;
 }
 
+
 /* =========================================================
-   본문 문단
+   같은 섹션 안 문단 간격
+   기존보다 한 줄 정도 증가
 ========================================================= */
 
-.about-section p {
-  margin: 0;
-  padding: 0;
-}
-
-/* 같은 섹션 안 문단 사이 간격 */
-
 .about-section p + p {
-  margin-top: 14px;
+  margin-top:
+    clamp(32px, 2.7vw, 40px);
 }
+
 
 /* =========================================================
-   무엇을 횡단하는가 번호
+   번호 문단
 ========================================================= */
 
 .about-numbered-paragraph {
@@ -222,31 +263,10 @@
   margin-left: 0;
 }
 
-/* =========================================================
-   각주 전체 단위
-
-   글자 → 6px → 파란 네모 → 6px → 마침표
-========================================================= */
-
-.about-section .footnote-unit {
-  display: inline-flex;
-  align-items: center;
-
-  margin-left: 6px;
-
-  gap: 6px;
-
-  color: inherit;
-
-  font: inherit;
-  line-height: inherit;
-
-  white-space: nowrap;
-  vertical-align: baseline;
-}
 
 /* =========================================================
-   파란 네모 자리
+   참고문헌
+   형식: 문장.  ■
 ========================================================= */
 
 .about-section .footnote-wrap {
@@ -259,8 +279,18 @@
   width: 14px;
   height: 14px;
 
-  margin: 0;
+  margin:
+    0
+    0
+    0
+    6px;
+
   padding: 0;
+
+  /*
+    글자의 세로 중앙에 맞춤
+  */
+  vertical-align: middle;
 
   flex:
     0
@@ -268,14 +298,11 @@
     14px;
 
   line-height: 0;
-
-  vertical-align: middle;
-
-  transform: none;
 }
 
+
 /* =========================================================
-   파란 네모 각주 버튼
+   파란 네모
 ========================================================= */
 
 .about-page
@@ -293,21 +320,11 @@
   margin: 0 !important;
   padding: 0 !important;
 
-  flex:
-    0
-    0
-    14px !important;
-
   background-color:
     #0f9ed5 !important;
 
-  color: transparent !important;
-
   border: 0 !important;
   border-radius: 4px !important;
-
-  font-size: 0 !important;
-  line-height: 0 !important;
 
   cursor: pointer;
 
@@ -315,6 +332,9 @@
   -webkit-appearance: none;
 
   outline: none;
+
+  font-size: 0 !important;
+  line-height: 0 !important;
 
   -webkit-tap-highlight-color:
     transparent;
@@ -328,26 +348,9 @@
   outline-offset: 2px;
 }
 
-/* =========================================================
-   네모 뒤 마침표
-========================================================= */
-
-.about-section .footnote-period {
-  display: inline-block;
-
-  margin: 0;
-  padding: 0;
-
-  color: inherit;
-
-  font: inherit;
-  line-height: inherit;
-
-  vertical-align: baseline;
-}
 
 /* =========================================================
-   각주 말풍선
+   각주 팝오버
 ========================================================= */
 
 .about-section .footnote-popover {
@@ -381,10 +384,11 @@
   font-size: 11px;
   font-weight: 500;
   line-height: 1.5;
+
   letter-spacing: -0.01em;
 
   text-align: left;
-  white-space: nowrap;
+  white-space: normal;
 
   transform:
     translateX(-50%);
@@ -424,12 +428,14 @@
   display: none !important;
 }
 
+
 /* =========================================================
-   하단
+   ABOUT 하단
 ========================================================= */
 
 .about-footer {
-  margin-top: 44px;
+  margin-top:
+    clamp(60px, 6vw, 80px);
 
   padding-top: 18px;
 
@@ -437,8 +443,18 @@
     1px solid #111111;
 }
 
+
+/* =========================================================
+   ■ INDEX
+========================================================= */
+
 .about-back-link {
-  color: inherit;
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  color: #111111;
 
   font-family:
     "Pretendard",
@@ -449,6 +465,25 @@
 
   text-decoration: none;
 }
+
+.about-back-link::before {
+  content: "";
+
+  display: block;
+
+  width: 10px;
+  height: 10px;
+
+  flex:
+    0
+    0
+    10px;
+
+  background-color: #111111;
+
+  border-radius: 3px;
+}
+
 
 /* =========================================================
    태블릿
@@ -463,64 +498,53 @@
   }
 
   .about-content {
-    width: min(100%, 720px);
+    width:
+      min(
+        100%,
+        720px
+      );
+  }
+
+  .about-page-title {
+    margin-bottom: 46px;
+
+    font-size: 52px;
   }
 
   .about-introduction,
-  .about-section-title,
-  .about-section p {
+  .about-section p,
+  .about-section-title {
     font-size:
-      clamp(16px, 2.4vw, 19px);
+      clamp(
+        16px,
+        2.4vw,
+        19px
+      );
 
-    font-weight: 500;
     line-height: 1.72;
   }
 
-  .about-introduction {
-    margin-bottom: 24px;
-  }
-
+  .about-introduction,
   .about-section {
-    margin-bottom: 26px;
+    margin-bottom: 46px;
   }
 
-  .about-section-title {
-    gap: 7px;
-
-    margin-bottom: 6px;
+  .about-section p + p {
+    margin-top: 32px;
   }
-
-  /*
-    검정 네모와 파란 네모를 모두 12px로 통일
-  */
 
   .about-section-title > span {
     width: 12px;
     min-width: 12px;
-    max-width: 12px;
-
     height: 12px;
-    min-height: 12px;
-    max-height: 12px;
 
     flex-basis: 12px;
 
     border-radius: 3px;
-
-    transform: none;
   }
 
-  .about-section p + p {
-    margin-top: 13px;
-  }
-
-  .about-section .footnote-unit {
-    margin-left: 6px;
-
-    gap: 6px;
-  }
-
-  .about-section .footnote-wrap {
+  .about-section
+    .footnote-wrap {
     width: 12px;
     height: 12px;
 
@@ -537,13 +561,11 @@
     min-height: 12px !important;
     max-height: 12px !important;
 
-    flex-basis:
-      12px !important;
-
     border-radius:
       3px !important;
   }
 }
+
 
 /* =========================================================
    모바일
@@ -592,69 +614,61 @@
     margin: 0 auto;
   }
 
+  /*
+    모바일 ALL과 동일 크기
+  */
+
+  .about-page-title {
+    margin-bottom: 38px;
+
+    font-size: 42px;
+    line-height: 1;
+  }
+
   .about-introduction,
-  .about-section-title,
-  .about-section p {
+  .about-section p,
+  .about-section-title {
     font-size:
-      clamp(16px, 4.3vw, 18px);
+      clamp(
+        16px,
+        4.3vw,
+        18px
+      );
 
-    font-weight: 500;
     line-height: 1.68;
-    letter-spacing: -0.02em;
-
-    text-align: left;
   }
 
-  .about-introduction {
-    margin-bottom: 22px;
-  }
-
+  .about-introduction,
   .about-section {
-    margin-bottom: 24px;
+    margin-bottom: 40px;
+  }
+
+  .about-section p + p {
+    margin-top: 30px;
   }
 
   .about-section-title {
     gap: 6px;
 
-    margin-bottom: 6px;
+    margin-bottom: 10px;
   }
-
-  /*
-    모바일 검정 네모와 파란 네모를 모두 10px로 통일
-  */
 
   .about-section-title > span {
     width: 10px;
     min-width: 10px;
-    max-width: 10px;
-
     height: 10px;
-    min-height: 10px;
-    max-height: 10px;
 
     flex-basis: 10px;
 
     border-radius: 3px;
-
-    font-size: 0;
-    line-height: 0;
-
-    transform: none;
   }
 
-  .about-section p + p {
-    margin-top: 12px;
-  }
-
-  .about-section .footnote-unit {
-    margin-left: 6px;
-
-    gap: 6px;
-  }
-
-  .about-section .footnote-wrap {
+  .about-section
+    .footnote-wrap {
     width: 10px;
     height: 10px;
+
+    margin-left: 6px;
 
     flex-basis: 10px;
   }
@@ -669,16 +683,12 @@
     min-height: 10px !important;
     max-height: 10px !important;
 
-    flex-basis:
-      10px !important;
-
     border-radius:
       3px !important;
   }
 
-  .about-section .footnote-popover {
-    min-width: 0;
-
+  .about-section
+    .footnote-popover {
     width:
       min(
         260px,
@@ -688,24 +698,28 @@
     max-width:
       calc(100vw - 40px);
 
-    white-space: normal;
-
     font-size: 11px;
     line-height: 1.5;
   }
 
   .about-footer {
-    margin-top: 40px;
+    margin-top: 54px;
   }
 }
+
 
 /* =========================================================
    움직임 최소화
 ========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
-  .about-section .footnote-marker,
-  .about-section .footnote-popover {
+@media (
+  prefers-reduced-motion:
+  reduce
+) {
+  .about-section
+    .footnote-marker,
+  .about-section
+    .footnote-popover {
     transition: none;
   }
 }

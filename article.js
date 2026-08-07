@@ -159,13 +159,24 @@ function renderArticle(post) {
         ${createAuthorMarkup(post)}
 
         <footer class="article-footer">
-          <a
-            href="./archive.html"
-            class="back-link"
-          >
-            ← INDEX
-          </a>
-        </footer>
+  <div class="article-footer-date">
+    2026년 8월
+  </div>
+
+  <div class="article-footer-bottom">
+    <a
+      href="./archive.html?category=all"
+      class="back-link"
+    >
+      INDEX
+    </a>
+
+    <div class="article-publication-info">
+      <p>발행인&nbsp;&nbsp;박하나</p>
+      <p>웹디자인&nbsp;&nbsp;박수연</p>
+    </div>
+  </div>
+</footer>
       </section>
 
       ${
