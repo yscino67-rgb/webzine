@@ -428,7 +428,6 @@
   display: none !important;
 }
 
-
 /* =========================================================
    ABOUT 하단 전체
 ========================================================= */
@@ -444,7 +443,7 @@
 
 /* =========================================================
    날짜
-   선 바로 위 오른쪽
+   선 위 오른쪽
 ========================================================= */
 
 .about-footer-date {
@@ -453,13 +452,13 @@
   margin:
     0
     0
-    12px;
+    8px;
 
   font-family:
     "Pretendard",
     sans-serif;
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   line-height: 1.5;
 
@@ -467,25 +466,26 @@
 }
 
 /* =========================================================
-   선 아래 영역
+   선
 ========================================================= */
 
 .about-footer-bottom {
+  position: relative;
+
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 
-  gap: 30px;
-
   width: 100%;
 
-  padding-top: 18px;
+  padding-top: 14px;
 
-  border-top: 1px solid #111111;
+  border-top:
+    1px solid #111111;
 }
 
 /* =========================================================
-   ■ INDEX
+   INDEX
 ========================================================= */
 
 .about-back-link {
@@ -499,11 +499,12 @@
   color: #111111;
 
   font-family:
-    "Pretendard",
+    "CossetteTitre"
     sans-serif;
 
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
+  line-height: 1.4;
 
   text-decoration: none;
 }
@@ -513,10 +514,13 @@
 
   display: block;
 
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
 
-  flex: 0 0 10px;
+  flex:
+    0
+    0
+    9px;
 
   background-color: #111111;
 
@@ -525,24 +529,29 @@
 
 /* =========================================================
    발행인 / 웹디자인
+   선 아래 오른쪽
 ========================================================= */
 
 .about-publication-info {
   margin: 0;
 
-  text-align: right;
-
   font-family:
     "Pretendard",
     sans-serif;
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
-  line-height: 1.75;
+  line-height: 1.6;
+
+  text-align: right;
 }
 
 .about-publication-info p {
   margin: 0;
+}
+
+.about-publication-info p + p {
+  margin-top: 2px;
 }
 
 /* =========================================================
