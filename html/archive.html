@@ -15,11 +15,13 @@
 
     <title>Magazine Archive</title>
 
+    <!-- 공통 스타일 -->
     <link
       rel="stylesheet"
       href="../css/style.css?v=18"
     />
 
+    <!-- 인덱스 전용 스타일 -->
     <link
       rel="stylesheet"
       href="../css/index.css?v=18"
@@ -32,10 +34,10 @@
          횡단
     ====================================================== -->
 
-    <header class="site-header archive-header page-masthead">
-  <div class="page-brand">
-    횡단
-  </div>
+    <div class="page-brand">
+      횡단
+    </div>
+
 
     <!-- =====================================================
          상단 카테고리 메뉴
@@ -46,6 +48,8 @@
         class="archive-filter"
         aria-label="카테고리 메뉴"
       >
+        <!-- ALL -->
+
         <a
           class="archive-filter-all"
           href="./archive.html?category=all"
@@ -53,30 +57,46 @@
           ALL
         </a>
 
+
+        <!-- 펼쳐지는 메뉴 -->
+
         <div
           class="archive-filter-items"
           id="archive-filter-items"
         >
-          <a href="./archive.html?category=criticism">
+          <a
+            href="./archive.html?category=criticism"
+          >
             CRITICISM
           </a>
 
-          <a href="./archive.html?category=interview">
+          <a
+            href="./archive.html?category=interview"
+          >
             INTERVIEW
           </a>
 
-          <a href="./archive.html?category=essay">
+          <a
+            href="./archive.html?category=essay"
+          >
             ESSAY
           </a>
 
-          <a href="./archive.html?category=article">
+          <a
+            href="./archive.html?category=article"
+          >
             ARTICLE
           </a>
 
-          <a href="./about.html">
+          <a
+            href="./about.html"
+          >
             ABOUT
           </a>
         </div>
+
+
+        <!-- 검정 네모 메뉴 버튼 -->
 
         <button
           class="archive-filter-toggle"
@@ -90,6 +110,7 @@
       </nav>
     </header>
 
+
     <!-- =====================================================
          기사 인덱스
     ====================================================== -->
@@ -97,17 +118,22 @@
     <main class="site-main">
 
       <!-- ===================================================
-           검정 정렬표
+           검정 정렬바
 
-           1열 = 흰색 블록
-           4열 = 순환 정렬 버튼
+           왼쪽:
+           흰색 네모 2개
+
+           오른쪽:
+           LATEST → OLDEST → CRITICISM...
       ==================================================== -->
 
       <div
         class="archive-sort"
         aria-label="기사 정렬 및 필터"
       >
-        <!-- 기존 WRITER 자리 -->
+
+        <!-- 왼쪽 흰색 블록 -->
+
         <div
           class="archive-sort-blocks"
           aria-hidden="true"
@@ -116,7 +142,9 @@
           <span></span>
         </div>
 
-        <!-- 기존 CATEGORY 자리 -->
+
+        <!-- 오른쪽 순환 정렬 버튼 -->
+
         <button
           class="archive-sort-button"
           id="archive-sort-button"
@@ -127,6 +155,7 @@
           LATEST
         </button>
       </div>
+
 
       <!-- ===================================================
            기사 목록
@@ -144,10 +173,20 @@
       </section>
     </main>
 
+
+    <!-- =====================================================
+         공통 스크립트
+    ====================================================== -->
+
     <script
       src="../script.js?v=18"
       defer
     ></script>
+
+
+    <!-- =====================================================
+         아카이브 기사 목록 / 정렬
+    ====================================================== -->
 
     <script
       src="../archive.js?v=3"
