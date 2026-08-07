@@ -17,20 +17,29 @@
 
     <link
       rel="stylesheet"
-      href="../css/style.css?v=17"
+      href="../css/style.css?v=18"
     />
 
     <link
       rel="stylesheet"
-      href="../css/index.css?v=17"
+      href="../css/index.css?v=18"
     />
   </head>
 
   <body class="archive-page">
+
+    <!-- =====================================================
+         횡단
+    ====================================================== -->
+
     <div class="page-brand">
-  횡단
-</div>
-    
+      횡단
+    </div>
+
+    <!-- =====================================================
+         상단 카테고리 메뉴
+    ====================================================== -->
+
     <header class="site-header archive-header">
       <nav
         class="archive-filter"
@@ -80,35 +89,48 @@
       </nav>
     </header>
 
+    <!-- =====================================================
+         기사 인덱스
+    ====================================================== -->
+
     <main class="site-main">
-      <!-- 정렬 버튼 -->
-<section
-  class="archive-sort"
-  aria-label="기사 정렬 기준"
->
-  <span class="archive-sort-label">
-    WRITER
-  </span>
 
-  <button
-    class="archive-sort-button"
-    id="archive-sort-button"
-    type="button"
-    aria-label="현재 정렬: 최신순. 눌러서 다음 정렬 방식으로 변경"
-  >
-    최신순
-  </button>
+      <!-- ===================================================
+           검정 정렬표
 
-  <span class="archive-sort-label archive-sort-date">
-    DATE
-  </span>
+           1열 = 흰색 블록
+           4열 = 순환 정렬 버튼
+      ==================================================== -->
 
-  <span class="archive-sort-label archive-sort-category">
-    CATEGORY
-  </span>
-</section>
+      <div
+        class="archive-sort"
+        aria-label="기사 정렬 및 필터"
+      >
+        <!-- 기존 WRITER 자리 -->
+        <div
+          class="archive-sort-blocks"
+          aria-hidden="true"
+        >
+          <span></span>
+          <span></span>
+        </div>
 
-      <!-- 기사 목록 -->
+        <!-- 기존 CATEGORY 자리 -->
+        <button
+          class="archive-sort-button"
+          id="archive-sort-button"
+          type="button"
+          data-mode="newest"
+          aria-label="현재 정렬: LATEST. 눌러서 다음 정렬 방식으로 변경"
+        >
+          LATEST
+        </button>
+      </div>
+
+      <!-- ===================================================
+           기사 목록
+      ==================================================== -->
+
       <section
         class="article-index"
         id="article-index"
@@ -122,12 +144,12 @@
     </main>
 
     <script
-      src="../script.js?v=17"
+      src="../script.js?v=18"
       defer
     ></script>
 
     <script
-      src="../archive.js?v=2"
+      src="../archive.js?v=3"
       defer
     ></script>
   </body>

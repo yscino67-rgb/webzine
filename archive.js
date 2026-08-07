@@ -14,6 +14,7 @@ const sortButton =
     "archive-sort-button"
   );
 
+
 /* =========================================================
    기본 설정
 ========================================================= */
@@ -23,50 +24,67 @@ const POSTS_URL =
 
 const PLACEHOLDER_COUNT = 14;
 
+
 /*
-  버튼을 누를 때 아래 순서로 순환합니다.
+  하나의 버튼을 누를 때
+  아래 순서대로 계속 순환합니다.
+
+  LATEST
+  ↓
+  OLDEST
+  ↓
+  CRITICISM
+  ↓
+  INTERVIEW
+  ↓
+  ESSAY
+  ↓
+  ARTICLE
+  ↓
+  LATEST
 */
+
 const SORT_MODES = [
   {
     id: "newest",
-    label: "최신순"
+    label: "LATEST"
   },
+
   {
     id: "oldest",
-    label: "오래된순"
+    label: "OLDEST"
   },
+
   {
     id: "criticism",
     label: "CRITICISM"
   },
+
   {
     id: "interview",
     label: "INTERVIEW"
   },
+
   {
     id: "essay",
     label: "ESSAY"
   },
+
   {
     id: "article",
     label: "ARTICLE"
   }
 ];
 
+
 /* =========================================================
-   상태값
+   상태
 ========================================================= */
 
 let allPosts = [];
 
-/*
-  기본값은 최신순입니다.
-
-  단, 상단 메뉴에서 특정 카테고리를 눌러
-  category=criticism 등의 주소로 들어온 경우에는
-  해당 카테고리 상태로 시작합니다.
-*/
 let currentModeIndex = 0;
+
 
 /* =========================================================
    날짜 처리
@@ -89,9 +107,12 @@ function parseDate(dateValue) {
   return date;
 }
 
+
 function formatDate(dateValue) {
   const date =
-    parseDate(dateValue);
+    parseDate(
+      dateValue
+    );
 
   if (
     date.getTime() === 0
@@ -123,8 +144,9 @@ function formatDate(dateValue) {
   );
 }
 
+
 /* =========================================================
-   주소에서 카테고리 확인
+   URL 카테고리 읽기
 ========================================================= */
 
 function getCategoryFromUrl() {
@@ -139,14 +161,18 @@ function getCategoryFromUrl() {
   ).toLowerCase();
 }
 
-/*
-  URL에 특정 카테고리가 있으면
-  해당 정렬 모드로 시작합니다.
-*/
+
+/* =========================================================
+   처음 들어왔을 때 정렬 상태 결정
+========================================================= */
+
 function setInitialModeFromUrl() {
   const selectedCategory =
     getCategoryFromUrl();
 
+  /*
+    ALL이면 항상 LATEST부터
+  */
   if (
     selectedCategory === "all"
   ) {
@@ -154,6 +180,12 @@ function setInitialModeFromUrl() {
 
     return;
   }
+
+  /*
+    상단 메뉴에서
+    특정 카테고리를 눌러 들어왔다면
+    해당 카테고리 상태로 시작
+  */
 
   const categoryModeIndex =
     SORT_MODES.findIndex(
@@ -168,8 +200,9 @@ function setInitialModeFromUrl() {
       : 0;
 }
 
+
 /* =========================================================
-   주소 표시 갱신
+   URL 갱신
 ========================================================= */
 
 function updateUrlForMode(modeId) {
@@ -179,8 +212,10 @@ function updateUrlForMode(modeId) {
     );
 
   /*
-    최신순과 오래된순은 전체 기사를 보여줍니다.
+    LATEST / OLDEST는
+    전체 기사
   */
+
   if (
     modeId === "newest" ||
     modeId === "oldest"
@@ -190,6 +225,11 @@ function updateUrlForMode(modeId) {
       "all"
     );
   } else {
+    /*
+      카테고리 상태라면
+      URL에도 해당 카테고리 표시
+    */
+
     url.searchParams.set(
       "category",
       modeId
@@ -203,8 +243,9 @@ function updateUrlForMode(modeId) {
   );
 }
 
+
 /* =========================================================
-   실제 기사 항목 생성
+   기사 한 개 생성
 ========================================================= */
 
 function createPostItem(post) {
@@ -217,7 +258,14 @@ function createPostItem(post) {
     "index-item";
 
   link.href =
-    `./article.html?id=${encodeURIComponent(post.id)}`;
+    `./article.html?id=${encodeURIComponent(
+      post.id
+    )}`;
+
+
+  /* -------------------------
+     작성자
+  ------------------------- */
 
   const author =
     document.createElement(
@@ -230,6 +278,11 @@ function createPostItem(post) {
   author.textContent =
     post.author || "";
 
+
+  /* -------------------------
+     제목
+  ------------------------- */
+
   const title =
     document.createElement(
       "h2"
@@ -240,6 +293,11 @@ function createPostItem(post) {
 
   title.textContent =
     post.title || "";
+
+
+  /* -------------------------
+     날짜
+  ------------------------- */
 
   const date =
     document.createElement(
@@ -257,6 +315,11 @@ function createPostItem(post) {
       post.date || ""
     );
 
+
+  /* -------------------------
+     세부 카테고리
+  ------------------------- */
+
   const category =
     document.createElement(
       "span"
@@ -271,6 +334,15 @@ function createPostItem(post) {
       post.category || ""
     ).toUpperCase();
 
+
+  /* -------------------------
+     카드 결합
+
+     CSS grid-area에서
+     화면 위치를 결정하므로
+     DOM 순서는 유지
+  ------------------------- */
+
   link.append(
     author,
     title,
@@ -281,8 +353,9 @@ function createPostItem(post) {
   return link;
 }
 
+
 /* =========================================================
-   빈칸 항목 생성
+   빈 카드 생성
 ========================================================= */
 
 function createPlaceholderItem() {
@@ -301,16 +374,26 @@ function createPlaceholderItem() {
 
   item.innerHTML = `
     <span class="index-author">.</span>
-    <h2 class="index-title">.</h2>
-    <time class="index-date">.</time>
-    <span class="index-subcategory">.</span>
+
+    <h2 class="index-title">
+      .
+    </h2>
+
+    <time class="index-date">
+      .
+    </time>
+
+    <span class="index-subcategory">
+      .
+    </span>
   `;
 
   return item;
 }
 
+
 /* =========================================================
-   현재 정렬 방식에 따라 기사 가공
+   현재 상태에 맞게 기사 가공
 ========================================================= */
 
 function getVisiblePosts() {
@@ -319,18 +402,22 @@ function getVisiblePosts() {
       currentModeIndex
     ];
 
+
   /*
-    비공개 글은 항상 제외합니다.
+    비공개 기사 제외
   */
+
   let visiblePosts =
     allPosts.filter(
       (post) =>
         post.published !== false
     );
 
+
   /*
-    카테고리 모드일 때 해당 카테고리만 표시합니다.
+    카테고리 모드인지 확인
   */
+
   const isCategoryMode =
     ![
       "newest",
@@ -338,6 +425,12 @@ function getVisiblePosts() {
     ].includes(
       currentMode.id
     );
+
+
+  /*
+    카테고리 상태라면
+    해당 카테고리만 남김
+  */
 
   if (isCategoryMode) {
     visiblePosts =
@@ -353,15 +446,20 @@ function getVisiblePosts() {
       );
   }
 
+
   /*
-    오래된순을 제외한 모든 상태는 최신순입니다.
+    OLDEST
   */
+
   if (
     currentMode.id ===
     "oldest"
   ) {
     visiblePosts.sort(
-      (firstPost, secondPost) => {
+      (
+        firstPost,
+        secondPost
+      ) => {
         return (
           parseDate(
             firstPost.date
@@ -373,8 +471,16 @@ function getVisiblePosts() {
       }
     );
   } else {
+    /*
+      LATEST 및 카테고리 상태는
+      모두 최신순
+    */
+
     visiblePosts.sort(
-      (firstPost, secondPost) => {
+      (
+        firstPost,
+        secondPost
+      ) => {
         return (
           parseDate(
             secondPost.date
@@ -389,6 +495,7 @@ function getVisiblePosts() {
 
   return visiblePosts;
 }
+
 
 /* =========================================================
    정렬 버튼 표시 갱신
@@ -412,17 +519,33 @@ function updateSortButton() {
       SORT_MODES.length
     ];
 
+
+  /*
+    실제 화면 글자
+  */
+
   sortButton.textContent =
     currentMode.label;
+
+
+  /*
+    접근성 안내
+  */
 
   sortButton.setAttribute(
     "aria-label",
     `현재 정렬: ${currentMode.label}. 누르면 ${nextMode.label}으로 변경됩니다.`
   );
 
+
+  /*
+    현재 상태를 HTML dataset에도 기록
+  */
+
   sortButton.dataset.mode =
     currentMode.id;
 }
+
 
 /* =========================================================
    기사 목록 출력
@@ -438,9 +561,11 @@ function renderPosts() {
 
   articleIndex.innerHTML = "";
 
-  /*
-    해당 조건에 기사가 하나도 없는 경우
-  */
+
+  /* =====================================================
+     결과 없음
+  ===================================================== */
+
   if (
     visiblePosts.length === 0
   ) {
@@ -464,6 +589,11 @@ function renderPosts() {
     return;
   }
 
+
+  /* =====================================================
+     기사 컬럼
+  ===================================================== */
+
   const column =
     document.createElement(
       "div"
@@ -472,17 +602,26 @@ function renderPosts() {
   column.className =
     "index-column";
 
+
+  /* =====================================================
+     기사 출력
+  ===================================================== */
+
   visiblePosts.forEach(
     (post) => {
       column.appendChild(
-        createPostItem(post)
+        createPostItem(
+          post
+        )
       );
     }
   );
 
-  /*
-    기존 디자인의 빈 줄을 유지합니다.
-  */
+
+  /* =====================================================
+     PC의 기존 빈 행 유지
+  ===================================================== */
+
   const placeholderTotal =
     Math.max(
       PLACEHOLDER_COUNT -
@@ -500,12 +639,14 @@ function renderPosts() {
     );
   }
 
+
   articleIndex.appendChild(
     column
   );
 
   updateSortButton();
 }
+
 
 /* =========================================================
    정렬 버튼 클릭
@@ -515,28 +656,44 @@ if (sortButton) {
   sortButton.addEventListener(
     "click",
     () => {
+      /*
+        다음 상태로 이동
+      */
+
       currentModeIndex =
         (
           currentModeIndex + 1
         ) %
         SORT_MODES.length;
 
+
       const currentMode =
         SORT_MODES[
           currentModeIndex
         ];
 
+
+      /*
+        URL 갱신
+      */
+
       updateUrlForMode(
         currentMode.id
       );
+
+
+      /*
+        다시 렌더링
+      */
 
       renderPosts();
     }
   );
 }
 
+
 /* =========================================================
-   브라우저 뒤로가기·앞으로가기
+   브라우저 뒤로가기 / 앞으로가기
 ========================================================= */
 
 window.addEventListener(
@@ -547,6 +704,7 @@ window.addEventListener(
     renderPosts();
   }
 );
+
 
 /* =========================================================
    게시글 불러오기
@@ -582,9 +740,20 @@ async function loadPosts() {
         ? data.posts
         : [];
 
+
+    /*
+      URL 기준 최초 상태 설정
+    */
+
     setInitialModeFromUrl();
 
+
+    /*
+      화면 출력
+    */
+
     renderPosts();
+
   } catch (error) {
     console.error(
       "아카이브 로드 실패:",
@@ -598,6 +767,7 @@ async function loadPosts() {
     `;
   }
 }
+
 
 /* =========================================================
    실행
