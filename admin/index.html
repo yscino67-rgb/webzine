@@ -38,7 +38,9 @@
           HWENGDAN CMS
         </p>
 
-        <h1>관리자 로그인</h1>
+        <h1>
+          관리자 로그인
+        </h1>
 
         <label for="admin-password">
           비밀번호
@@ -73,6 +75,10 @@
       id="admin-view"
       hidden
     >
+      <!-- =================================================
+           상단
+      ================================================== -->
+
       <header class="admin-header">
         <a
           class="admin-brand"
@@ -101,12 +107,20 @@
         </div>
       </header>
 
+      <!-- =================================================
+           전체 레이아웃
+      ================================================== -->
+
       <div class="admin-layout">
-        <!-- 게시글 목록 -->
+        <!-- ===============================================
+             게시글 목록
+        ================================================ -->
 
         <aside class="post-sidebar">
           <div class="sidebar-header">
-            <h2>게시글</h2>
+            <h2>
+              게시글
+            </h2>
 
             <button
               type="button"
@@ -122,7 +136,9 @@
           ></div>
         </aside>
 
-        <!-- 게시글 편집 -->
+        <!-- ===============================================
+             게시글 편집
+        ================================================ -->
 
         <section class="post-editor">
           <form id="post-form">
@@ -132,10 +148,15 @@
             />
 
             <!-- 업로드된 실제 이미지 경로 -->
+
             <input
               type="hidden"
               id="post-thumbnail"
             />
+
+            <!-- ===========================================
+                 에디터 상단
+            ============================================ -->
 
             <div class="editor-heading">
               <div>
@@ -172,8 +193,12 @@
             ================================================== -->
 
             <div class="field-grid">
+              <!-- 제목 -->
+
               <label class="field field--wide">
-                <span>제목</span>
+                <span>
+                  제목
+                </span>
 
                 <input
                   type="text"
@@ -182,8 +207,12 @@
                 />
               </label>
 
+              <!-- 작성자 -->
+
               <label class="field">
-                <span>작성자</span>
+                <span>
+                  작성자
+                </span>
 
                 <input
                   type="text"
@@ -192,8 +221,12 @@
                 />
               </label>
 
+              <!-- 작성일 -->
+
               <label class="field">
-                <span>작성일</span>
+                <span>
+                  작성일
+                </span>
 
                 <input
                   type="date"
@@ -202,8 +235,12 @@
                 />
               </label>
 
+              <!-- 카테고리 -->
+
               <label class="field">
-                <span>카테고리</span>
+                <span>
+                  카테고리
+                </span>
 
                 <select id="post-category">
                   <option value="criticism">
@@ -224,8 +261,12 @@
                 </select>
               </label>
 
+              <!-- 세부 카테고리 -->
+
               <label class="field">
-                <span>세부 카테고리</span>
+                <span>
+                  세부 카테고리
+                </span>
 
                 <input
                   type="text"
@@ -239,7 +280,9 @@
               ================================================== -->
 
               <div class="field field--wide">
-                <span>대표 이미지</span>
+                <span>
+                  대표 이미지
+                </span>
 
                 <div class="image-upload-row">
                   <input
@@ -284,8 +327,12 @@
                 </div>
               </div>
 
+              <!-- 이미지 설명 -->
+
               <label class="field">
-                <span>이미지 설명</span>
+                <span>
+                  이미지 설명
+                </span>
 
                 <input
                   type="text"
@@ -293,8 +340,12 @@
                 />
               </label>
 
+              <!-- 이미지 출처 -->
+
               <label class="field">
-                <span>이미지 출처</span>
+                <span>
+                  이미지 출처
+                </span>
 
                 <input
                   type="text"
@@ -307,7 +358,9 @@
               ================================================== -->
 
               <label class="field field--wide">
-                <span>작성자 소개</span>
+                <span>
+                  작성자 소개
+                </span>
 
                 <textarea
                   id="post-author-bio"
@@ -316,6 +369,8 @@
                 ></textarea>
               </label>
 
+              <!-- 공개 여부 -->
+
               <label class="checkbox-field">
                 <input
                   type="checkbox"
@@ -323,7 +378,9 @@
                   checked
                 />
 
-                <span>사이트에 공개</span>
+                <span>
+                  사이트에 공개
+                </span>
               </label>
             </div>
 
@@ -336,108 +393,175 @@
                 본문
               </div>
 
+              <!-- ===============================================
+                   본문 툴바
+              ================================================ -->
+
               <div
                 class="editor-toolbar"
                 id="editor-toolbar"
                 role="toolbar"
                 aria-label="본문 서식"
               >
+                <!-- 굵게 -->
+
                 <button
                   type="button"
                   data-command="bold"
                   title="굵게"
                 >
-                  <strong>B</strong>
+                  <strong>
+                    B
+                  </strong>
                 </button>
+
+                <!-- 기울임 -->
 
                 <button
                   type="button"
                   data-command="italic"
                   title="기울임"
                 >
-                  <em>I</em>
+                  <em>
+                    I
+                  </em>
                 </button>
+
+                <!-- 밑줄 -->
 
                 <button
                   type="button"
                   data-command="underline"
                   title="밑줄"
                 >
-                  <u>U</u>
+                  <u>
+                    U
+                  </u>
                 </button>
+
+                <!-- 취소선 -->
 
                 <button
                   type="button"
                   data-command="strikeThrough"
                   title="취소선"
                 >
-                  <s>S</s>
+                  <s>
+                    S
+                  </s>
                 </button>
+
+                <!-- 일반 문단 -->
 
                 <button
                   type="button"
                   data-block="p"
+                  title="일반 문단"
                 >
                   P
                 </button>
 
+                <!-- H2 -->
+
                 <button
                   type="button"
                   data-block="h2"
+                  title="소제목"
                 >
                   H2
                 </button>
 
+                <!-- 인용문 -->
+
                 <button
                   type="button"
                   data-block="blockquote"
+                  title="인용문"
                 >
                   “ ”
                 </button>
 
+                <!-- 순서 없는 목록 -->
+
                 <button
                   type="button"
                   data-command="insertUnorderedList"
+                  title="글머리표 목록"
                 >
                   • LIST
                 </button>
 
+                <!-- 순서 있는 목록 -->
+
                 <button
                   type="button"
                   data-command="insertOrderedList"
+                  title="번호 목록"
                 >
                   1. LIST
                 </button>
 
+                <!-- =============================================
+                     문단 정렬
+                ============================================== -->
+
+                <!-- 좌측 정렬 -->
+
                 <button
                   type="button"
                   data-command="justifyLeft"
+                  title="좌측 정렬"
                 >
                   LEFT
                 </button>
 
+                <!-- 가운데 정렬 -->
+
                 <button
                   type="button"
                   data-command="justifyCenter"
+                  title="가운데 정렬"
                 >
                   CENTER
                 </button>
 
+                <!-- 우측 정렬 -->
+
                 <button
                   type="button"
                   data-command="justifyRight"
+                  title="우측 정렬"
                 >
                   RIGHT
                 </button>
 
+                <!-- =============================================
+                     양끝 맞춤
+                     새로 추가된 기능
+                ============================================== -->
+
+                <button
+                  type="button"
+                  data-command="justifyFull"
+                  title="양끝 맞춤"
+                  aria-label="선택한 문단 양끝 맞춤"
+                >
+                  JUSTIFY
+                </button>
+
+                <!-- 링크 -->
+
                 <button
                   type="button"
                   id="link-button"
+                  title="링크"
                 >
                   LINK
                 </button>
 
-                <!-- 글자 크기 -->
+                <!-- =============================================
+                     글자 크기
+                ============================================== -->
 
                 <button
                   type="button"
@@ -447,7 +571,9 @@
                   SMALL
                 </button>
 
-                <!-- 참고문헌 -->
+                <!-- =============================================
+                     참고문헌
+                ============================================== -->
 
                 <button
                   type="button"
@@ -457,7 +583,9 @@
                   각주 ■
                 </button>
 
-                <!-- 글자색 -->
+                <!-- =============================================
+                     글자색
+                ============================================== -->
 
                 <div
                   class="text-color-tool"
@@ -472,6 +600,7 @@
                     class="text-color-button text-color-button--black"
                     data-text-color="#111111"
                     title="검정"
+                    aria-label="검정색"
                   ></button>
 
                   <button
@@ -479,6 +608,7 @@
                     class="text-color-button text-color-button--gray"
                     data-text-color="#888888"
                     title="회색"
+                    aria-label="회색"
                   ></button>
 
                   <button
@@ -486,6 +616,7 @@
                     class="text-color-button text-color-button--red"
                     data-text-color="#e12727"
                     title="빨강"
+                    aria-label="빨강색"
                   ></button>
 
                   <button
@@ -493,6 +624,7 @@
                     class="text-color-button text-color-button--blue"
                     data-text-color="#2457d6"
                     title="파랑"
+                    aria-label="파랑색"
                   ></button>
 
                   <button
@@ -500,23 +632,34 @@
                     class="text-color-button text-color-button--green"
                     data-text-color="#16834b"
                     title="초록"
+                    aria-label="초록색"
                   ></button>
                 </div>
+
+                <!-- 실행 취소 -->
 
                 <button
                   type="button"
                   data-command="undo"
+                  title="실행 취소"
                 >
                   UNDO
                 </button>
 
+                <!-- 다시 실행 -->
+
                 <button
                   type="button"
                   data-command="redo"
+                  title="다시 실행"
                 >
                   REDO
                 </button>
               </div>
+
+              <!-- ===============================================
+                   실제 본문 작성 영역
+              ================================================ -->
 
               <div
                 class="body-editor"
@@ -538,7 +681,9 @@
               hidden
             >
               <div class="footnote-editor-heading">
-                <strong>참고문헌</strong>
+                <strong>
+                  참고문헌
+                </strong>
 
                 <button
                   type="button"
@@ -571,6 +716,10 @@
                 </button>
               </div>
             </section>
+
+            <!-- =================================================
+                 저장 메시지
+            ================================================== -->
 
             <p
               class="form-message"
