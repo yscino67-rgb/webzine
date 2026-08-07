@@ -1093,3 +1093,51 @@
       13px !important;
   }
 }
+
+/* =========================================================
+   이미지가 있는 기사
+========================================================= */
+
+.article-layout--with-image {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 900px)
+    minmax(280px, 1fr);
+
+  column-gap:
+    clamp(70px, 8vw, 150px);
+
+  align-items: start;
+}
+
+
+/* =========================================================
+   이미지가 없는 기사
+   ABOUT 페이지처럼 본문 중앙 정렬
+========================================================= */
+
+.article-layout--text-only {
+  display: block;
+
+  width: 100%;
+}
+
+.article-layout--text-only .article-copy {
+  width: min(100%, 760px);
+  max-width: 760px;
+
+  margin:
+    0
+    auto;
+
+  justify-self: auto;
+}
+
+
+/* 이미지 없는 글의 작성자 소개도
+   본문 너비 안에서 우측 정렬 */
+.article-layout--text-only
+.article-author-profile {
+  margin-left: auto;
+}

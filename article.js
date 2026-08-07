@@ -55,30 +55,12 @@ function escapeHtml(value) {
    이미지
 ========================================================= */
 
-function createImageMarkup(
-  post
-) {
+function createImageMarkup(post) {
   if (!post.thumbnail) {
-    return `
-      <figure class="article-visual">
-        <div class="article-image-placeholder">
-          IMAGE<br />
-          수정중
-        </div>
-
-        <figcaption class="article-caption">
-          ${
-            escapeHtml(
-              post.imageCaption ||
-              "이미지 및 출처 수정중"
-            )
-          }
-        </figcaption>
-      </figure>
-    `;
+    return "";
   }
 
-  const source =
+  const sourceMarkup =
     post.imageSource
       ? `<br />(출처: ${escapeHtml(post.imageSource)})`
       : "";
@@ -93,7 +75,7 @@ function createImageMarkup(
 
       <figcaption class="article-caption">
         ${escapeHtml(post.imageCaption || "")}
-        ${source}
+        ${sourceMarkup}
       </figcaption>
     </figure>
   `;
@@ -139,25 +121,21 @@ function createAuthorMarkup(
    기사 출력
 ========================================================= */
 
-function renderArticle(
-  post
-) {
-  if (!articleDetail) {
-    return;
-  }
+function renderArticle(post) {
+  if (!articleDetail) return;
 
   document.title =
-    post.title ||
-    "Magazine Article";
+    post.title || "Magazine Article";
 
   const bodyHtml =
-    Array.isArray(
-      post.body
-    )
+    Array.isArray(post.body)
       ? post.body.join("")
-      : String(
-          post.body || ""
-        );
+      : String(post.body || "");
+
+  const hasImage =
+    Boolean(
+      String(post.thumbnail || "").trim()
+    );
 
   articleDetail.innerHTML = `
     <header class="article-header">
@@ -166,7 +144,13 @@ function renderArticle(
       </h1>
     </header>
 
-    <div class="article-layout">
+    <div
+      class="article-layout ${
+        hasImage
+          ? "article-layout--with-image"
+          : "article-layout--text-only"
+      }"
+    >
       <section class="article-copy">
         <div class="article-body">
           ${bodyHtml}
@@ -184,13 +168,16 @@ function renderArticle(
         </footer>
       </section>
 
-      ${createImageMarkup(post)}
+      ${
+        hasImage
+          ? createImageMarkup(post)
+          : ""
+      }
     </div>
   `;
 
   initializeFootnotes();
 }
-
 /* =========================================================
    각주
 ========================================================= */
