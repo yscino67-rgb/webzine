@@ -21,30 +21,98 @@
 
 
 /* =========================================================
-   고정 상단 메뉴
+   ABOUT 고정 상단
+   횡단 + 카테고리 메뉴
 ========================================================= */
 
-.about-page .about-header {
+.about-page
+.about-header {
   position: fixed;
 
   top: 0;
   left: 0;
   z-index: 1000;
 
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  gap: 14px;
+
   width: 100%;
 
+  padding:
+    26px
+    44px
+    18px;
+
   background-color: #ffffff;
+
+  pointer-events: auto;
+}
+
+
+/* =========================================================
+   ABOUT 상단 횡단
+========================================================= */
+
+.about-page
+.about-header
+.page-brand {
+  position: static;
+
+  display: block;
+
+  width: auto;
+
+  margin: 0;
+  padding: 0;
+
+  color: #111111;
+
+  font-family:
+    "KoPubWorldDotum",
+    "Pretendard",
+    sans-serif;
+
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1;
+
+  letter-spacing: -0.03em;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   ABOUT 상단 메뉴
+========================================================= */
+
+.about-page
+.about-header
+.archive-filter {
+  position: relative;
+
+  flex: 0 0 auto;
+
+  width: max-content;
+  max-width: 100%;
+
+  margin: 0;
+  padding: 0;
 }
 
 .about-page
-  .archive-filter.is-open
-  .archive-filter-items {
+.archive-filter.is-open
+.archive-filter-items {
   opacity: 1;
 }
 
 
 /* =========================================================
-   ABOUT 전체 영역
+   ABOUT 전체
 ========================================================= */
 
 .about-main {
@@ -53,8 +121,16 @@
   min-height: 100vh;
   min-height: 100dvh;
 
+  /*
+    횡단 한 줄 추가한 만큼
+    기존 본문 시작점에서 아래로 이동
+  */
   padding:
-    clamp(145px, 10vw, 185px)
+    clamp(
+      185px,
+      13vw,
+      225px
+    )
     var(--page-padding)
     80px;
 
@@ -62,7 +138,11 @@
 }
 
 .about-content {
-  width: min(100%, 760px);
+  width:
+    min(
+      100%,
+      760px
+    );
 
   margin:
     0
@@ -72,14 +152,17 @@
 
 /* =========================================================
    큰 ABOUT 제목
-   인덱스의 ALL과 같은 크기
 ========================================================= */
 
 .about-page-title {
   margin:
     0
     0
-    clamp(48px, 5vw, 68px);
+    clamp(
+      48px,
+      5vw,
+      68px
+    );
 
   padding: 0;
 
@@ -94,6 +177,7 @@
   font-size: 64px;
   font-weight: 400;
   line-height: 0.94;
+
   letter-spacing: -0.045em;
 
   text-align: left;
@@ -101,7 +185,7 @@
 
 
 /* =========================================================
-   본문 공통
+   ABOUT 본문 공통
 ========================================================= */
 
 .about-introduction,
@@ -117,18 +201,22 @@
     sans-serif;
 
   font-size:
-    clamp(17px, 1.2vw, 21px);
+    clamp(
+      17px,
+      1.2vw,
+      21px
+    );
 
   font-weight: 500;
   line-height: 1.75;
   letter-spacing: -0.02em;
 
-  /*
-    요청사항:
-    본문 양끝 맞춤
-  */
   text-align: justify;
   text-align-last: left;
+
+  /*
+    한글 양끝맞춤
+  */
   text-justify: inter-character;
 
   word-break: keep-all;
@@ -137,22 +225,23 @@
 
 
 /* =========================================================
-   첫 소개 문장
+   소개
 ========================================================= */
 
 .about-introduction {
   width: 100%;
 
-  /*
-    기존보다 한 줄가량 더 띄움
-  */
   margin-bottom:
-    clamp(48px, 4vw, 58px);
+    clamp(
+      48px,
+      4vw,
+      58px
+    );
 }
 
 
 /* =========================================================
-   각 섹션
+   ABOUT 섹션
 ========================================================= */
 
 .about-section {
@@ -161,7 +250,11 @@
   margin:
     0
     0
-    clamp(48px, 4vw, 58px);
+    clamp(
+      48px,
+      4vw,
+      58px
+    );
 
   padding: 0;
 }
@@ -195,23 +288,26 @@
     sans-serif;
 
   font-size:
-    clamp(17px, 1.2vw, 21px);
+    clamp(
+      17px,
+      1.2vw,
+      21px
+    );
 
   font-weight: 500;
   line-height: 1.75;
   letter-spacing: -0.02em;
-
-  text-align: left;
 
   word-break: keep-all;
 }
 
 
 /* =========================================================
-   소제목 앞 검정 네모
+   소제목 검정 네모
 ========================================================= */
 
-.about-section-title > span {
+.about-section-title
+> span {
   display: block;
 
   width: 14px;
@@ -235,12 +331,16 @@
 
 /* =========================================================
    같은 섹션 안 문단 간격
-   기존보다 한 줄 정도 증가
 ========================================================= */
 
-.about-section p + p {
+.about-section
+p + p {
   margin-top:
-    clamp(32px, 2.7vw, 40px);
+    clamp(
+      32px,
+      2.7vw,
+      40px
+    );
 }
 
 
@@ -266,10 +366,11 @@
 
 /* =========================================================
    참고문헌
-   형식: 문장.  ■
+   문장. ■
 ========================================================= */
 
-.about-section .footnote-wrap {
+.about-section
+.footnote-wrap {
   position: relative;
 
   display: inline-flex;
@@ -287,9 +388,6 @@
 
   padding: 0;
 
-  /*
-    글자의 세로 중앙에 맞춤
-  */
   vertical-align: middle;
 
   flex:
@@ -306,7 +404,7 @@
 ========================================================= */
 
 .about-page
-  button.footnote-marker {
+button.footnote-marker {
   display: block;
 
   width: 14px !important;
@@ -335,28 +433,32 @@
 
   font-size: 0 !important;
   line-height: 0 !important;
-
-  -webkit-tap-highlight-color:
-    transparent;
 }
 
 .about-page
-  button.footnote-marker:focus-visible {
+button.footnote-marker:focus-visible {
   outline:
-    1px solid #0f9ed5;
+    1px solid
+    #0f9ed5;
 
   outline-offset: 2px;
 }
 
 
 /* =========================================================
-   각주 팝오버
+   참고문헌 팝오버
 ========================================================= */
 
-.about-section .footnote-popover {
+.about-section
+.footnote-popover {
   position: absolute;
 
-  top: calc(100% + 9px);
+  top:
+    calc(
+      100% +
+      9px
+    );
+
   left: 50%;
   z-index: 100;
 
@@ -365,7 +467,10 @@
   max-width:
     min(
       420px,
-      calc(100vw - 40px)
+      calc(
+        100vw -
+        40px
+      )
     );
 
   padding:
@@ -373,7 +478,12 @@
     11px;
 
   background-color:
-    rgba(0, 0, 0, 0.82);
+    rgba(
+      0,
+      0,
+      0,
+      0.82
+    );
 
   color: #ffffff;
 
@@ -397,11 +507,16 @@
     0
     4px
     14px
-    rgba(0, 0, 0, 0.14);
+    rgba(
+      0,
+      0,
+      0,
+      0.14
+    );
 }
 
 .about-section
-  .footnote-popover::before {
+.footnote-popover::before {
   content: "";
 
   position: absolute;
@@ -414,7 +529,12 @@
 
   border-bottom:
     5px solid
-    rgba(0, 0, 0, 0.82);
+    rgba(
+      0,
+      0,
+      0,
+      0.82
+    );
 
   border-left:
     4px solid transparent;
@@ -424,22 +544,28 @@
 }
 
 .about-section
-  .footnote-popover[hidden] {
+.footnote-popover[hidden] {
   display: none !important;
 }
 
+
 /* =========================================================
-   ABOUT 하단 전체
+   ABOUT 하단
 ========================================================= */
 
 .about-footer {
   width: 100%;
 
   margin-top:
-    clamp(60px, 6vw, 80px);
+    clamp(
+      60px,
+      6vw,
+      80px
+    );
 
   padding: 0;
 }
+
 
 /* =========================================================
    날짜
@@ -465,8 +591,9 @@
   text-align: right;
 }
 
+
 /* =========================================================
-   선
+   하단 선
 ========================================================= */
 
 .about-footer-bottom {
@@ -476,6 +603,8 @@
   align-items: flex-start;
   justify-content: space-between;
 
+  gap: 30px;
+
   width: 100%;
 
   padding-top: 14px;
@@ -484,8 +613,9 @@
     1px solid #111111;
 }
 
+
 /* =========================================================
-   INDEX
+   ■ INDEX
 ========================================================= */
 
 .about-back-link {
@@ -500,11 +630,13 @@
 
   font-family:
     "CossetteTitre",
+    "Special Gothic Condensed One",
+    "Pretendard",
     sans-serif;
 
   font-size: 14px;
-  font-weight: 500;
-  line-height: 1.4;
+  font-weight: 400;
+  line-height: 1;
 
   text-decoration: none;
 }
@@ -527,9 +659,9 @@
   border-radius: 3px;
 }
 
+
 /* =========================================================
    발행인 / 웹디자인
-   선 아래 오른쪽
 ========================================================= */
 
 .about-publication-info {
@@ -554,50 +686,32 @@
   margin-top: 2px;
 }
 
-/* =========================================================
-   모바일
-========================================================= */
-
-@media (max-width: 767px) {
-  .about-footer {
-    margin-top: 54px;
-  }
-
-  .about-footer-date {
-    margin-bottom: 10px;
-
-    font-size: 11px;
-  }
-
-  .about-footer-bottom {
-    gap: 20px;
-
-    padding-top: 15px;
-  }
-
-  .about-back-link,
-  .about-publication-info {
-    font-size: 11px;
-  }
-
-  .about-back-link::before {
-    width: 9px;
-    height: 9px;
-
-    flex-basis: 9px;
-
-    border-radius: 3px;
-  }
-}
 
 /* =========================================================
    태블릿
 ========================================================= */
 
 @media (max-width: 899px) {
+
+  .about-page
+  .about-header {
+    gap: 12px;
+
+    padding:
+      22px
+      var(--page-padding)
+      16px;
+  }
+
+  .about-page
+  .about-header
+  .page-brand {
+    font-size: 24px;
+  }
+
   .about-main {
     padding:
-      130px
+      165px
       var(--page-padding)
       68px;
   }
@@ -634,11 +748,13 @@
     margin-bottom: 46px;
   }
 
-  .about-section p + p {
+  .about-section
+  p + p {
     margin-top: 32px;
   }
 
-  .about-section-title > span {
+  .about-section-title
+  > span {
     width: 12px;
     min-width: 12px;
     height: 12px;
@@ -649,7 +765,7 @@
   }
 
   .about-section
-    .footnote-wrap {
+  .footnote-wrap {
     width: 12px;
     height: 12px;
 
@@ -657,7 +773,7 @@
   }
 
   .about-page
-    button.footnote-marker {
+  button.footnote-marker {
     width: 12px !important;
     min-width: 12px !important;
     max-width: 12px !important;
@@ -677,12 +793,20 @@
 ========================================================= */
 
 @media (max-width: 767px) {
-  .about-page .about-header {
+
+  .about-page
+  .about-header {
     position: fixed;
 
     top: 0;
     left: 0;
     z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 10px;
 
     width: 100%;
 
@@ -695,9 +819,23 @@
         18px
       )
       18px
-      16px;
+      14px;
 
     background-color: #ffffff;
+  }
+
+  .about-page
+  .about-header
+  .page-brand {
+    position: static;
+
+    width: auto;
+
+    margin: 0;
+    padding: 0;
+
+    font-size: 22px;
+    line-height: 1;
   }
 
   .about-main {
@@ -707,7 +845,7 @@
           safe-area-inset-top,
           0px
         ) +
-        128px
+        155px
       )
       20px
       58px;
@@ -716,12 +854,10 @@
   .about-content {
     width: 100%;
 
-    margin: 0 auto;
+    margin:
+      0
+      auto;
   }
-
-  /*
-    모바일 ALL과 동일 크기
-  */
 
   .about-page-title {
     margin-bottom: 38px;
@@ -748,7 +884,8 @@
     margin-bottom: 40px;
   }
 
-  .about-section p + p {
+  .about-section
+  p + p {
     margin-top: 30px;
   }
 
@@ -758,7 +895,8 @@
     margin-bottom: 10px;
   }
 
-  .about-section-title > span {
+  .about-section-title
+  > span {
     width: 10px;
     min-width: 10px;
     height: 10px;
@@ -769,17 +907,17 @@
   }
 
   .about-section
-    .footnote-wrap {
+  .footnote-wrap {
     width: 10px;
     height: 10px;
 
-    margin-left: 6px;
+    margin-left: 5px;
 
     flex-basis: 10px;
   }
 
   .about-page
-    button.footnote-marker {
+  button.footnote-marker {
     width: 10px !important;
     min-width: 10px !important;
     max-width: 10px !important;
@@ -793,15 +931,21 @@
   }
 
   .about-section
-    .footnote-popover {
+  .footnote-popover {
     width:
       min(
         260px,
-        calc(100vw - 40px)
+        calc(
+          100vw -
+          40px
+        )
       );
 
     max-width:
-      calc(100vw - 40px);
+      calc(
+        100vw -
+        40px
+      );
 
     font-size: 11px;
     line-height: 1.5;
@@ -809,6 +953,28 @@
 
   .about-footer {
     margin-top: 54px;
+  }
+
+  .about-footer-date,
+  .about-publication-info {
+    font-size: 11px;
+  }
+
+  .about-footer-bottom {
+    gap: 20px;
+
+    padding-top: 15px;
+  }
+
+  .about-back-link {
+    font-size: 12px;
+  }
+
+  .about-back-link::before {
+    width: 9px;
+    height: 9px;
+
+    flex-basis: 9px;
   }
 }
 
@@ -822,9 +988,9 @@
   reduce
 ) {
   .about-section
-    .footnote-marker,
+  .footnote-marker,
   .about-section
-    .footnote-popover {
+  .footnote-popover {
     transition: none;
   }
 }
