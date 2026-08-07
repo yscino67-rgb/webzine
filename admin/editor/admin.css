@@ -4,6 +4,7 @@
 
 @font-face {
   font-family: "Pretendard";
+
   src:
     url("../../font/Pretendard-Medium.otf")
     format("opentype");
@@ -13,8 +14,10 @@
   font-display: swap;
 }
 
+
 @font-face {
   font-family: "Pretendard";
+
   src:
     url("../../font/Pretendard-SemiBold.otf")
     format("opentype");
@@ -24,11 +27,28 @@
   font-display: swap;
 }
 
+
+/* =========================================================
+   기본 변수
+========================================================= */
+
 :root {
   --cms-background: #ffffff;
   --cms-text: #111111;
-  --cms-border: rgba(17, 17, 17, 0.18);
+
+  --cms-border:
+    rgba(
+      17,
+      17,
+      17,
+      0.18
+    );
 }
+
+
+/* =========================================================
+   기본 설정
+========================================================= */
 
 *,
 *::before,
@@ -36,14 +56,18 @@
   box-sizing: border-box;
 }
 
+
 html,
 body {
   min-height: 100%;
 
   margin: 0;
 
-  background-color: var(--cms-background);
-  color: var(--cms-text);
+  background-color:
+    var(--cms-background);
+
+  color:
+    var(--cms-text);
 
   font-family:
     "Pretendard",
@@ -54,10 +78,15 @@ body {
 
   font-weight: 500;
 
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing:
+    antialiased;
 }
 
-/* 입력창 및 버튼 폰트 */
+
+/* =========================================================
+   입력창 및 버튼 폰트
+========================================================= */
+
 button,
 input,
 textarea,
@@ -71,16 +100,158 @@ select,
     sans-serif !important;
 }
 
-/* CMS 버튼과 입력창 각진 형태 */
+
+/* =========================================================
+   CMS 버튼과 입력창 각진 형태
+========================================================= */
+
 button,
 input,
 textarea,
 select {
-  border-radius: 0 !important;
+  border-radius:
+    0 !important;
 }
 
-/* 본문 편집 영역 */
+
+/* =========================================================
+   본문 편집 영역
+========================================================= */
+
 [contenteditable="true"] {
-  line-height: 1.8 !important;
-  letter-spacing: -0.02em !important;
+  line-height:
+    1.8 !important;
+
+  letter-spacing:
+    -0.02em !important;
+
+  word-break:
+    keep-all;
+
+  overflow-wrap:
+    break-word;
+}
+
+
+/* =========================================================
+   본문 기본 정렬
+========================================================= */
+
+.body-editor {
+  text-align: left;
+}
+
+
+/* =========================================================
+   본문 문단 공통
+========================================================= */
+
+.body-editor p,
+.body-editor div,
+.body-editor h1,
+.body-editor h2,
+.body-editor h3,
+.body-editor h4,
+.body-editor blockquote,
+.body-editor li {
+  word-break:
+    keep-all;
+
+  overflow-wrap:
+    break-word;
+}
+
+
+/* =========================================================
+   LEFT
+========================================================= */
+
+.body-editor
+[style*="text-align: left"] {
+  text-align:
+    left !important;
+
+  text-align-last:
+    auto !important;
+
+  text-justify:
+    auto !important;
+}
+
+
+/* =========================================================
+   CENTER
+========================================================= */
+
+.body-editor
+[style*="text-align: center"] {
+  text-align:
+    center !important;
+
+  text-align-last:
+    auto !important;
+
+  text-justify:
+    auto !important;
+}
+
+
+/* =========================================================
+   RIGHT
+========================================================= */
+
+.body-editor
+[style*="text-align: right"] {
+  text-align:
+    right !important;
+
+  text-align-last:
+    auto !important;
+
+  text-justify:
+    auto !important;
+}
+
+
+/* =========================================================
+   JUSTIFY
+   양끝맞춤
+========================================================= */
+
+.body-editor
+[style*="text-align: justify"] {
+  text-align:
+    justify !important;
+
+  text-align-last:
+    left !important;
+
+  text-justify:
+    inter-character !important;
+
+  word-break:
+    keep-all;
+
+  overflow-wrap:
+    break-word;
+}
+
+
+/* =========================================================
+   정렬 버튼
+========================================================= */
+
+.editor-toolbar
+button[data-align] {
+  white-space:
+    nowrap;
+}
+
+
+/* JUSTIFY는 글자가 길어서 약간 넓게 */
+
+.editor-toolbar
+button[data-align="justify"] {
+  min-width:
+    58px;
 }

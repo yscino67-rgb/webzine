@@ -17,7 +17,7 @@
 
     <link
       rel="stylesheet"
-      href="./admin.css?v=3"
+      href="./admin.css?v=4"
     />
   </head>
 
@@ -75,10 +75,6 @@
       id="admin-view"
       hidden
     >
-      <!-- =================================================
-           상단
-      ================================================== -->
-
       <header class="admin-header">
         <a
           class="admin-brand"
@@ -106,10 +102,6 @@
           </button>
         </div>
       </header>
-
-      <!-- =================================================
-           전체 레이아웃
-      ================================================== -->
 
       <div class="admin-layout">
         <!-- ===============================================
@@ -147,16 +139,10 @@
               id="post-id"
             />
 
-            <!-- 업로드된 실제 이미지 경로 -->
-
             <input
               type="hidden"
               id="post-thumbnail"
             />
-
-            <!-- ===========================================
-                 에디터 상단
-            ============================================ -->
 
             <div class="editor-heading">
               <div>
@@ -193,8 +179,6 @@
             ================================================== -->
 
             <div class="field-grid">
-              <!-- 제목 -->
-
               <label class="field field--wide">
                 <span>
                   제목
@@ -206,8 +190,6 @@
                   required
                 />
               </label>
-
-              <!-- 작성자 -->
 
               <label class="field">
                 <span>
@@ -221,8 +203,6 @@
                 />
               </label>
 
-              <!-- 작성일 -->
-
               <label class="field">
                 <span>
                   작성일
@@ -234,8 +214,6 @@
                   required
                 />
               </label>
-
-              <!-- 카테고리 -->
 
               <label class="field">
                 <span>
@@ -261,8 +239,6 @@
                 </select>
               </label>
 
-              <!-- 세부 카테고리 -->
-
               <label class="field">
                 <span>
                   세부 카테고리
@@ -276,7 +252,7 @@
               </label>
 
               <!-- =================================================
-                   대표 이미지 파일
+                   대표 이미지
               ================================================== -->
 
               <div class="field field--wide">
@@ -327,8 +303,6 @@
                 </div>
               </div>
 
-              <!-- 이미지 설명 -->
-
               <label class="field">
                 <span>
                   이미지 설명
@@ -339,8 +313,6 @@
                   id="post-image-caption"
                 />
               </label>
-
-              <!-- 이미지 출처 -->
 
               <label class="field">
                 <span>
@@ -369,8 +341,6 @@
                 ></textarea>
               </label>
 
-              <!-- 공개 여부 -->
-
               <label class="checkbox-field">
                 <input
                   type="checkbox"
@@ -393,65 +363,43 @@
                 본문
               </div>
 
-              <!-- ===============================================
-                   본문 툴바
-              ================================================ -->
-
               <div
                 class="editor-toolbar"
                 id="editor-toolbar"
                 role="toolbar"
                 aria-label="본문 서식"
               >
-                <!-- 굵게 -->
-
                 <button
                   type="button"
                   data-command="bold"
                   title="굵게"
                 >
-                  <strong>
-                    B
-                  </strong>
+                  <strong>B</strong>
                 </button>
-
-                <!-- 기울임 -->
 
                 <button
                   type="button"
                   data-command="italic"
                   title="기울임"
                 >
-                  <em>
-                    I
-                  </em>
+                  <em>I</em>
                 </button>
-
-                <!-- 밑줄 -->
 
                 <button
                   type="button"
                   data-command="underline"
                   title="밑줄"
                 >
-                  <u>
-                    U
-                  </u>
+                  <u>U</u>
                 </button>
-
-                <!-- 취소선 -->
 
                 <button
                   type="button"
                   data-command="strikeThrough"
                   title="취소선"
                 >
-                  <s>
-                    S
-                  </s>
+                  <s>S</s>
                 </button>
-
-                <!-- 일반 문단 -->
 
                 <button
                   type="button"
@@ -461,8 +409,6 @@
                   P
                 </button>
 
-                <!-- H2 -->
-
                 <button
                   type="button"
                   data-block="h2"
@@ -470,8 +416,6 @@
                 >
                   H2
                 </button>
-
-                <!-- 인용문 -->
 
                 <button
                   type="button"
@@ -481,8 +425,6 @@
                   “ ”
                 </button>
 
-                <!-- 순서 없는 목록 -->
-
                 <button
                   type="button"
                   data-command="insertUnorderedList"
@@ -490,8 +432,6 @@
                 >
                   • LIST
                 </button>
-
-                <!-- 순서 있는 목록 -->
 
                 <button
                   type="button"
@@ -505,51 +445,41 @@
                      문단 정렬
                 ============================================== -->
 
-                <!-- 좌측 정렬 -->
-
                 <button
                   type="button"
-                  data-command="justifyLeft"
+                  data-align="left"
                   title="좌측 정렬"
                 >
                   LEFT
                 </button>
 
-                <!-- 가운데 정렬 -->
-
                 <button
                   type="button"
-                  data-command="justifyCenter"
+                  data-align="center"
                   title="가운데 정렬"
                 >
                   CENTER
                 </button>
 
-                <!-- 우측 정렬 -->
-
                 <button
                   type="button"
-                  data-command="justifyRight"
+                  data-align="right"
                   title="우측 정렬"
                 >
                   RIGHT
                 </button>
 
-                <!-- =============================================
-                     양끝 맞춤
-                     새로 추가된 기능
-                ============================================== -->
-
                 <button
                   type="button"
-                  data-command="justifyFull"
+                  data-align="justify"
                   title="양끝 맞춤"
-                  aria-label="선택한 문단 양끝 맞춤"
                 >
                   JUSTIFY
                 </button>
 
-                <!-- 링크 -->
+                <!-- =============================================
+                     링크
+                ============================================== -->
 
                 <button
                   type="button"
@@ -560,7 +490,7 @@
                 </button>
 
                 <!-- =============================================
-                     글자 크기
+                     작은 글씨
                 ============================================== -->
 
                 <button
@@ -636,8 +566,6 @@
                   ></button>
                 </div>
 
-                <!-- 실행 취소 -->
-
                 <button
                   type="button"
                   data-command="undo"
@@ -645,8 +573,6 @@
                 >
                   UNDO
                 </button>
-
-                <!-- 다시 실행 -->
 
                 <button
                   type="button"
@@ -656,10 +582,6 @@
                   REDO
                 </button>
               </div>
-
-              <!-- ===============================================
-                   실제 본문 작성 영역
-              ================================================ -->
 
               <div
                 class="body-editor"
@@ -717,10 +639,6 @@
               </div>
             </section>
 
-            <!-- =================================================
-                 저장 메시지
-            ================================================== -->
-
             <p
               class="form-message"
               id="save-message"
@@ -732,7 +650,7 @@
     </main>
 
     <script
-      src="./admin.js?v=3"
+      src="./admin.js?v=4"
       defer
     ></script>
   </body>

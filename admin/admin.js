@@ -254,6 +254,317 @@ function refreshEditorSelection() {
 }
 
 /* =========================================================
+   문단 정렬
+========================================================= */
+
+const EDITOR_BLOCK_SELECTOR =
+  "p, div, h1, h2, h3, h4, blockquote, li";
+
+
+/* =========================================================
+   현재 노드의 문단 찾기
+========================================================= */
+
+function findEditorBlock(
+  node
+) {
+  if (!node) {
+    return null;
+  }
+
+  let element =
+    node.nodeType ===
+    Node.ELEMENT_NODE
+      ? node
+      : node.parentElement;
+
+  while (
+    element &&
+    element !== bodyEditor
+  ) {
+    if (
+      element.matches(
+        EDITOR_BLOCK_SELECTOR
+      )
+    ) {
+      return element;
+    }
+
+    element =
+      element.parentElement;
+  }
+
+  return null;
+}
+
+
+/* =========================================================
+   선택 영역에 포함된 문단 가져오기
+========================================================= */
+
+function getSelectedEditorBlocks(
+  range
+) {
+  const blocks =
+    Array.from(
+      bodyEditor.querySelectorAll(
+        EDITOR_BLOCK_SELECTOR
+      )
+    );
+
+  const selectedBlocks =
+    blocks.filter(
+      (block) => {
+        try {
+          return range.intersectsNode(
+            block
+          );
+        } catch {
+          return false;
+        }
+      }
+    );
+
+  /*
+    글자를 드래그하지 않고
+    문단 안에 커서만 둔 경우
+  */
+
+  if (
+    selectedBlocks.length === 0
+  ) {
+    const block =
+      findEditorBlock(
+        range.startContainer
+      );
+
+    if (block) {
+      return [
+        block
+      ];
+    }
+  }
+
+  return selectedBlocks;
+}
+
+
+/* =========================================================
+   body-editor에 직접 들어간 텍스트 처리
+
+   복붙 시 브라우저에 따라
+   p가 아닌 최상위 텍스트 노드가 들어올 수 있기 때문에
+   필요한 경우 p로 감쌉니다.
+========================================================= */
+
+function ensureEditorBlockForRange(
+  range
+) {
+  const existingBlock =
+    findEditorBlock(
+      range.startContainer
+    );
+
+  if (existingBlock) {
+    return existingBlock;
+  }
+
+  if (
+    range.startContainer ===
+    bodyEditor
+  ) {
+    return null;
+  }
+
+  const parent =
+    range.startContainer
+      .parentElement;
+
+  if (
+    parent === bodyEditor
+  ) {
+    const paragraph =
+      document.createElement(
+        "p"
+      );
+
+    const node =
+      range.startContainer;
+
+    bodyEditor.insertBefore(
+      paragraph,
+      node
+    );
+
+    paragraph.appendChild(
+      node
+    );
+
+    return paragraph;
+  }
+
+  return null;
+}
+
+
+/* =========================================================
+   실제 문단 정렬 적용
+========================================================= */
+
+function applyEditorAlignment(
+  alignment
+) {
+  if (
+    !restoreEditorSelection()
+  ) {
+    saveMessage.textContent =
+      "정렬할 문단 안에 커서를 놓거나 문단을 선택해 주세요.";
+
+    return;
+  }
+
+  const selection =
+    window.getSelection();
+
+  if (
+    !selection ||
+    selection.rangeCount === 0
+  ) {
+    saveMessage.textContent =
+      "정렬할 문단을 선택해 주세요.";
+
+    return;
+  }
+
+  const range =
+    selection
+      .getRangeAt(0)
+      .cloneRange();
+
+  /*
+    복붙한 일반 텍스트도
+    문단으로 인식할 수 있게 처리
+  */
+
+  ensureEditorBlockForRange(
+    range
+  );
+
+  let blocks =
+    getSelectedEditorBlocks(
+      range
+    );
+
+  /*
+    그래도 블록이 잡히지 않으면
+    브라우저 기본 명령으로 p를 만든 뒤 재시도
+  */
+
+  if (
+    blocks.length === 0
+  ) {
+    document.execCommand(
+      "formatBlock",
+      false,
+      "p"
+    );
+
+    const currentSelection =
+      window.getSelection();
+
+    if (
+      currentSelection &&
+      currentSelection.rangeCount
+    ) {
+      blocks =
+        getSelectedEditorBlocks(
+          currentSelection
+            .getRangeAt(0)
+        );
+    }
+  }
+
+  if (
+    blocks.length === 0
+  ) {
+    saveMessage.textContent =
+      "정렬할 문단을 찾지 못했습니다.";
+
+    return;
+  }
+
+  blocks.forEach(
+    (block) => {
+      /*
+        실제 저장될 inline CSS
+      */
+
+      block.style.textAlign =
+        alignment;
+
+      if (
+        alignment ===
+        "justify"
+      ) {
+        block.style.textAlignLast =
+          "left";
+
+        block.style.textJustify =
+          "inter-character";
+      } else {
+        block.style.removeProperty(
+          "text-align-last"
+        );
+
+        block.style.removeProperty(
+          "text-justify"
+        );
+      }
+    }
+  );
+
+  saveMessage.textContent =
+    "";
+
+  bodyEditor.focus();
+
+  try {
+    selection.removeAllRanges();
+
+    selection.addRange(
+      range
+    );
+
+    savedEditorRange =
+      range.cloneRange();
+  } catch {
+    refreshEditorSelection();
+  }
+}
+
+
+/* =========================================================
+   정렬 버튼 연결
+========================================================= */
+
+document
+  .querySelectorAll(
+    "[data-align]"
+  )
+  .forEach(
+    (button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          applyEditorAlignment(
+            button.dataset.align
+          );
+        }
+      );
+    }
+  );
+
+/* =========================================================
    이미지
 ========================================================= */
 
