@@ -926,7 +926,13 @@
 }
 
 
-/* 한 줄 소개 */
+/* =========================================================
+   작성자 한 줄 소개
+
+   변경점:
+   pre-line → normal
+   나머지는 그대로
+========================================================= */
 
 .article-author-bio {
   width: 100%;
@@ -968,7 +974,7 @@
 
   overflow-wrap: break-word;
 
-  white-space: pre-line;
+  white-space: normal !important;
 }
 
 
