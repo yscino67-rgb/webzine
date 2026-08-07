@@ -14,20 +14,67 @@
 
 
 /* =========================================================
-   기사 상단 횡단
+   ARTICLE 상단
+
+   INDEX의 상단 HTML 구조를 그대로 사용하되
+   style.css의 fixed site-header만 기사 페이지에서 해제
 ========================================================= */
 
 .article-detail-page
-.article-archive-header
+.article-archive-header {
+  position: relative !important;
+
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+
+  z-index: 1000;
+
+  display: block !important;
+
+  width: 100%;
+
+  margin: 0;
+
+  padding:
+    28px
+    44px
+    18px !important;
+
+  background-color: #ffffff;
+
+  pointer-events: auto !important;
+}
+
+
+/* =========================================================
+   횡단
+
+   INDEX와 동일한 위치 / 크기
+========================================================= */
+
+.article-detail-page
 .page-brand {
-  position: static;
+  position: relative !important;
+
+  top: auto !important;
+  left: auto !important;
+
+  z-index: 1100;
 
   display: block;
 
-  width: auto;
+  width: 100%;
 
   margin: 0;
-  padding: 0;
+
+  padding:
+    26px
+    44px
+    0 !important;
+
+  background-color: #ffffff;
 
   color: #111111;
 
@@ -47,27 +94,32 @@
 
 
 /* =========================================================
-   기사 상단 카테고리 메뉴
+   상단 카테고리 메뉴
+
+   INDEX처럼 왼쪽부터 시작
 ========================================================= */
 
 .article-detail-page
-.article-archive-header
 .archive-filter {
-  position: relative;
+  position: relative !important;
 
-  flex: 0 0 auto;
+  display: flex !important;
+
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
 
   width: max-content;
   max-width: 100%;
 
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  white-space: nowrap;
 }
 
 
-/*
-  기사 페이지에서는 메뉴가 기본적으로 펼쳐져 있음
-*/
+/* 기사에서는 기본 펼침 */
+
 .article-detail-page
 .archive-filter.is-open
 .archive-filter-items {
@@ -85,15 +137,11 @@
   min-height: 100vh;
   min-height: 100dvh;
 
-  /*
-    기존 기사 시작 위치에
-    횡단 한 줄 높이만 추가
-  */
   padding:
     clamp(
-      190px,
-      15vw,
-      230px
+      72px,
+      6vw,
+      105px
     )
     var(--page-padding)
     100px;
@@ -108,6 +156,7 @@
     sans-serif;
 }
 
+
 .article-detail {
   width: 100%;
 
@@ -121,7 +170,7 @@
 
 
 /* =========================================================
-   로딩 및 오류
+   로딩 / 오류
 ========================================================= */
 
 .article-loading,
@@ -156,6 +205,7 @@
 
   text-align: center;
 }
+
 
 .article-title {
   display: inline-block;
@@ -194,34 +244,9 @@
 
 
 /* =========================================================
-   카테고리
+   이미지 있는 기사
 ========================================================= */
 
-.article-category {
-  margin:
-    0
-    0
-    18px;
-
-  font-family:
-    "CossetteTitre",
-    "Special Gothic Condensed One",
-    "Pretendard",
-    sans-serif;
-
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 1;
-
-  text-align: center;
-}
-
-
-/* =========================================================
-   본문 + 오른쪽 이미지
-========================================================= */
-
-.article-layout,
 .article-layout--with-image {
   display: grid;
 
@@ -244,6 +269,8 @@
 
 /* =========================================================
    이미지 없는 기사
+
+   ABOUT처럼 760px 중앙
 ========================================================= */
 
 .article-layout--text-only {
@@ -251,6 +278,7 @@
 
   width: 100%;
 }
+
 
 .article-layout--text-only
 .article-copy {
@@ -265,13 +293,6 @@
   margin:
     0
     auto;
-
-  justify-self: auto;
-}
-
-.article-layout--text-only
-.article-author-profile {
-  margin-left: auto;
 }
 
 
@@ -282,6 +303,7 @@
 .article-copy {
   width: 100%;
   min-width: 0;
+
   max-width: 900px;
 
   margin: 0;
@@ -290,6 +312,11 @@
 
   text-align: left;
 }
+
+
+/* =========================================================
+   본문
+========================================================= */
 
 .article-body {
   width: 100%;
@@ -312,15 +339,22 @@
 
   font-weight: 500;
   line-height: 1.85;
+
   letter-spacing: -0.02em;
 
   text-align: justify;
   text-align-last: left;
-  text-justify: inter-word;
+
+  text-justify: inter-character;
 
   word-break: keep-all;
   overflow-wrap: break-word;
 }
+
+
+/* =========================================================
+   본문 문단
+========================================================= */
 
 .article-body > p {
   margin:
@@ -329,12 +363,53 @@
     38px;
 }
 
+
 .article-body > p:first-child {
   margin-top: 0;
 }
 
+
 .article-body > p:last-child {
   margin-bottom: 0;
+}
+
+
+/*
+  CMS에서 LEFT / CENTER / RIGHT / JUSTIFY를
+  inline style로 저장했을 경우
+  그 값을 그대로 존중합니다.
+*/
+
+.article-body
+[style*="text-align: left"] {
+  text-align: left !important;
+  text-align-last: auto !important;
+}
+
+
+.article-body
+[style*="text-align: center"] {
+  text-align: center !important;
+  text-align-last: auto !important;
+}
+
+
+.article-body
+[style*="text-align: right"] {
+  text-align: right !important;
+  text-align-last: auto !important;
+}
+
+
+.article-body
+[style*="text-align: justify"] {
+  text-align: justify !important;
+
+  text-align-last:
+    left !important;
+
+  text-justify:
+    inter-character !important;
 }
 
 
@@ -367,6 +442,7 @@
 
   font-weight: 600;
   line-height: 1.4;
+
   letter-spacing: -0.03em;
 
   word-break: keep-all;
@@ -387,6 +463,7 @@
   padding-left: 1.5em;
 }
 
+
 .article-body li {
   margin-bottom: 10px;
 }
@@ -400,6 +477,7 @@
   color: inherit;
 
   text-decoration: underline;
+
   text-underline-offset: 4px;
 }
 
@@ -424,6 +502,7 @@
     sans-serif;
 }
 
+
 .article-quote p,
 .article-body blockquote p {
   margin: 0;
@@ -433,6 +512,7 @@
   text-align: justify;
   text-align-last: left;
 }
+
 
 .article-quote cite,
 .article-body blockquote cite {
@@ -472,6 +552,7 @@
   align-self: start;
 }
 
+
 .article-image {
   display: block;
 
@@ -484,6 +565,7 @@
 
   background-color: #eeeeee;
 }
+
 
 .article-caption {
   margin-top: 10px;
@@ -507,22 +589,9 @@
   word-break: keep-all;
 }
 
-.article-image-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
-  width: 100%;
-
-  aspect-ratio: 5 / 3;
-
-  background-color: #f1f1f1;
-  color: #777777;
-
-  font-size: 12px;
-  line-height: 1.6;
-
-  text-align: center;
+.article-image-source {
+  display: inline;
 }
 
 
@@ -546,22 +615,28 @@
   list-style: none;
 }
 
+
 .article-principles li {
   display: grid;
 
   grid-template-columns:
     44px
-    minmax(0, 1fr);
+    minmax(
+      0,
+      1fr
+    );
 
   column-gap: 8px;
 
   align-items: start;
 }
 
+
 .principle-number {
   font-size: 14px;
   line-height: 1.8;
 }
+
 
 .article-principles strong {
   display: block;
@@ -569,6 +644,7 @@
   font-weight: 600;
   line-height: 1.8;
 }
+
 
 .article-principles p {
   margin: 0;
@@ -581,6 +657,7 @@
 
 .principle-heading {
   display: inline-flex;
+
   align-items: center;
 
   gap: 6px;
@@ -592,6 +669,8 @@
 
 /* =========================================================
    각주 래퍼
+
+   문장. ■
 ========================================================= */
 
 .footnote-wrap,
@@ -600,15 +679,13 @@
   position: relative;
 
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
 
   width: 14px;
   height: 14px;
 
-  /*
-    문장. ■
-  */
   margin:
     0
     0
@@ -629,7 +706,7 @@
 
 
 /* =========================================================
-   파란 네모 각주 버튼
+   파란 네모
 ========================================================= */
 
 .footnote-marker,
@@ -651,6 +728,7 @@
   background-color: #0f9ed5;
 
   border: 0;
+
   border-radius: 4px;
 
   cursor: pointer;
@@ -666,6 +744,7 @@
   -webkit-tap-highlight-color:
     transparent;
 }
+
 
 .footnote-marker:focus-visible {
   outline:
@@ -692,6 +771,7 @@
     );
 
   left: 50%;
+
   z-index: 100;
 
   width: max-content;
@@ -727,7 +807,10 @@
   font-weight: 500;
   line-height: 1.5;
 
+  letter-spacing: -0.01em;
+
   text-align: left;
+
   white-space: normal;
 
   transform:
@@ -745,6 +828,7 @@
     );
 }
 
+
 .footnote-popover::before {
   content: "";
 
@@ -754,10 +838,13 @@
   left: 50%;
 
   border-right:
-    4px solid transparent;
+    4px
+    solid
+    transparent;
 
   border-bottom:
-    5px solid
+    5px
+    solid
     rgba(
       0,
       0,
@@ -766,11 +853,14 @@
     );
 
   border-left:
-    4px solid transparent;
+    4px
+    solid
+    transparent;
 
   transform:
     translateX(-50%);
 }
+
 
 .footnote-popover[hidden] {
   display: none !important;
@@ -778,10 +868,12 @@
 
 
 /* =========================================================
-   작성자 소개
+   작성자 + 한 줄 소개
+
+   둘이 하나의 블록으로 함께 오른쪽 정렬
 ========================================================= */
 
-.article-author-profile {
+.article-author-info {
   width:
     min(
       100%,
@@ -794,11 +886,25 @@
     0
     auto;
 
+  padding: 0;
+
   text-align: right;
 }
 
+
+/* 작성자 이름 */
+
 .article-author-name {
-  margin: 0;
+  margin:
+    0 !important;
+
+  padding: 0;
+
+  color: #111111;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
 
   font-size:
     clamp(
@@ -809,13 +915,34 @@
 
   font-weight: 600;
   line-height: 1.6;
+
+  letter-spacing: -0.02em;
+
+  text-align:
+    right !important;
+
+  text-align-last:
+    right !important;
 }
 
+
+/* 한 줄 소개 */
+
 .article-author-bio {
+  width: 100%;
+
   margin:
-    5px
+    8px
     0
     0 !important;
+
+  padding: 0;
+
+  color: #111111;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
 
   font-size:
     clamp(
@@ -825,10 +952,21 @@
     ) !important;
 
   font-weight: 500;
-  line-height: 1.7 !important;
 
-  text-align: right !important;
-  text-align-last: right !important;
+  line-height:
+    1.7 !important;
+
+  letter-spacing: -0.02em;
+
+  text-align:
+    right !important;
+
+  text-align-last:
+    right !important;
+
+  word-break: keep-all;
+
+  overflow-wrap: break-word;
 
   white-space: pre-line;
 }
@@ -841,10 +979,15 @@
 .article-footer {
   width: 100%;
 
-  margin-top: 80px;
+  margin-top: 70px;
 
   padding: 0;
 }
+
+
+/* =========================================================
+   날짜
+========================================================= */
 
 .article-footer-date {
   width: 100%;
@@ -854,6 +997,14 @@
     0
     12px;
 
+  padding: 0;
+
+  color: #111111;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
+
   font-size: 11px;
   font-weight: 500;
   line-height: 1.5;
@@ -861,20 +1012,25 @@
   text-align: right;
 }
 
+
+/* =========================================================
+   선 + INDEX
+========================================================= */
+
 .article-footer-bottom {
   display: flex;
 
   align-items: flex-start;
-  justify-content: space-between;
-
-  gap: 30px;
+  justify-content: flex-start;
 
   width: 100%;
 
   padding-top: 18px;
 
   border-top:
-    1px solid #111111;
+    1px
+    solid
+    #111111;
 }
 
 
@@ -884,11 +1040,15 @@
 
 .back-link {
   display: inline-flex;
+
   align-items: center;
 
   gap: 7px;
 
-  flex: 0 0 auto;
+  flex:
+    0
+    0
+    auto;
 
   color: #111111;
 
@@ -904,6 +1064,7 @@
 
   text-decoration: none;
 }
+
 
 .back-link::before {
   content: "";
@@ -925,29 +1086,6 @@
 
 
 /* =========================================================
-   발행 정보
-========================================================= */
-
-.article-publication-info {
-  margin: 0;
-
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1.6;
-
-  text-align: right;
-}
-
-.article-publication-info p {
-  margin: 0;
-}
-
-.article-publication-info p + p {
-  margin-top: 2px;
-}
-
-
-/* =========================================================
    태블릿
 ========================================================= */
 
@@ -955,30 +1093,40 @@
 
   .article-detail-page
   .article-archive-header {
-    gap: 12px;
+    position: relative !important;
+
+    display: block !important;
 
     padding:
       22px
       var(--page-padding)
-      16px;
+      16px !important;
   }
 
+
   .article-detail-page
-  .article-archive-header
   .page-brand {
+    padding:
+      22px
+      var(--page-padding)
+      0 !important;
+
     font-size: 24px;
   }
 
+
   .article-page {
     padding:
-      165px
+      60px
       var(--page-padding)
       60px;
   }
 
+
   .article-header {
     margin-bottom: 44px;
   }
+
 
   .article-title {
     font-size:
@@ -989,33 +1137,45 @@
       );
   }
 
-  .article-layout,
+
   .article-layout--with-image {
     display: flex;
+
     flex-direction: column;
 
     gap: 42px;
   }
 
+
+  .article-layout--text-only {
+    display: block;
+  }
+
+
+  .article-copy,
+  .article-layout--text-only
   .article-copy {
     width: 100%;
     max-width: none;
   }
 
+
   .article-body {
     font-size:
       clamp(
         16px,
-        4.2vw,
+        2.4vw,
         19px
       );
 
     line-height: 1.85;
   }
 
+
   .article-body > p {
     margin-bottom: 32px;
   }
+
 
   .article-visual {
     position: static;
@@ -1028,13 +1188,16 @@
     margin: 0;
   }
 
+
   .article-image {
     width: 100%;
   }
 
+
   .article-caption {
     font-size: 11px;
   }
+
 
   .footnote-wrap,
   .article-body
@@ -1044,6 +1207,7 @@
 
     flex-basis: 12px;
   }
+
 
   .footnote-marker,
   .article-body
@@ -1058,127 +1222,16 @@
 
     border-radius: 3px;
   }
-}
 
 
-/* =========================================================
-   ARTICLE 상단바 최종 교정
-   INDEX와 완전히 같은 배치
-========================================================= */
-
-.article-detail-page .page-brand {
-  position: relative !important;
-
-  top: auto !important;
-  left: auto !important;
-
-  display: block !important;
-
-  width: 100% !important;
-
-  margin: 0 !important;
-
-  padding:
-    26px
-    44px
-    0 !important;
-
-  color: #111111 !important;
-
-  font-family:
-    "KoPubWorldDotum",
-    "Pretendard",
-    sans-serif !important;
-
-  font-size: 27px !important;
-  font-weight: 700 !important;
-  line-height: 1 !important;
-
-  letter-spacing: -0.03em !important;
-
-  background-color: #ffffff !important;
-
-  z-index: 1100;
-}
+  .article-author-info {
+    margin-top: 60px;
+  }
 
 
-/* =========================================================
-   중요
-   site-header의 flex/fixed를 완전히 해제
-========================================================= */
-
-.article-detail-page .archive-header,
-.article-detail-page .article-archive-header {
-  position: relative !important;
-
-  top: auto !important;
-  right: auto !important;
-  bottom: auto !important;
-  left: auto !important;
-
-  display: block !important;
-
-  align-items: initial !important;
-  justify-content: initial !important;
-
-  width: 100% !important;
-
-  margin: 0 !important;
-
-  padding:
-    28px
-    44px
-    18px !important;
-
-  background-color: #ffffff !important;
-
-  pointer-events: auto !important;
-}
-
-
-/* =========================================================
-   INDEX와 동일하게 ALL부터 왼쪽 정렬
-========================================================= */
-
-.article-detail-page .archive-filter {
-  position: relative !important;
-
-  display: flex !important;
-
-  align-items: flex-start !important;
-  justify-content: flex-start !important;
-
-  width: max-content !important;
-  max-width: 100% !important;
-
-  margin: 0 !important;
-  padding: 0 !important;
-
-  white-space: nowrap !important;
-}
-
-
-/* 펼쳐진 상태 유지 */
-
-.article-detail-page
-.archive-filter.is-open
-.archive-filter-items {
-  opacity: 1 !important;
-}
-
-
-/* =========================================================
-   기사 본문
-   기존 fixed-header 보정 제거
-========================================================= */
-
-.article-detail-page .article-page {
-  padding-top:
-    clamp(
-      72px,
-      6vw,
-      105px
-    ) !important;
+  .article-footer {
+    margin-top: 60px;
+  }
 }
 
 
@@ -1188,322 +1241,86 @@
 
 @media (max-width: 767px) {
 
-  .article-detail-page .page-brand {
+  /* =======================================================
+     횡단
+  ======================================================= */
+
+  .article-detail-page
+  .page-brand {
+    position: relative !important;
+
     padding:
       calc(
-        env(safe-area-inset-top, 0px) +
+        env(
+          safe-area-inset-top,
+          0px
+        ) +
         18px
       )
       18px
       0 !important;
 
-    font-size: 22px !important;
+    font-size: 22px;
   }
 
-  .article-detail-page .archive-header,
-  .article-detail-page .article-archive-header {
-    position: relative !important;
 
-    top: auto !important;
-    left: auto !important;
+  /* =======================================================
+     상단 메뉴
 
-    display: block !important;
+     fixed로 되돌리지 않음
+  ======================================================= */
+
+  .article-detail-page
+  .article-archive-header {
+    position:
+      relative !important;
+
+    top:
+      auto !important;
+
+    left:
+      auto !important;
+
+    display:
+      block !important;
+
+    width:
+      100%;
 
     padding:
       20px
       18px
       14px !important;
+
+    background-color:
+      #ffffff;
   }
 
-  .article-detail-page .archive-filter {
-    display: flex !important;
-
-    justify-content: flex-start !important;
-
-    margin: 0 !important;
-  }
-
-  .article-detail-page .article-page {
-    padding:
-      58px
-      18px
-      60px !important;
-  }
-}
-/* =========================================================
-   기사 작성자 / 소개
-========================================================= */
-
-.article-author-info {
-  width: 100%;
-
-  margin-top:
-    clamp(
-      72px,
-      7vw,
-      110px
-    );
-
-  padding: 0;
-
-  text-align: right;
-}
-
-
-/* 작성자명 */
-
-.article-author-name {
-  margin: 0;
-
-  font-family:
-    "Pretendard",
-    sans-serif;
-
-  font-size:
-    clamp(
-      15px,
-      1.1vw,
-      18px
-    );
-
-  font-weight: 600;
-  line-height: 1.6;
-
-  text-align: right;
-}
-
-
-/* 작성자 소개 */
-
-.article-author-bio {
-  width:
-    min(
-      100%,
-      520px
-    );
-
-  margin:
-    clamp(
-      32px,
-      3vw,
-      48px
-    )
-    0
-    0
-    auto;
-
-  font-family:
-    "Pretendard",
-    sans-serif;
-
-  font-size:
-    clamp(
-      14px,
-      1vw,
-      17px
-    );
-
-  font-weight: 500;
-  line-height: 1.8;
-
-  text-align: right;
-
-  word-break: keep-all;
-  overflow-wrap: break-word;
-}
-
-
-/* =========================================================
-   기사 하단
-========================================================= */
-
-.article-footer {
-  width: 100%;
-
-  margin-top:
-    clamp(
-      70px,
-      6vw,
-      100px
-    );
-
-  padding: 0;
-}
-
-
-/* 2026년 8월 */
-
-.article-footer-date {
-  width: 100%;
-
-  margin:
-    0
-    0
-    12px;
-
-  font-family:
-    "Pretendard",
-    sans-serif;
-
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.5;
-
-  text-align: right;
-}
-
-
-/* 선 + INDEX */
-
-.article-footer-bottom {
-  display: flex;
-
-  align-items: flex-start;
-
-  width: 100%;
-
-  padding-top: 18px;
-
-  border-top:
-    1px solid #111111;
-}
-
-
-/* ■ INDEX */
-
-.back-link {
-  display: inline-flex;
-
-  align-items: center;
-
-  gap: 7px;
-
-  color: #111111;
-
-  font-family:
-    "CossetteTitre",
-    "Pretendard",
-    sans-serif;
-
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1;
-
-  text-decoration: none;
-}
-
-
-.back-link::before {
-  content: "";
-
-  display: block;
-
-  width: 10px;
-  height: 10px;
-
-  flex:
-    0
-    0
-    10px;
-
-  background-color: #111111;
-
-  border-radius: 3px;
-}
-
-
-/* =========================================================
-   모바일
-========================================================= */
-
-@media (max-width: 767px) {
-  .article-author-info {
-    margin-top: 60px;
-  }
-
-  .article-author-name {
-    font-size: 14px;
-  }
-
-  .article-author-bio {
-    margin-top: 26px;
-
-    font-size: 13px;
-  }
-
-  .article-footer {
-    margin-top: 60px;
-  }
-
-  .article-footer-date {
-    font-size: 11px;
-  }
-
-  .article-footer-bottom {
-    padding-top: 15px;
-  }
-
-  .back-link {
-    font-size: 12px;
-  }
-
-  .back-link::before {
-    width: 9px;
-    height: 9px;
-
-    flex-basis: 9px;
-  }
-}
-
-/* =========================================================
-   모바일
-========================================================= */
-
-@media (max-width: 767px) {
 
   .article-detail-page
-  .article-archive-header {
-    position: fixed;
+  .archive-filter {
+    display:
+      flex !important;
 
-    top: 0;
-    left: 0;
-    z-index: 1000;
+    justify-content:
+      flex-start !important;
 
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    gap: 10px;
-
-    width: 100%;
-
-    padding:
-      calc(
-        env(
-          safe-area-inset-top,
-          0px
-        ) +
-        18px
-      )
-      18px
-      14px;
-
-    background-color: #ffffff;
+    margin:
+      0 !important;
   }
 
+
+  /* =======================================================
+     기사
+  ======================================================= */
 
   .article-page {
     padding:
-      calc(
-        env(
-          safe-area-inset-top,
-          0px
-        ) +
-        155px
-      )
+      52px
       18px
       60px;
   }
+
 
   .article-header {
     margin:
@@ -1511,6 +1328,7 @@
       0
       38px;
   }
+
 
   .article-title {
     max-width: 100%;
@@ -1525,23 +1343,32 @@
     line-height: 1.28;
   }
 
-  .article-layout,
+
   .article-layout--with-image {
     display: flex;
+
     flex-direction: column;
 
     gap: 38px;
   }
 
+
   .article-layout--text-only {
     display: block;
   }
 
+
   .article-layout--text-only
+  .article-copy,
   .article-copy {
     width: 100%;
     max-width: none;
+
+    margin:
+      0
+      auto;
   }
+
 
   .article-body {
     font-size:
@@ -1554,9 +1381,15 @@
     line-height: 1.8;
   }
 
+
   .article-body > p {
     margin-bottom: 30px;
   }
+
+
+  /* =======================================================
+     이미지
+  ======================================================= */
 
   .article-visual {
     position: static;
@@ -1569,18 +1402,24 @@
     margin: 0;
   }
 
-  .article-image,
-  .article-image-placeholder {
+
+  .article-image {
     width: 100%;
 
     aspect-ratio: 5 / 3;
   }
+
 
   .article-caption {
     margin-top: 10px;
 
     font-size: 11px;
   }
+
+
+  /* =======================================================
+     각주
+  ======================================================= */
 
   .footnote-wrap,
   .article-body
@@ -1592,6 +1431,7 @@
 
     flex-basis: 10px;
   }
+
 
   .footnote-marker,
   .article-body
@@ -1607,6 +1447,9 @@
     border-radius: 3px;
   }
 
+
+  .footnote-popover,
+  .article-body
   .footnote-popover {
     width:
       min(
@@ -1626,39 +1469,55 @@
     white-space: normal;
   }
 
-  .article-author-profile {
+
+  /* =======================================================
+     작성자 + 소개
+  ======================================================= */
+
+  .article-author-info {
     width: 100%;
 
     margin-top: 52px;
   }
 
+
   .article-author-name {
     font-size: 15px;
   }
 
+
   .article-author-bio {
+    margin-top:
+      6px !important;
+
     font-size:
       13px !important;
   }
 
+
+  /* =======================================================
+     하단
+  ======================================================= */
+
   .article-footer {
-    margin-top: 60px;
+    margin-top: 52px;
   }
 
-  .article-footer-date,
-  .article-publication-info {
+
+  .article-footer-date {
     font-size: 11px;
   }
 
-  .article-footer-bottom {
-    gap: 20px;
 
+  .article-footer-bottom {
     padding-top: 15px;
   }
+
 
   .back-link {
     font-size: 12px;
   }
+
 
   .back-link::before {
     width: 9px;

@@ -35,9 +35,7 @@ function getArticleId() {
    HTML 문자 이스케이프
 ========================================================= */
 
-function escapeHtml(
-  value
-) {
+function escapeHtml(value) {
   return String(
     value || ""
   )
@@ -68,9 +66,7 @@ function escapeHtml(
    이미지
 ========================================================= */
 
-function createImageMarkup(
-  post
-) {
+function createImageMarkup(post) {
   const thumbnail =
     String(
       post.thumbnail || ""
@@ -78,8 +74,8 @@ function createImageMarkup(
 
 
   /*
-    이미지가 없는 기사에서는
-    우측 이미지 영역 자체를 만들지 않습니다.
+    이미지가 없으면
+    이미지 영역 자체를 출력하지 않습니다.
   */
 
   if (!thumbnail) {
@@ -109,24 +105,32 @@ function createImageMarkup(
     );
 
 
-  const sourceMarkup =
-    imageSource
-      ? `
-        <br />
-        <span class="article-image-source">
-          출처: ${imageSource}
-        </span>
-      `
-      : "";
-
-
   const captionMarkup =
     imageCaption ||
     imageSource
       ? `
         <figcaption class="article-caption">
-          ${imageCaption}
-          ${sourceMarkup}
+          ${
+            imageCaption
+              ? imageCaption
+              : ""
+          }
+
+          ${
+            imageSource
+              ? `
+                ${
+                  imageCaption
+                    ? "<br />"
+                    : ""
+                }
+
+                <span class="article-image-source">
+                  출처: ${imageSource}
+                </span>
+              `
+              : ""
+          }
         </figcaption>
       `
       : "";
@@ -147,12 +151,10 @@ function createImageMarkup(
 
 
 /* =========================================================
-   작성자 소개
+   작성자 + 한 줄 소개
 ========================================================= */
 
-function createAuthorMarkup(
-  post
-) {
+function createAuthorMarkup(post) {
   const author =
     String(
       post.author || ""
@@ -174,7 +176,7 @@ function createAuthorMarkup(
 
 
   return `
-    <section class="article-author-info">
+    <aside class="article-author-info">
       ${
         author
           ? `
@@ -194,7 +196,7 @@ function createAuthorMarkup(
           `
           : ""
       }
-    </section>
+    </aside>
   `;
 }
 
@@ -203,9 +205,7 @@ function createAuthorMarkup(
    기사 출력
 ========================================================= */
 
-function renderArticle(
-  post
-) {
+function renderArticle(post) {
   if (!articleDetail) {
     return;
   }
@@ -216,12 +216,10 @@ function renderArticle(
     "Magazine Article";
 
 
-  /* =======================================================
-     본문 HTML
-
-     CMS에서 저장한 HTML이므로
-     escapeHtml을 적용하지 않습니다.
-  ======================================================= */
+  /*
+    CMS에서 저장한 본문은 HTML이므로
+    escapeHtml을 적용하지 않습니다.
+  */
 
   const bodyHtml =
     Array.isArray(
@@ -246,16 +244,11 @@ function renderArticle(
 
 
   /*
-    중요
+    이미지 없는 기사:
+    가운데 760px 본문
 
-    이미지 없음:
-    article-layout--text-only
-
-    이미지 있음:
-    article-layout--with-image
-
-    article.css에서 이 클래스를 기준으로
-    본문 폭과 레이아웃이 갈립니다.
+    이미지 있는 기사:
+    왼쪽 본문 + 오른쪽 이미지
   */
 
   const layoutClass =
@@ -264,23 +257,9 @@ function renderArticle(
       : "article-layout article-layout--text-only";
 
 
-  /* =======================================================
-     작성자
-  ======================================================= */
-
-  const authorMarkup =
-    createAuthorMarkup(
-      post
-    );
-
-
-  /* =======================================================
-     전체 출력
-  ======================================================= */
-
   articleDetail.innerHTML = `
     <!-- ===============================================
-         기사 제목
+         제목
     ================================================ -->
 
     <header class="article-header">
@@ -301,17 +280,16 @@ function renderArticle(
       ============================================== -->
 
       <section class="article-copy">
-
         <div class="article-body">
           ${bodyHtml}
         </div>
 
 
         <!-- ===========================================
-             작성자 / 작성자 소개
+             작성자 / 한 줄 소개
         ============================================ -->
 
-        ${authorMarkup}
+        ${createAuthorMarkup(post)}
 
 
         <!-- ===========================================
@@ -442,7 +420,7 @@ function initializeFootnotes() {
           }
 
 
-          const open =
+          const isOpen =
             marker.getAttribute(
               "aria-expanded"
             ) ===
@@ -452,7 +430,7 @@ function initializeFootnotes() {
           closeAll();
 
 
-          if (!open) {
+          if (!isOpen) {
             popover.hidden =
               false;
 
@@ -511,7 +489,7 @@ async function loadArticle() {
 
 
   /* =======================================================
-     ID 없음
+     기사 ID 없음
   ======================================================= */
 
   if (!articleId) {
@@ -541,8 +519,7 @@ async function loadArticle() {
       await fetch(
         `${POSTS_URL}?v=${Date.now()}`,
         {
-          cache:
-            "no-store"
+          cache: "no-store"
         }
       );
 
@@ -567,7 +544,7 @@ async function loadArticle() {
 
 
     /* =====================================================
-       현재 기사 찾기
+       현재 기사
     ===================================================== */
 
     const post =
@@ -605,17 +582,9 @@ async function loadArticle() {
     }
 
 
-    /* =====================================================
-       출력
-    ===================================================== */
+    renderArticle(post);
 
-    renderArticle(
-      post
-    );
-
-  } catch (
-    error
-  ) {
+  } catch (error) {
     console.error(
       "기사 로드 오류:",
       error
