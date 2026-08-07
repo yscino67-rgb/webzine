@@ -1053,3 +1053,307 @@ textarea,
     line-height: 1.8;
   }
 }
+/* =========================================================
+   textarea
+========================================================= */
+
+.field textarea {
+  display: block;
+
+  width: 100%;
+  min-height: 110px;
+
+  padding: 12px;
+
+  resize: vertical;
+
+  background-color: #ffffff;
+  color: var(--text);
+
+  border: 1px solid var(--line);
+
+  outline: none;
+}
+
+.field textarea:focus {
+  border-color: #111111;
+}
+
+/* =========================================================
+   이미지 업로드
+========================================================= */
+
+.image-upload-row {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  width: 100%;
+}
+
+.image-upload-row input[type="file"] {
+  flex: 1;
+
+  min-height: 44px;
+
+  padding: 9px;
+
+  background-color: #ffffff;
+
+  border: 1px solid var(--line);
+}
+
+.image-upload-button {
+  flex: 0 0 auto;
+
+  min-height: 44px;
+
+  padding:
+    0
+    18px;
+
+  background-color: #111111;
+
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.image-upload-button:hover {
+  opacity: 0.8;
+}
+
+.image-upload-status {
+  min-height: 18px;
+
+  margin:
+    3px
+    0
+    0;
+
+  color: var(--muted);
+
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.image-upload-preview-wrap {
+  position: relative;
+
+  width: min(420px, 100%);
+
+  margin-top: 8px;
+}
+
+.image-upload-preview {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  background-color: #eeeeee;
+}
+
+.image-remove-button {
+  margin-top: 8px;
+
+  padding:
+    8px
+    11px;
+
+  border: 1px solid var(--line);
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   회색 버튼
+========================================================= */
+
+.text-color-button--gray {
+  background-color: #888888 !important;
+}
+
+/* =========================================================
+   CMS 작은 글씨
+========================================================= */
+
+.body-editor .cms-small-text {
+  font-size: 0.78em;
+}
+
+/* =========================================================
+   CMS 본문 속 각주
+========================================================= */
+
+.body-editor .footnote-wrap {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 14px;
+  height: 14px;
+
+  margin:
+    0
+    6px;
+
+  vertical-align: middle;
+
+  line-height: 0;
+}
+
+.body-editor .footnote-marker {
+  display: block;
+
+  width: 14px;
+  min-width: 14px;
+  max-width: 14px;
+
+  height: 14px;
+  min-height: 14px;
+  max-height: 14px;
+
+  margin: 0;
+  padding: 0;
+
+  background-color: #0f9ed5;
+
+  border: 0;
+  border-radius: 4px;
+
+  cursor: pointer;
+}
+
+.body-editor .footnote-marker:hover {
+  background-color: #0f9ed5;
+}
+
+.body-editor .footnote-popover {
+  display: none !important;
+}
+
+/* =========================================================
+   참고문헌 편집창
+========================================================= */
+
+.footnote-editor-panel {
+  width: 100%;
+
+  margin-top: 14px;
+
+  padding: 18px;
+
+  background-color: #f4f4f4;
+
+  border: 1px solid var(--line);
+}
+
+.footnote-editor-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 12px;
+}
+
+.footnote-editor-heading strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.footnote-editor-heading button {
+  width: 28px;
+  height: 28px;
+
+  font-size: 20px;
+  line-height: 1;
+}
+
+.footnote-editor-panel textarea {
+  display: block;
+
+  width: 100%;
+  min-height: 110px;
+
+  padding: 12px;
+
+  resize: vertical;
+
+  background-color: #ffffff;
+
+  border: 1px solid var(--line);
+
+  outline: none;
+}
+
+.footnote-editor-panel textarea:focus {
+  border-color: #111111;
+}
+
+.footnote-editor-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  margin-top: 10px;
+}
+
+.footnote-editor-actions button {
+  min-height: 34px;
+
+  padding:
+    0
+    14px;
+
+  border: 1px solid #111111;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+#footnote-editor-save {
+  background-color: #111111;
+  color: #ffffff;
+}
+
+/* =========================================================
+   모바일
+========================================================= */
+
+@media (max-width: 600px) {
+  .image-upload-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .image-upload-button {
+    width: 100%;
+  }
+
+  .body-editor .footnote-wrap {
+    width: 10px;
+    height: 10px;
+
+    margin:
+      0
+      5px;
+  }
+
+  .body-editor .footnote-marker {
+    width: 10px;
+    min-width: 10px;
+    max-width: 10px;
+
+    height: 10px;
+    min-height: 10px;
+    max-height: 10px;
+
+    border-radius: 3px;
+  }
+}

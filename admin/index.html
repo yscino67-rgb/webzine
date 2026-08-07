@@ -17,12 +17,15 @@
 
     <link
       rel="stylesheet"
-      href="./admin.css?v=2"
+      href="./admin.css?v=3"
     />
   </head>
 
   <body>
-    <!-- 로그인 화면 -->
+    <!-- ===================================================
+         로그인
+    ==================================================== -->
+
     <main
       class="admin-login"
       id="login-view"
@@ -61,7 +64,10 @@
       </form>
     </main>
 
-    <!-- CMS 화면 -->
+    <!-- ===================================================
+         CMS
+    ==================================================== -->
+
     <main
       class="admin-app"
       id="admin-view"
@@ -97,6 +103,7 @@
 
       <div class="admin-layout">
         <!-- 게시글 목록 -->
+
         <aside class="post-sidebar">
           <div class="sidebar-header">
             <h2>게시글</h2>
@@ -115,12 +122,19 @@
           ></div>
         </aside>
 
-        <!-- 글쓰기 -->
+        <!-- 게시글 편집 -->
+
         <section class="post-editor">
           <form id="post-form">
             <input
               type="hidden"
               id="post-id"
+            />
+
+            <!-- 업로드된 실제 이미지 경로 -->
+            <input
+              type="hidden"
+              id="post-thumbnail"
             />
 
             <div class="editor-heading">
@@ -152,6 +166,10 @@
                 </button>
               </div>
             </div>
+
+            <!-- =================================================
+                 기본 정보
+            ================================================== -->
 
             <div class="field-grid">
               <label class="field field--wide">
@@ -216,15 +234,55 @@
                 />
               </label>
 
-              <label class="field field--wide">
-                <span>대표 이미지 주소</span>
+              <!-- =================================================
+                   대표 이미지 파일
+              ================================================== -->
 
-                <input
-                  type="text"
-                  id="post-thumbnail"
-                  placeholder="/images/uploads/example.jpg"
-                />
-              </label>
+              <div class="field field--wide">
+                <span>대표 이미지</span>
+
+                <div class="image-upload-row">
+                  <input
+                    type="file"
+                    id="post-thumbnail-file"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                  />
+
+                  <button
+                    type="button"
+                    class="image-upload-button"
+                    id="image-upload-button"
+                  >
+                    이미지 업로드
+                  </button>
+                </div>
+
+                <p
+                  class="image-upload-status"
+                  id="image-upload-status"
+                  aria-live="polite"
+                ></p>
+
+                <div
+                  class="image-upload-preview-wrap"
+                  id="image-upload-preview-wrap"
+                  hidden
+                >
+                  <img
+                    id="image-upload-preview"
+                    class="image-upload-preview"
+                    alt="대표 이미지 미리보기"
+                  />
+
+                  <button
+                    type="button"
+                    class="image-remove-button"
+                    id="image-remove-button"
+                  >
+                    이미지 제거
+                  </button>
+                </div>
+              </div>
 
               <label class="field">
                 <span>이미지 설명</span>
@@ -244,6 +302,20 @@
                 />
               </label>
 
+              <!-- =================================================
+                   작성자 소개
+              ================================================== -->
+
+              <label class="field field--wide">
+                <span>작성자 소개</span>
+
+                <textarea
+                  id="post-author-bio"
+                  rows="4"
+                  placeholder="기사 마지막에 표시될 작성자 소개를 입력하세요."
+                ></textarea>
+              </label>
+
               <label class="checkbox-field">
                 <input
                   type="checkbox"
@@ -254,6 +326,10 @@
                 <span>사이트에 공개</span>
               </label>
             </div>
+
+            <!-- =================================================
+                 본문
+            ================================================== -->
 
             <section class="body-editor-section">
               <div class="body-editor-label">
@@ -269,7 +345,6 @@
                 <button
                   type="button"
                   data-command="bold"
-                  aria-label="굵게"
                   title="굵게"
                 >
                   <strong>B</strong>
@@ -278,7 +353,6 @@
                 <button
                   type="button"
                   data-command="italic"
-                  aria-label="기울임"
                   title="기울임"
                 >
                   <em>I</em>
@@ -287,7 +361,6 @@
                 <button
                   type="button"
                   data-command="underline"
-                  aria-label="밑줄"
                   title="밑줄"
                 >
                   <u>U</u>
@@ -296,7 +369,6 @@
                 <button
                   type="button"
                   data-command="strikeThrough"
-                  aria-label="취소선"
                   title="취소선"
                 >
                   <s>S</s>
@@ -305,7 +377,6 @@
                 <button
                   type="button"
                   data-block="p"
-                  title="본문"
                 >
                   P
                 </button>
@@ -313,7 +384,6 @@
                 <button
                   type="button"
                   data-block="h2"
-                  title="중간 제목"
                 >
                   H2
                 </button>
@@ -321,7 +391,6 @@
                 <button
                   type="button"
                   data-block="blockquote"
-                  title="인용문"
                 >
                   “ ”
                 </button>
@@ -329,7 +398,6 @@
                 <button
                   type="button"
                   data-command="insertUnorderedList"
-                  aria-label="글머리표"
                 >
                   • LIST
                 </button>
@@ -337,7 +405,6 @@
                 <button
                   type="button"
                   data-command="insertOrderedList"
-                  aria-label="번호 목록"
                 >
                   1. LIST
                 </button>
@@ -370,7 +437,28 @@
                   LINK
                 </button>
 
-                <!-- 글자색 4종 -->
+                <!-- 글자 크기 -->
+
+                <button
+                  type="button"
+                  id="small-text-button"
+                  title="선택한 글자 작게"
+                >
+                  SMALL
+                </button>
+
+                <!-- 참고문헌 -->
+
+                <button
+                  type="button"
+                  id="footnote-button"
+                  title="현재 커서 위치에 참고문헌 삽입"
+                >
+                  각주 ■
+                </button>
+
+                <!-- 글자색 -->
+
                 <div
                   class="text-color-tool"
                   aria-label="글자색"
@@ -383,32 +471,35 @@
                     type="button"
                     class="text-color-button text-color-button--black"
                     data-text-color="#111111"
-                    aria-label="검정색"
-                    title="검정색"
+                    title="검정"
+                  ></button>
+
+                  <button
+                    type="button"
+                    class="text-color-button text-color-button--gray"
+                    data-text-color="#888888"
+                    title="회색"
                   ></button>
 
                   <button
                     type="button"
                     class="text-color-button text-color-button--red"
                     data-text-color="#e12727"
-                    aria-label="빨간색"
-                    title="빨간색"
+                    title="빨강"
                   ></button>
 
                   <button
                     type="button"
                     class="text-color-button text-color-button--blue"
                     data-text-color="#2457d6"
-                    aria-label="파란색"
-                    title="파란색"
+                    title="파랑"
                   ></button>
 
                   <button
                     type="button"
                     class="text-color-button text-color-button--green"
                     data-text-color="#16834b"
-                    aria-label="초록색"
-                    title="초록색"
+                    title="초록"
                   ></button>
                 </div>
 
@@ -437,6 +528,50 @@
               ></div>
             </section>
 
+            <!-- =================================================
+                 참고문헌 편집창
+            ================================================== -->
+
+            <section
+              class="footnote-editor-panel"
+              id="footnote-editor-panel"
+              hidden
+            >
+              <div class="footnote-editor-heading">
+                <strong>참고문헌</strong>
+
+                <button
+                  type="button"
+                  id="footnote-editor-close"
+                  aria-label="닫기"
+                >
+                  ×
+                </button>
+              </div>
+
+              <textarea
+                id="footnote-editor-text"
+                rows="5"
+                placeholder="참고문헌 내용을 입력하세요."
+              ></textarea>
+
+              <div class="footnote-editor-actions">
+                <button
+                  type="button"
+                  id="footnote-editor-delete"
+                >
+                  각주 삭제
+                </button>
+
+                <button
+                  type="button"
+                  id="footnote-editor-save"
+                >
+                  적용
+                </button>
+              </div>
+            </section>
+
             <p
               class="form-message"
               id="save-message"
@@ -448,7 +583,7 @@
     </main>
 
     <script
-      src="./admin.js?v=2"
+      src="./admin.js?v=3"
       defer
     ></script>
   </body>

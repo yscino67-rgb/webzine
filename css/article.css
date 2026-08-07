@@ -872,3 +872,224 @@
     margin-top: 60px;
   }
 }
+/* =========================================================
+   CMS 작은 글씨
+========================================================= */
+
+.article-body .cms-small-text {
+  font-size: 0.78em;
+}
+
+/* =========================================================
+   CMS 참고문헌 네모
+========================================================= */
+
+.article-body .footnote-wrap {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 14px;
+  height: 14px;
+
+  margin:
+    0
+    6px;
+
+  vertical-align: middle;
+
+  line-height: 0;
+}
+
+.article-body .footnote-marker {
+  display: block;
+
+  width: 14px;
+  min-width: 14px;
+  max-width: 14px;
+
+  height: 14px;
+  min-height: 14px;
+  max-height: 14px;
+
+  margin: 0;
+  padding: 0;
+
+  background-color: #0f9ed5;
+
+  border: 0;
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.article-body .footnote-popover {
+  position: absolute;
+
+  top: calc(100% + 9px);
+  left: 50%;
+  z-index: 100;
+
+  width: max-content;
+  max-width:
+    min(
+      420px,
+      calc(100vw - 40px)
+    );
+
+  padding:
+    8px
+    11px;
+
+  background-color:
+    rgba(0, 0, 0, 0.82);
+
+  color: #ffffff;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
+
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.5;
+
+  text-align: left;
+  white-space: normal;
+
+  transform:
+    translateX(-50%);
+
+  box-shadow:
+    0
+    4px
+    14px
+    rgba(0, 0, 0, 0.14);
+}
+
+.article-body
+  .footnote-popover::before {
+  content: "";
+
+  position: absolute;
+
+  bottom: 100%;
+  left: 50%;
+
+  border-right:
+    4px solid transparent;
+
+  border-bottom:
+    5px solid
+    rgba(0, 0, 0, 0.82);
+
+  border-left:
+    4px solid transparent;
+
+  transform:
+    translateX(-50%);
+}
+
+.article-body
+  .footnote-popover[hidden] {
+  display: none !important;
+}
+
+/* =========================================================
+   작성자 소개
+========================================================= */
+
+.article-author-profile {
+  width: min(100%, 520px);
+
+  margin:
+    72px
+    0
+    0
+    auto;
+
+  text-align: right;
+}
+
+.article-author-name {
+  margin: 0;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
+
+  font-size:
+    clamp(15px, 1vw, 18px);
+
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.article-author-bio {
+  margin:
+    5px
+    0
+    0 !important;
+
+  font-family:
+    "Pretendard",
+    sans-serif;
+
+  font-size:
+    clamp(13px, 0.9vw, 16px) !important;
+
+  font-weight: 500;
+  line-height: 1.7 !important;
+
+  text-align: right !important;
+  text-align-last: right !important;
+
+  white-space: pre-line;
+}
+
+/* =========================================================
+   모바일
+========================================================= */
+
+@media (max-width: 767px) {
+  .article-body .footnote-wrap {
+    width: 10px;
+    height: 10px;
+
+    margin:
+      0
+      5px;
+  }
+
+  .article-body .footnote-marker {
+    width: 10px;
+    min-width: 10px;
+    max-width: 10px;
+
+    height: 10px;
+    min-height: 10px;
+    max-height: 10px;
+
+    border-radius: 3px;
+  }
+
+  .article-author-profile {
+    width: 100%;
+
+    margin-top: 52px;
+  }
+
+  .article-author-name {
+    font-size: 15px;
+  }
+
+  .article-author-bio {
+    font-size:
+      13px !important;
+  }
+}
