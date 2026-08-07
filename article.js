@@ -298,12 +298,6 @@ function renderArticle(post) {
 
         <footer class="article-footer">
 
-          <!-- 날짜 -->
-
-          <p class="article-footer-date">
-            2026년 8월
-          </p>
-
 
           <!-- 선 + INDEX -->
 
