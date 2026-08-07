@@ -1,86 +1,100 @@
 "use strict";
 
 /* =========================================================
-   DOM 요소
+   DOM
 ========================================================= */
 
 const loginView =
-  document.getElementById(
-    "login-view"
-  );
+  document.getElementById("login-view");
 
 const adminView =
-  document.getElementById(
-    "admin-view"
-  );
+  document.getElementById("admin-view");
 
 const loginForm =
-  document.getElementById(
-    "login-form"
-  );
+  document.getElementById("login-form");
 
 const loginMessage =
-  document.getElementById(
-    "login-message"
-  );
+  document.getElementById("login-message");
 
 const logoutButton =
-  document.getElementById(
-    "logout-button"
-  );
+  document.getElementById("logout-button");
 
 const postList =
-  document.getElementById(
-    "post-list"
-  );
+  document.getElementById("post-list");
 
 const postForm =
-  document.getElementById(
-    "post-form"
-  );
+  document.getElementById("post-form");
 
 const bodyEditor =
-  document.getElementById(
-    "body-editor"
-  );
+  document.getElementById("body-editor");
 
 const editorToolbar =
-  document.getElementById(
-    "editor-toolbar"
-  );
+  document.getElementById("editor-toolbar");
 
 const newPostButton =
-  document.getElementById(
-    "new-post-button"
-  );
+  document.getElementById("new-post-button");
 
 const deleteButton =
-  document.getElementById(
-    "delete-post-button"
-  );
+  document.getElementById("delete-post-button");
 
 const saveMessage =
-  document.getElementById(
-    "save-message"
-  );
+  document.getElementById("save-message");
+
+const thumbnailInput =
+  document.getElementById("post-thumbnail");
+
+const thumbnailFileInput =
+  document.getElementById("post-thumbnail-file");
+
+const imageUploadButton =
+  document.getElementById("image-upload-button");
+
+const imageUploadStatus =
+  document.getElementById("image-upload-status");
+
+const imagePreviewWrap =
+  document.getElementById("image-upload-preview-wrap");
+
+const imagePreview =
+  document.getElementById("image-upload-preview");
+
+const imageRemoveButton =
+  document.getElementById("image-remove-button");
+
+const footnoteButton =
+  document.getElementById("footnote-button");
+
+const smallTextButton =
+  document.getElementById("small-text-button");
+
+const footnotePanel =
+  document.getElementById("footnote-editor-panel");
+
+const footnoteText =
+  document.getElementById("footnote-editor-text");
+
+const footnoteSaveButton =
+  document.getElementById("footnote-editor-save");
+
+const footnoteDeleteButton =
+  document.getElementById("footnote-editor-delete");
+
+const footnoteCloseButton =
+  document.getElementById("footnote-editor-close");
 
 /* =========================================================
-   상태값
+   상태
 ========================================================= */
 
 let posts = [];
 let selectedPostId = null;
 
-/*
-  본문에서 마지막으로 선택한 글자 범위를 저장합니다.
-
-  툴바의 색상 버튼을 누르면 브라우저가 본문의 선택 영역을
-  해제할 수 있으므로, 선택 영역을 별도로 기억했다가 복원합니다.
-*/
 let savedEditorRange = null;
 
+let activeFootnoteWrap = null;
+
 /* =========================================================
-   화면 전환
+   화면
 ========================================================= */
 
 function showLogin() {
@@ -94,7 +108,7 @@ function showAdmin() {
 }
 
 /* =========================================================
-   공통 함수
+   공통
 ========================================================= */
 
 function today() {
@@ -107,49 +121,53 @@ function createPostId() {
   return `article-${Date.now()}`;
 }
 
+function createFootnoteId() {
+  return (
+    `footnote-${Date.now()}-` +
+    Math.random()
+      .toString(36)
+      .slice(2, 8)
+  );
+}
+
 function normalizeBody(body) {
-  if (Array.isArray(body)) {
+  if (
+    Array.isArray(body)
+  ) {
     return body.join("");
   }
 
-  return String(body || "");
+  return String(
+    body || ""
+  );
 }
 
-/*
-  서버가 JSON 대신 오류 문구나 HTML을 반환해도
-  JSON 파싱 오류로 전체 코드가 멈추지 않도록 처리합니다.
-*/
 async function readJsonResponse(
   response
 ) {
-  const responseText =
+  const text =
     await response.text();
 
-  if (!responseText) {
+  if (!text) {
     return {};
   }
 
   try {
-    return JSON.parse(
-      responseText
-    );
+    return JSON.parse(text);
   } catch {
     return {
       error:
         response.ok
           ? "서버 응답을 읽지 못했습니다."
-          : `서버 오류가 발생했습니다. 상태 코드: ${response.status}`
+          : `서버 오류: ${response.status}`
     };
   }
 }
 
 /* =========================================================
-   본문 선택 영역 관리
+   선택 영역
 ========================================================= */
 
-/*
-  현재 선택 영역이 본문 편집기 안에 있는지 확인합니다.
-*/
 function isSelectionInsideEditor() {
   const selection =
     window.getSelection();
@@ -164,29 +182,26 @@ function isSelectionInsideEditor() {
   const range =
     selection.getRangeAt(0);
 
-  const commonNode =
+  const node =
     range.commonAncestorContainer;
 
-  const targetElement =
-    commonNode.nodeType ===
+  const element =
+    node.nodeType ===
     Node.ELEMENT_NODE
-      ? commonNode
-      : commonNode.parentElement;
+      ? node
+      : node.parentElement;
 
   return Boolean(
-    targetElement &&
+    element &&
     (
-      targetElement === bodyEditor ||
+      element === bodyEditor ||
       bodyEditor.contains(
-        targetElement
+        element
       )
     )
   );
 }
 
-/*
-  본문에서 선택한 글자 범위를 저장합니다.
-*/
 function saveEditorSelection() {
   const selection =
     window.getSelection();
@@ -205,9 +220,6 @@ function saveEditorSelection() {
       .cloneRange();
 }
 
-/*
-  색상 버튼 등을 누르기 전 저장한 선택 영역을 복원합니다.
-*/
 function restoreEditorSelection() {
   bodyEditor.focus();
 
@@ -230,36 +242,239 @@ function restoreEditorSelection() {
     );
 
     return true;
-  } catch (error) {
-    console.error(
-      "본문 선택 영역 복원 실패:",
-      error
-    );
-
-    savedEditorRange = null;
-
+  } catch {
     return false;
   }
 }
 
-/*
-  본문 편집 후 현재 커서나 선택 영역을 다시 저장합니다.
-*/
 function refreshEditorSelection() {
-  window.requestAnimationFrame(
-    () => {
-      saveEditorSelection();
-    }
+  requestAnimationFrame(
+    saveEditorSelection
   );
 }
 
 /* =========================================================
-   새 글 작성 화면 초기화
+   이미지
+========================================================= */
+
+function showImagePreview(
+  src
+) {
+  if (!src) {
+    imagePreviewWrap.hidden =
+      true;
+
+    imagePreview.removeAttribute(
+      "src"
+    );
+
+    return;
+  }
+
+  imagePreview.src = src;
+
+  imagePreviewWrap.hidden =
+    false;
+}
+
+function fileToBase64(file) {
+  return new Promise(
+    (
+      resolve,
+      reject
+    ) => {
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        () => {
+          const result =
+            String(
+              reader.result || ""
+            );
+
+          const comma =
+            result.indexOf(",");
+
+          if (comma < 0) {
+            reject(
+              new Error(
+                "이미지를 읽지 못했습니다."
+              )
+            );
+
+            return;
+          }
+
+          resolve(
+            result.slice(
+              comma + 1
+            )
+          );
+        };
+
+      reader.onerror =
+        () => {
+          reject(
+            new Error(
+              "이미지를 읽지 못했습니다."
+            )
+          );
+        };
+
+      reader.readAsDataURL(
+        file
+      );
+    }
+  );
+}
+
+async function uploadSelectedImage() {
+  const file =
+    thumbnailFileInput
+      .files?.[0];
+
+  if (!file) {
+    imageUploadStatus.textContent =
+      "업로드할 이미지를 선택해 주세요.";
+
+    return;
+  }
+
+  if (
+    file.size >
+    2.5 * 1024 * 1024
+  ) {
+    imageUploadStatus.textContent =
+      "이미지는 2.5MB 이하로 선택해 주세요.";
+
+    return;
+  }
+
+  imageUploadStatus.textContent =
+    "이미지 업로드 중입니다.";
+
+  imageUploadButton.disabled =
+    true;
+
+  try {
+    const content =
+      await fileToBase64(
+        file
+      );
+
+    const response =
+      await fetch(
+        "/api/upload",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          credentials:
+            "same-origin",
+
+          body:
+            JSON.stringify({
+              mimeType:
+                file.type,
+
+              content
+            })
+        }
+      );
+
+    const data =
+      await readJsonResponse(
+        response
+      );
+
+    if (!response.ok) {
+      throw new Error(
+        data.error ||
+        "이미지 업로드에 실패했습니다."
+      );
+    }
+
+    thumbnailInput.value =
+      data.path || "";
+
+    showImagePreview(
+      data.path
+    );
+
+    imageUploadStatus.textContent =
+      "이미지가 업로드되었습니다.";
+  } catch (error) {
+    console.error(error);
+
+    imageUploadStatus.textContent =
+      error.message ||
+      "이미지 업로드에 실패했습니다.";
+  } finally {
+    imageUploadButton.disabled =
+      false;
+  }
+}
+
+imageUploadButton.addEventListener(
+  "click",
+  uploadSelectedImage
+);
+
+thumbnailFileInput.addEventListener(
+  "change",
+  () => {
+    const file =
+      thumbnailFileInput
+        .files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const previewUrl =
+      URL.createObjectURL(
+        file
+      );
+
+    showImagePreview(
+      previewUrl
+    );
+
+    imageUploadStatus.textContent =
+      "파일 선택됨. 이미지 업로드를 눌러 주세요.";
+  }
+);
+
+imageRemoveButton.addEventListener(
+  "click",
+  () => {
+    thumbnailInput.value = "";
+
+    thumbnailFileInput.value =
+      "";
+
+    imageUploadStatus.textContent =
+      "대표 이미지를 제거했습니다.";
+
+    showImagePreview("");
+  }
+);
+
+/* =========================================================
+   새 글
 ========================================================= */
 
 function clearEditor() {
   selectedPostId = null;
+
   savedEditorRange = null;
+
+  activeFootnoteWrap = null;
 
   document.getElementById(
     "post-id"
@@ -274,20 +489,27 @@ function clearEditor() {
   ).value = "";
 
   document.getElementById(
+    "post-author-bio"
+  ).value = "";
+
+  document.getElementById(
     "post-date"
   ).value = today();
 
   document.getElementById(
     "post-category"
-  ).value = "criticism";
+  ).value =
+    "criticism";
 
   document.getElementById(
     "post-subcategory"
-  ).value = "CRITICISM";
+  ).value =
+    "CRITICISM";
 
-  document.getElementById(
-    "post-thumbnail"
-  ).value = "";
+  thumbnailInput.value = "";
+
+  thumbnailFileInput.value =
+    "";
 
   document.getElementById(
     "post-image-caption"
@@ -303,6 +525,13 @@ function clearEditor() {
 
   bodyEditor.innerHTML = "";
 
+  imageUploadStatus.textContent =
+    "";
+
+  showImagePreview("");
+
+  footnotePanel.hidden = true;
+
   document.getElementById(
     "editor-title"
   ).textContent =
@@ -316,11 +545,15 @@ function clearEditor() {
 }
 
 /* =========================================================
-   기존 글 편집기에 불러오기
+   글 불러오기
 ========================================================= */
 
-function loadPostIntoEditor(post) {
-  selectedPostId = post.id;
+function loadPostIntoEditor(
+  post
+) {
+  selectedPostId =
+    post.id;
+
   savedEditorRange = null;
 
   document.getElementById(
@@ -339,6 +572,11 @@ function loadPostIntoEditor(post) {
     post.author || "";
 
   document.getElementById(
+    "post-author-bio"
+  ).value =
+    post.authorBio || "";
+
+  document.getElementById(
     "post-date"
   ).value =
     post.date || "";
@@ -354,9 +592,7 @@ function loadPostIntoEditor(post) {
   ).value =
     post.subcategory || "";
 
-  document.getElementById(
-    "post-thumbnail"
-  ).value =
+  thumbnailInput.value =
     post.thumbnail || "";
 
   document.getElementById(
@@ -379,6 +615,15 @@ function loadPostIntoEditor(post) {
       post.body
     );
 
+  showImagePreview(
+    post.thumbnail || ""
+  );
+
+  imageUploadStatus.textContent =
+    "";
+
+  footnotePanel.hidden = true;
+
   document.getElementById(
     "editor-title"
   ).textContent =
@@ -392,34 +637,28 @@ function loadPostIntoEditor(post) {
 }
 
 /* =========================================================
-   게시글 목록 출력
+   목록
 ========================================================= */
 
 function renderPostList() {
   postList.innerHTML = "";
 
-  const sortedPosts =
+  const sorted =
     [...posts].sort(
-      (firstPost, secondPost) => {
-        return (
-          new Date(
-            secondPost.date
-          ) -
-          new Date(
-            firstPost.date
-          )
-        );
-      }
+      (a, b) =>
+        new Date(b.date) -
+        new Date(a.date)
     );
 
-  sortedPosts.forEach(
+  sorted.forEach(
     (post) => {
       const button =
         document.createElement(
           "button"
         );
 
-      button.type = "button";
+      button.type =
+        "button";
 
       button.className =
         "post-list-item";
@@ -463,11 +702,10 @@ function renderPostList() {
 
       button.addEventListener(
         "click",
-        () => {
+        () =>
           loadPostIntoEditor(
             post
-          );
-        }
+          )
       );
 
       postList.appendChild(
@@ -478,7 +716,7 @@ function renderPostList() {
 }
 
 /* =========================================================
-   로그인 상태 확인
+   로그인 상태
 ========================================================= */
 
 async function checkSession() {
@@ -510,23 +748,17 @@ async function checkSession() {
 
     showLogin();
   } catch (error) {
-    console.error(
-      "세션 확인 실패:",
-      error
-    );
+    console.error(error);
 
     showLogin();
   }
 }
 
 /* =========================================================
-   게시글 목록 불러오기
+   게시글 로드
 ========================================================= */
 
 async function loadPosts() {
-  saveMessage.textContent =
-    "게시글을 불러오는 중입니다.";
-
   const response =
     await fetch(
       "/api/posts",
@@ -555,11 +787,7 @@ async function loadPosts() {
       ? data.posts
       : [];
 
-  renderPostList();
-
   clearEditor();
-
-  saveMessage.textContent = "";
 }
 
 /* =========================================================
@@ -571,13 +799,13 @@ loginForm.addEventListener(
   async (event) => {
     event.preventDefault();
 
-    loginMessage.textContent =
-      "로그인 중입니다.";
-
     const password =
       document.getElementById(
         "admin-password"
       ).value;
+
+    loginMessage.textContent =
+      "로그인 중입니다.";
 
     try {
       const response =
@@ -613,20 +841,15 @@ loginForm.addEventListener(
         );
       }
 
-      loginMessage.textContent = "";
+      loginMessage.textContent =
+        "";
 
       showAdmin();
 
       await loadPosts();
     } catch (error) {
-      console.error(
-        "로그인 실패:",
-        error
-      );
-
       loginMessage.textContent =
-        error.message ||
-        "로그인하지 못했습니다.";
+        error.message;
     }
   }
 );
@@ -648,11 +871,6 @@ logoutButton.addEventListener(
             "same-origin"
         }
       );
-    } catch (error) {
-      console.error(
-        "로그아웃 요청 실패:",
-        error
-      );
     } finally {
       window.location.reload();
     }
@@ -669,13 +887,713 @@ newPostButton.addEventListener(
 );
 
 /* =========================================================
-   게시글 저장
+   기본 편집 명령
+========================================================= */
 
-   저장 버튼
-   → GitHub posts.json 수정
-   → GitHub 자동 커밋
-   → Vercel 자동 배포
-   → 사이트 자동 반영
+document
+  .querySelectorAll(
+    "[data-command]"
+  )
+  .forEach(
+    (button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          restoreEditorSelection();
+
+          document.execCommand(
+            button.dataset.command,
+            false,
+            null
+          );
+
+          refreshEditorSelection();
+        }
+      );
+    }
+  );
+
+/* =========================================================
+   P / H2 / 인용
+========================================================= */
+
+document
+  .querySelectorAll(
+    "[data-block]"
+  )
+  .forEach(
+    (button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          restoreEditorSelection();
+
+          document.execCommand(
+            "formatBlock",
+            false,
+            button.dataset.block
+          );
+
+          refreshEditorSelection();
+        }
+      );
+    }
+  );
+
+/* =========================================================
+   글자색
+========================================================= */
+
+document
+  .querySelectorAll(
+    "[data-text-color]"
+  )
+  .forEach(
+    (button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          const color =
+            button.dataset
+              .textColor;
+
+          if (
+            !restoreEditorSelection()
+          ) {
+            saveMessage.textContent =
+              "색을 바꿀 글자를 먼저 선택해 주세요.";
+
+            return;
+          }
+
+          document.execCommand(
+            "styleWithCSS",
+            false,
+            true
+          );
+
+          document.execCommand(
+            "foreColor",
+            false,
+            color
+          );
+
+          saveMessage.textContent =
+            "";
+
+          refreshEditorSelection();
+        }
+      );
+    }
+  );
+
+/* =========================================================
+   작은 글씨
+========================================================= */
+
+smallTextButton.addEventListener(
+  "click",
+  () => {
+    if (
+      !restoreEditorSelection()
+    ) {
+      saveMessage.textContent =
+        "작게 만들 글자를 먼저 선택해 주세요.";
+
+      return;
+    }
+
+    document.execCommand(
+      "fontSize",
+      false,
+      "2"
+    );
+
+    bodyEditor
+      .querySelectorAll(
+        'font[size="2"]'
+      )
+      .forEach(
+        (font) => {
+          const span =
+            document.createElement(
+              "span"
+            );
+
+          span.className =
+            "cms-small-text";
+
+          while (
+            font.firstChild
+          ) {
+            span.appendChild(
+              font.firstChild
+            );
+          }
+
+          font.replaceWith(
+            span
+          );
+        }
+      );
+
+    saveMessage.textContent =
+      "";
+
+    refreshEditorSelection();
+  }
+);
+
+/* =========================================================
+   링크
+========================================================= */
+
+document.getElementById(
+  "link-button"
+).addEventListener(
+  "click",
+  () => {
+    saveEditorSelection();
+
+    const url =
+      window.prompt(
+        "링크 주소를 입력하세요."
+      );
+
+    if (!url) {
+      return;
+    }
+
+    if (
+      !restoreEditorSelection()
+    ) {
+      return;
+    }
+
+    document.execCommand(
+      "createLink",
+      false,
+      url
+    );
+
+    refreshEditorSelection();
+  }
+);
+
+/* =========================================================
+   참고문헌 / 각주
+========================================================= */
+
+function openFootnoteEditor(wrap) {
+  if (!wrap) {
+    return;
+  }
+
+  activeFootnoteWrap = wrap;
+
+  const popover =
+    wrap.querySelector(
+      ".footnote-popover"
+    );
+
+  footnoteText.value =
+    popover
+      ? popover.textContent.trim()
+      : "";
+
+  footnotePanel.hidden = false;
+
+  window.requestAnimationFrame(() => {
+    footnoteText.focus();
+  });
+}
+
+function closeFootnoteEditor() {
+  activeFootnoteWrap = null;
+
+  footnoteText.value = "";
+
+  footnotePanel.hidden = true;
+}
+
+/* =========================================================
+   현재 본문 커서 위치 가져오기
+========================================================= */
+
+function getFootnoteInsertRange() {
+  /*
+    이전에 저장해 둔 본문 커서 위치가 있으면
+    그 위치를 사용합니다.
+  */
+  if (savedEditorRange) {
+    try {
+      const range =
+        savedEditorRange.cloneRange();
+
+      const container =
+        range.commonAncestorContainer;
+
+      const element =
+        container.nodeType === Node.ELEMENT_NODE
+          ? container
+          : container.parentElement;
+
+      if (
+        element &&
+        (
+          element === bodyEditor ||
+          bodyEditor.contains(element)
+        )
+      ) {
+        return range;
+      }
+    } catch (error) {
+      console.error(
+        "저장된 커서 위치 확인 실패:",
+        error
+      );
+    }
+  }
+
+  /*
+    현재 실제 selection이 본문 안에 있다면 사용합니다.
+  */
+  const selection =
+    window.getSelection();
+
+  if (
+    selection &&
+    selection.rangeCount > 0
+  ) {
+    const range =
+      selection.getRangeAt(0);
+
+    const container =
+      range.commonAncestorContainer;
+
+    const element =
+      container.nodeType === Node.ELEMENT_NODE
+        ? container
+        : container.parentElement;
+
+    if (
+      element &&
+      (
+        element === bodyEditor ||
+        bodyEditor.contains(element)
+      )
+    ) {
+      return range.cloneRange();
+    }
+  }
+
+  return null;
+}
+
+/* =========================================================
+   각주 삽입
+========================================================= */
+
+function insertFootnote() {
+  const range =
+    getFootnoteInsertRange();
+
+  if (!range) {
+    saveMessage.textContent =
+      "본문에서 각주를 넣을 위치를 한 번 클릭한 뒤 각주 버튼을 눌러 주세요.";
+
+    bodyEditor.focus();
+
+    return;
+  }
+
+  saveMessage.textContent = "";
+
+  const footnoteId =
+    createFootnoteId();
+
+  /* -------------------------
+     각주 전체 묶음
+  ------------------------- */
+
+  const unit =
+    document.createElement(
+      "span"
+    );
+
+  unit.className =
+    "footnote-unit";
+
+  unit.setAttribute(
+    "contenteditable",
+    "false"
+  );
+
+  /* -------------------------
+     파란 네모 + 팝오버 묶음
+  ------------------------- */
+
+  const wrap =
+    document.createElement(
+      "span"
+    );
+
+  wrap.className =
+    "footnote-wrap";
+
+  /* -------------------------
+     파란 네모 버튼
+  ------------------------- */
+
+  const marker =
+    document.createElement(
+      "button"
+    );
+
+  marker.type =
+    "button";
+
+  marker.className =
+    "footnote-marker";
+
+  marker.setAttribute(
+    "aria-label",
+    "참고문헌 보기"
+  );
+
+  marker.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+
+  marker.setAttribute(
+    "aria-controls",
+    footnoteId
+  );
+
+  /* -------------------------
+     참고문헌 내용
+  ------------------------- */
+
+  const popover =
+    document.createElement(
+      "span"
+    );
+
+  popover.className =
+    "footnote-popover";
+
+  popover.id =
+    footnoteId;
+
+  popover.setAttribute(
+    "role",
+    "note"
+  );
+
+  popover.hidden = true;
+
+  /* -------------------------
+     마침표
+  ------------------------- */
+
+  const period =
+    document.createElement(
+      "span"
+    );
+
+  period.className =
+    "footnote-period";
+
+  period.textContent =
+    ".";
+
+  /* -------------------------
+     DOM 결합
+  ------------------------- */
+
+  wrap.append(
+    marker,
+    popover
+  );
+
+  unit.append(
+    wrap,
+    period
+  );
+
+  /* -------------------------
+     본문의 현재 커서 위치에 삽입
+  ------------------------- */
+
+  range.deleteContents();
+
+  range.insertNode(
+    unit
+  );
+
+  /*
+    각주 다음에 커서를 계속 사용할 수 있도록
+    공백 텍스트 하나를 추가합니다.
+  */
+
+  const spacer =
+    document.createTextNode(
+      "\u00A0"
+    );
+
+  unit.after(
+    spacer
+  );
+
+  const selection =
+    window.getSelection();
+
+  const nextRange =
+    document.createRange();
+
+  nextRange.setStartAfter(
+    spacer
+  );
+
+  nextRange.collapse(true);
+
+  selection.removeAllRanges();
+
+  selection.addRange(
+    nextRange
+  );
+
+  savedEditorRange =
+    nextRange.cloneRange();
+
+  /*
+    방금 생성한 각주의 참고문헌 입력창을
+    즉시 엽니다.
+  */
+
+  openFootnoteEditor(
+    unit
+  );
+}
+
+/* =========================================================
+   각주 버튼
+
+   mousedown 단계에서 본문 커서 위치를 먼저 보존합니다.
+========================================================= */
+
+if (footnoteButton) {
+  footnoteButton.addEventListener(
+    "mousedown",
+    (event) => {
+      event.preventDefault();
+
+      /*
+        현재 본문 selection을 잃기 전에 저장
+      */
+      if (
+        isSelectionInsideEditor()
+      ) {
+        saveEditorSelection();
+      }
+    }
+  );
+
+  footnoteButton.addEventListener(
+    "click",
+    (event) => {
+      event.preventDefault();
+
+      insertFootnote();
+    }
+  );
+}
+
+/* =========================================================
+   CMS 본문에 이미 들어간 파란 네모 클릭
+   → 해당 참고문헌 다시 편집
+========================================================= */
+
+bodyEditor.addEventListener(
+  "click",
+  (event) => {
+    const marker =
+      event.target.closest(
+        ".footnote-marker"
+      );
+
+    if (!marker) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const unit =
+      marker.closest(
+        ".footnote-unit"
+      ) ||
+      marker.closest(
+        ".footnote-wrap"
+      );
+
+    if (!unit) {
+      return;
+    }
+
+    openFootnoteEditor(
+      unit
+    );
+  }
+);
+
+/* =========================================================
+   참고문헌 적용
+========================================================= */
+
+if (footnoteSaveButton) {
+  footnoteSaveButton.addEventListener(
+    "click",
+    () => {
+      if (!activeFootnoteWrap) {
+        return;
+      }
+
+      const popover =
+        activeFootnoteWrap.querySelector(
+          ".footnote-popover"
+        );
+
+      if (!popover) {
+        return;
+      }
+
+      const value =
+        footnoteText.value.trim();
+
+      if (!value) {
+        saveMessage.textContent =
+          "참고문헌 내용을 입력해 주세요.";
+
+        return;
+      }
+
+      popover.textContent =
+        value;
+
+      saveMessage.textContent =
+        "";
+
+      closeFootnoteEditor();
+
+      bodyEditor.focus();
+    }
+  );
+}
+
+/* =========================================================
+   각주 삭제
+========================================================= */
+
+if (footnoteDeleteButton) {
+  footnoteDeleteButton.addEventListener(
+    "click",
+    () => {
+      if (!activeFootnoteWrap) {
+        return;
+      }
+
+      activeFootnoteWrap.remove();
+
+      closeFootnoteEditor();
+
+      bodyEditor.focus();
+    }
+  );
+}
+
+/* =========================================================
+   참고문헌 편집창 닫기
+========================================================= */
+
+if (footnoteCloseButton) {
+  footnoteCloseButton.addEventListener(
+    "click",
+    () => {
+      closeFootnoteEditor();
+    }
+  );
+}
+
+/* =========================================================
+   선택 영역 추적
+========================================================= */
+
+document.addEventListener(
+  "selectionchange",
+  () => {
+    if (
+      document.activeElement ===
+        bodyEditor ||
+      isSelectionInsideEditor()
+    ) {
+      saveEditorSelection();
+    }
+  }
+);
+
+bodyEditor.addEventListener(
+  "mouseup",
+  saveEditorSelection
+);
+
+bodyEditor.addEventListener(
+  "keyup",
+  saveEditorSelection
+);
+
+bodyEditor.addEventListener(
+  "touchend",
+  saveEditorSelection
+);
+
+/* 툴바 클릭 때문에 selection이 풀리지 않게 */
+
+editorToolbar
+  .querySelectorAll(
+    "button"
+  )
+  .forEach(
+    (button) => {
+      button.addEventListener(
+        "mousedown",
+        (event) => {
+          event.preventDefault();
+        }
+      );
+    }
+  );
+
+/* =========================================================
+   카테고리
+========================================================= */
+
+document.getElementById(
+  "post-category"
+).addEventListener(
+  "change",
+  (event) => {
+    document.getElementById(
+      "post-subcategory"
+    ).value =
+      event.target.value
+        .toUpperCase();
+  }
+);
+
+/* =========================================================
+   저장
 ========================================================= */
 
 postForm.addEventListener(
@@ -707,23 +1625,13 @@ postForm.addEventListener(
         "post-date"
       ).value;
 
-    if (!title) {
+    if (
+      !title ||
+      !author ||
+      !date
+    ) {
       saveMessage.textContent =
-        "제목을 입력해 주세요.";
-
-      return;
-    }
-
-    if (!author) {
-      saveMessage.textContent =
-        "작성자를 입력해 주세요.";
-
-      return;
-    }
-
-    if (!date) {
-      saveMessage.textContent =
-        "작성일을 입력해 주세요.";
+        "제목, 작성자, 날짜를 입력해 주세요.";
 
       return;
     }
@@ -733,7 +1641,7 @@ postForm.addEventListener(
         "post-category"
       ).value;
 
-    const subcategoryInput =
+    const subcategory =
       document.getElementById(
         "post-subcategory"
       ).value.trim();
@@ -745,18 +1653,21 @@ postForm.addEventListener(
 
       author,
 
+      authorBio:
+        document.getElementById(
+          "post-author-bio"
+        ).value.trim(),
+
       date,
 
       category,
 
       subcategory:
-        subcategoryInput ||
+        subcategory ||
         category.toUpperCase(),
 
       thumbnail:
-        document.getElementById(
-          "post-thumbnail"
-        ).value.trim(),
+        thumbnailInput.value.trim(),
 
       imageAlt:
         title,
@@ -797,7 +1708,9 @@ postForm.addEventListener(
 
             body:
               JSON.stringify({
-                action: "save",
+                action:
+                  "save",
+
                 post
               })
           }
@@ -826,98 +1739,10 @@ postForm.addEventListener(
 
       renderPostList();
 
-      const savedPost =
-        posts.find(
-          (item) =>
-            item.id === id
-        );
-
-      if (savedPost) {
-        loadPostIntoEditor(
-          savedPost
-        );
-      }
-
-      const articleUrl =
-        `/html/article.html?id=${encodeURIComponent(id)}`;
-
-      const archiveUrl =
-        "/html/archive.html";
-
-      saveMessage.innerHTML = "";
-
-      const messageText =
-        document.createElement(
-          "span"
-        );
-
-      messageText.textContent =
-        post.published
-          ? "저장되었습니다. 잠시 후 사이트에 자동 반영됩니다. "
-          : "비공개 상태로 저장되었습니다. ";
-
-      const articleLink =
-        document.createElement(
-          "a"
-        );
-
-      articleLink.href =
-        articleUrl;
-
-      articleLink.target =
-        "_blank";
-
-      articleLink.rel =
-        "noopener";
-
-      articleLink.textContent =
-        "글 확인하기";
-
-      articleLink.style.textDecoration =
-        "underline";
-
-      articleLink.style.textUnderlineOffset =
-        "3px";
-
-      const separator =
-        document.createTextNode(
-          " · "
-        );
-
-      const archiveLink =
-        document.createElement(
-          "a"
-        );
-
-      archiveLink.href =
-        archiveUrl;
-
-      archiveLink.target =
-        "_blank";
-
-      archiveLink.rel =
-        "noopener";
-
-      archiveLink.textContent =
-        "목록 확인하기";
-
-      archiveLink.style.textDecoration =
-        "underline";
-
-      archiveLink.style.textUnderlineOffset =
-        "3px";
-
-      saveMessage.append(
-        messageText,
-        articleLink,
-        separator,
-        archiveLink
-      );
+      saveMessage.textContent =
+        "저장되었습니다. 잠시 후 사이트에 자동 반영됩니다.";
     } catch (error) {
-      console.error(
-        "게시글 저장 실패:",
-        error
-      );
+      console.error(error);
 
       saveMessage.textContent =
         error.message ||
@@ -927,7 +1752,7 @@ postForm.addEventListener(
 );
 
 /* =========================================================
-   게시글 삭제
+   삭제
 ========================================================= */
 
 deleteButton.addEventListener(
@@ -937,17 +1762,13 @@ deleteButton.addEventListener(
       return;
     }
 
-    const confirmed =
-      window.confirm(
+    if (
+      !window.confirm(
         "이 게시글을 삭제할까요?"
-      );
-
-    if (!confirmed) {
+      )
+    ) {
       return;
     }
-
-    saveMessage.textContent =
-      "삭제 중입니다.";
 
     try {
       const response =
@@ -997,262 +1818,13 @@ deleteButton.addEventListener(
       clearEditor();
 
       saveMessage.textContent =
-        "삭제되었습니다. 잠시 후 사이트에서도 자동으로 삭제됩니다.";
+        "삭제되었습니다.";
     } catch (error) {
-      console.error(
-        "게시글 삭제 실패:",
-        error
-      );
-
       saveMessage.textContent =
-        error.message ||
-        "삭제에 실패했습니다.";
+        error.message;
     }
   }
 );
-
-/* =========================================================
-   본문 선택 영역 감지
-========================================================= */
-
-document.addEventListener(
-  "selectionchange",
-  () => {
-    if (
-      document.activeElement ===
-        bodyEditor ||
-      isSelectionInsideEditor()
-    ) {
-      saveEditorSelection();
-    }
-  }
-);
-
-bodyEditor.addEventListener(
-  "mouseup",
-  saveEditorSelection
-);
-
-bodyEditor.addEventListener(
-  "keyup",
-  saveEditorSelection
-);
-
-bodyEditor.addEventListener(
-  "touchend",
-  saveEditorSelection
-);
-
-bodyEditor.addEventListener(
-  "input",
-  refreshEditorSelection
-);
-
-/* =========================================================
-   툴바 클릭 시 본문 선택 영역이 해제되는 것 방지
-========================================================= */
-
-if (editorToolbar) {
-  editorToolbar
-    .querySelectorAll(
-      "button"
-    )
-    .forEach((button) => {
-      button.addEventListener(
-        "mousedown",
-        (event) => {
-          /*
-            버튼을 눌렀을 때 브라우저 포커스가
-            본문에서 툴바로 이동하지 않도록 합니다.
-          */
-          event.preventDefault();
-        }
-      );
-    });
-}
-
-/* =========================================================
-   기본 편집 명령
-
-   굵게, 기울임, 밑줄, 취소선,
-   목록, 정렬, 실행 취소, 다시 실행
-========================================================= */
-
-document
-  .querySelectorAll(
-    "[data-command]"
-  )
-  .forEach((button) => {
-    button.addEventListener(
-      "click",
-      () => {
-        restoreEditorSelection();
-
-        document.execCommand(
-          button.dataset.command,
-          false,
-          null
-        );
-
-        refreshEditorSelection();
-      }
-    );
-  });
-
-/* =========================================================
-   문단 형식
-
-   P, H2, 인용문
-========================================================= */
-
-document
-  .querySelectorAll(
-    "[data-block]"
-  )
-  .forEach((button) => {
-    button.addEventListener(
-      "click",
-      () => {
-        restoreEditorSelection();
-
-        document.execCommand(
-          "formatBlock",
-          false,
-          button.dataset.block
-        );
-
-        refreshEditorSelection();
-      }
-    );
-  });
-
-/* =========================================================
-   글자색
-
-   HTML에는 아래 네 가지 버튼이 있어야 합니다.
-
-   data-text-color="#111111"
-   data-text-color="#e12727"
-   data-text-color="#2457d6"
-   data-text-color="#16834b"
-========================================================= */
-
-document
-  .querySelectorAll(
-    "[data-text-color]"
-  )
-  .forEach((button) => {
-    button.addEventListener(
-      "click",
-      () => {
-        const color =
-          button.dataset.textColor;
-
-        if (!color) {
-          return;
-        }
-
-        const restored =
-          restoreEditorSelection();
-
-        if (!restored) {
-          saveMessage.textContent =
-            "색을 바꿀 글자를 먼저 드래그해 주세요.";
-
-          return;
-        }
-
-        /*
-          font 태그 대신
-          style="color: ..." 형태로 저장되도록 합니다.
-        */
-        document.execCommand(
-          "styleWithCSS",
-          false,
-          true
-        );
-
-        document.execCommand(
-          "foreColor",
-          false,
-          color
-        );
-
-        saveMessage.textContent = "";
-
-        refreshEditorSelection();
-      }
-    );
-  });
-
-/* =========================================================
-   링크 삽입
-========================================================= */
-
-document
-  .getElementById(
-    "link-button"
-  )
-  .addEventListener(
-    "click",
-    () => {
-      /*
-        prompt가 뜨기 전에 선택 영역을 저장합니다.
-      */
-      saveEditorSelection();
-
-      const url =
-        window.prompt(
-          "링크 주소를 입력하세요."
-        );
-
-      if (!url) {
-        return;
-      }
-
-      const restored =
-        restoreEditorSelection();
-
-      if (!restored) {
-        saveMessage.textContent =
-          "링크를 적용할 글자를 먼저 드래그해 주세요.";
-
-        return;
-      }
-
-      document.execCommand(
-        "createLink",
-        false,
-        url
-      );
-
-      saveMessage.textContent = "";
-
-      refreshEditorSelection();
-    }
-  );
-
-/* =========================================================
-   카테고리 변경 시 세부 카테고리 자동 입력
-========================================================= */
-
-document
-  .getElementById(
-    "post-category"
-  )
-  .addEventListener(
-    "change",
-    (event) => {
-      const subcategory =
-        document.getElementById(
-          "post-subcategory"
-        );
-
-      subcategory.value =
-        event.target.value
-          .toUpperCase();
-    }
-  );
 
 /* =========================================================
    실행
