@@ -3,8 +3,7 @@
 ========================================================= */
 
 :root {
-  --archive-animation-duration:
-    800ms;
+  --archive-animation-duration: 800ms;
 
   --archive-animation-easing:
     cubic-bezier(
@@ -14,14 +13,10 @@
       1
     );
 
-  --archive-square-open-scale:
-    1;
+  --archive-square-open-scale: 1;
 
-  --archive-small-menu-offset-y:
-    0px;
-
-  --archive-square-offset-y:
-    -1.5px;
+  --archive-small-menu-offset-y: 0px;
+  --archive-square-offset-y: -1.5px;
 }
 
 
@@ -43,19 +38,15 @@
     var(--page-padding)
     100px;
 
-  background-color:
-    #ffffff;
+  background-color: #ffffff;
 }
 
 
 /* =========================================================
    검정 정렬표
 
-   1열 = WRITER가 있던 자리
-         → 흰색 블록
-
-   4열 = CATEGORY가 있던 자리
-         → LATEST / OLDEST / CATEGORY 순환 버튼
+   왼쪽  = 흰색 네모 블록
+   오른쪽 = LATEST / OLDEST / 카테고리 순환 버튼
 ========================================================= */
 
 .archive-sort {
@@ -77,7 +68,6 @@
     );
 
   width: 100%;
-
   min-height: 48px;
 
   margin:
@@ -89,6 +79,13 @@
     0
     0;
 
+  /*
+    기사 카드의 좌우 padding과 동일합니다.
+
+    따라서
+    왼쪽 네모 시작선 = FILM 시작선
+    오른쪽 LATEST 끝선 = 날짜 끝선
+  */
   padding:
     0
     clamp(
@@ -97,20 +94,18 @@
       40px
     );
 
-  background-color:
-    #111111;
-
-  color:
-    #ffffff;
+  background-color: #111111;
+  color: #ffffff;
 
   border: 0;
 }
 
-/* =========================================================
-   WRITER 자리 흰색 네모 블록
 
-   FILM과 같은 중심축을 기준으로
-   위아래 한 줄로 정렬
+/* =========================================================
+   왼쪽 흰색 네모 블록
+
+   첫 번째 열 중앙이 아니라
+   정렬바의 실제 왼쪽 padding 선에 맞춤
 ========================================================= */
 
 .archive-sort-blocks {
@@ -122,15 +117,23 @@
   align-items: center;
   justify-content: center;
 
-  gap: 4px;
+  gap: 3px;
 
-  width: 100%;
-  height: 30px;
+  /*
+    중요:
+    width:100%를 사용하지 않습니다.
+    첫 번째 grid 열 중앙으로 밀리는 것을 방지합니다.
+  */
+  width: 11px;
+  height: 28px;
 
   margin: 0;
   padding: 0;
 
-  justify-self: center;
+  /*
+    FILM 왼쪽 시작선과 동일
+  */
+  justify-self: start;
 }
 
 
@@ -150,6 +153,7 @@
     11px;
 
   margin: 0;
+  padding: 0;
 
   background-color: #ffffff;
 
@@ -159,17 +163,21 @@
 
 
 /*
-  두 번째 네모도 첫 번째 네모와
-  정확히 같은 중심축 사용
+  두 네모를 같은 x축에 정확히 배치
 */
 
-.archive-sort-blocks span:nth-child(2) {
-  margin-left: 0;
+.archive-sort-blocks
+span:nth-child(2) {
+  margin: 0;
+
   transform: none;
 }
+
+
 /* =========================================================
-   CATEGORY 자리
-   순환 정렬 버튼
+   오른쪽 순환 정렬 버튼
+
+   CATEGORY가 있던 우측 위치
 ========================================================= */
 
 .archive-sort-button {
@@ -189,11 +197,8 @@
   margin: 0;
   padding: 0;
 
-  background-color:
-    transparent;
-
-  color:
-    #ffffff;
+  background-color: transparent;
+  color: #ffffff;
 
   border: 0;
   border-radius: 0;
@@ -232,11 +237,8 @@
 ========================================================= */
 
 .archive-sort-button:hover {
-  background-color:
-    transparent;
-
-  color:
-    #ffffff;
+  background-color: transparent;
+  color: #ffffff;
 
   opacity: 0.55;
 }
@@ -247,15 +249,14 @@
 
 .archive-sort-button:focus-visible {
   outline:
-    1px solid
-    #ffffff;
+    1px solid #ffffff;
 
   outline-offset: 4px;
 }
 
 
 /* =========================================================
-   로딩·오류·빈 결과
+   로딩 / 오류 / 빈 결과
 ========================================================= */
 
 .archive-loading,
@@ -284,8 +285,7 @@
 .article-index {
   display: grid;
 
-  grid-template-columns:
-    1fr;
+  grid-template-columns: 1fr;
 
   row-gap: 0;
 
@@ -300,7 +300,7 @@
 
 
 /* =========================================================
-   기존 index-column 구조 평탄화
+   index-column 평탄화
 ========================================================= */
 
 .index-column {
@@ -311,8 +311,7 @@
 /* =========================================================
    개별 기사 카드
 
-   PC / 태블릿 / 모바일 모두
-   같은 카드 구조 사용
+   PC / 태블릿 / 모바일 공통 구조
 ========================================================= */
 
 .index-item {
@@ -352,6 +351,10 @@
       190px
     );
 
+  /*
+    왼쪽 padding이 archive-sort와 동일하므로
+    FILM과 흰 네모가 같은 시작선에 놓입니다.
+  */
   padding:
     clamp(
       24px,
@@ -369,17 +372,12 @@
       38px
     );
 
-  background-color:
-    #ffffff;
-
-  color:
-    #111111;
+  background-color: #ffffff;
+  color: #111111;
 
   border: 0;
-
   border-bottom:
-    1px solid
-    #111111;
+    1px solid #111111;
 
   box-shadow: none;
 
@@ -388,10 +386,8 @@
   overflow: visible;
 
   transition:
-    background-color
-    180ms ease,
-    opacity
-    180ms ease;
+    background-color 180ms ease,
+    opacity 180ms ease;
 
   -webkit-tap-highlight-color:
     transparent;
@@ -406,8 +402,7 @@
 > .index-column:first-child
 > .index-item:first-child {
   border-top:
-    1px solid
-    #111111;
+    1px solid #111111;
 }
 
 
@@ -416,15 +411,13 @@
 ========================================================= */
 
 .index-subcategory {
-  grid-area:
-    subcategory;
+  grid-area: subcategory;
 
   min-width: 0;
 
   margin: 0;
 
-  color:
-    #111111;
+  color: #111111;
 
   font-family:
     "CossetteTitre",
@@ -455,15 +448,13 @@
 ========================================================= */
 
 .index-title {
-  grid-area:
-    title;
+  grid-area: title;
 
   min-width: 0;
 
   margin: 0;
 
-  color:
-    #111111;
+  color: #111111;
 
   font-family:
     "Pretendard",
@@ -479,21 +470,15 @@
   font-weight: 600;
   line-height: 1.32;
 
-  letter-spacing:
-    -0.035em;
+  letter-spacing: -0.035em;
 
   white-space: normal;
 
   overflow: visible;
+  text-overflow: clip;
 
-  text-overflow:
-    clip;
-
-  word-break:
-    keep-all;
-
-  overflow-wrap:
-    break-word;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 
@@ -502,16 +487,13 @@
 ========================================================= */
 
 .index-author {
-  grid-area:
-    author;
+  grid-area: author;
 
-  align-self:
-    end;
+  align-self: end;
 
   min-width: 0;
 
-  color:
-    #111111;
+  color: #111111;
 
   font-family:
     "Pretendard",
@@ -527,8 +509,7 @@
   font-weight: 500;
   line-height: 1.3;
 
-  white-space:
-    nowrap;
+  white-space: nowrap;
 }
 
 
@@ -537,16 +518,13 @@
 ========================================================= */
 
 .index-date {
-  grid-area:
-    date;
+  grid-area: date;
 
-  align-self:
-    end;
+  align-self: end;
 
   min-width: 0;
 
-  color:
-    #111111;
+  color: #111111;
 
   font-family:
     "CossetteTitre",
@@ -566,11 +544,9 @@
 
   letter-spacing: 0;
 
-  text-align:
-    right;
+  text-align: right;
 
-  white-space:
-    nowrap;
+  white-space: nowrap;
 }
 
 
@@ -579,11 +555,9 @@
 ========================================================= */
 
 .index-item--placeholder {
-  cursor:
-    default;
+  cursor: default;
 
-  pointer-events:
-    none;
+  pointer-events: none;
 }
 
 .index-item--placeholder
@@ -612,6 +586,7 @@
   opacity: 0.55;
 }
 
+
 @media (hover: hover) {
   .index-item:not(
     .index-item--placeholder
@@ -632,11 +607,9 @@
 ========================================================= */
 
 .archive-header {
-  position:
-    relative;
+  position: relative;
 
-  display:
-    block;
+  display: block;
 
   width: 100%;
 
@@ -645,11 +618,9 @@
     44px
     18px;
 
-  background-color:
-    #ffffff;
+  background-color: #ffffff;
 
-  pointer-events:
-    auto;
+  pointer-events: auto;
 }
 
 
@@ -658,26 +629,19 @@
 ========================================================= */
 
 .archive-filter {
-  position:
-    relative;
+  position: relative;
 
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    flex-start;
+  align-items: flex-start;
 
-  width:
-    max-content;
+  width: max-content;
 
-  max-width:
-    100%;
+  max-width: 100%;
 
-  min-height:
-    66px;
+  min-height: 66px;
 
-  white-space:
-    nowrap;
+  white-space: nowrap;
 }
 
 
@@ -686,24 +650,20 @@
 ========================================================= */
 
 .archive-filter-all {
-  position:
-    relative;
+  position: relative;
 
   z-index: 1;
 
-  display:
-    inline-block;
+  display: inline-block;
 
   flex:
     0
     0
     auto;
 
-  margin-top:
-    -2px;
+  margin-top: -2px;
 
-  color:
-    #111111;
+  color: #111111;
 
   font-family:
     "CossetteTitre",
@@ -711,25 +671,17 @@
     "Pretendard",
     sans-serif;
 
-  font-size:
-    64px;
+  font-size: 64px;
 
-  font-weight:
-    400;
+  font-weight: 400;
+  line-height: 0.94;
 
-  line-height:
-    0.94;
+  letter-spacing: -0.045em;
 
-  letter-spacing:
-    -0.045em;
-
-  text-decoration:
-    none;
+  text-decoration: none;
 
   transition:
-    opacity
-    180ms
-    ease;
+    opacity 180ms ease;
 }
 
 
@@ -738,16 +690,13 @@
 ========================================================= */
 
 .archive-filter-items {
-  position:
-    relative;
+  position: relative;
 
   z-index: 1;
 
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    flex-start;
+  align-items: flex-start;
 
   gap: 16px;
 
@@ -758,8 +707,7 @@
 
   opacity: 0;
 
-  overflow:
-    hidden;
+  overflow: hidden;
 
   transform:
     translateY(
@@ -805,29 +753,25 @@
       0px
     );
 
-  margin-left:
-    22px;
+  margin-left: 22px;
 
-  opacity:
-    1;
+  opacity: 1;
 }
 
 
 /* =========================================================
-   메뉴 항목
+   펼쳐지는 메뉴 항목
 ========================================================= */
 
 .archive-filter-items a {
-  display:
-    inline-block;
+  display: inline-block;
 
   flex:
     0
     0
     auto;
 
-  color:
-    #111111;
+  color: #111111;
 
   font-family:
     "CossetteTitre",
@@ -835,20 +779,14 @@
     "Pretendard",
     sans-serif;
 
-  font-size:
-    30px;
+  font-size: 30px;
 
-  font-weight:
-    400;
+  font-weight: 400;
+  line-height: 1;
 
-  line-height:
-    1;
+  letter-spacing: -0.03em;
 
-  letter-spacing:
-    -0.03em;
-
-  text-decoration:
-    none;
+  text-decoration: none;
 }
 
 
@@ -857,30 +795,22 @@
 ========================================================= */
 
 .archive-filter-toggle {
-  position:
-    relative;
+  position: relative;
 
   z-index: 1;
 
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    center;
-
-  justify-content:
-    center;
+  align-items: center;
+  justify-content: center;
 
   flex:
     0
     0
     auto;
 
-  width:
-    24px;
-
-  height:
-    24px;
+  width: 24px;
+  height: 24px;
 
   margin:
     0
@@ -888,17 +818,13 @@
     0
     16px;
 
-  padding:
-    0;
+  padding: 0;
 
-  background-color:
-    transparent;
+  background-color: transparent;
 
-  border:
-    0;
+  border: 0;
 
-  cursor:
-    pointer;
+  cursor: pointer;
 
   transform:
     translateY(
@@ -908,9 +834,7 @@
     );
 
   transition:
-    opacity
-    180ms
-    ease;
+    opacity 180ms ease;
 
   -webkit-tap-highlight-color:
     transparent;
@@ -918,27 +842,20 @@
 
 
 /* =========================================================
-   검정 네모
+   상단 검정 네모
 ========================================================= */
 
 .archive-filter-toggle span {
-  display:
-    block;
+  display: block;
 
-  width:
-    15px;
+  width: 15px;
+  height: 15px;
 
-  height:
-    15px;
+  background-color: #111111;
 
-  background-color:
-    #111111;
+  transform: scale(1);
 
-  transform:
-    scale(1);
-
-  transform-origin:
-    center;
+  transform-origin: center;
 
   transition:
     transform
@@ -969,19 +886,16 @@ span {
 
 .archive-filter-toggle:focus-visible {
   outline:
-    1px solid
-    #111111;
+    1px solid #111111;
 
-  outline-offset:
-    4px;
+  outline-offset: 4px;
 }
 
 
 @media (hover: hover) {
   .archive-filter a:hover,
   .archive-filter-toggle:hover {
-    opacity:
-      0.45;
+    opacity: 0.45;
   }
 }
 
@@ -1005,8 +919,7 @@ a,
     "Pretendard",
     sans-serif;
 
-  font-weight:
-    400;
+  font-weight: 400;
 }
 
 
@@ -1017,6 +930,82 @@ a,
   font-family:
     "Pretendard",
     sans-serif;
+}
+
+
+/* =========================================================
+   태블릿
+========================================================= */
+
+@media (max-width: 1100px) {
+
+  .archive-sort {
+    grid-template-columns:
+      82px
+      minmax(0, 1fr)
+      100px
+      110px;
+
+    column-gap: 16px;
+
+    padding:
+      0
+      24px;
+  }
+
+
+  .archive-sort-button {
+    font-size: 13px;
+  }
+
+
+  /*
+    태블릿에서도 네모는
+    왼쪽 padding 선에 붙습니다.
+  */
+
+  .archive-sort-blocks {
+    width: 11px;
+
+    justify-self: start;
+  }
+
+
+  .index-item {
+    min-height: 150px;
+
+    padding:
+      22px
+      24px
+      24px;
+
+    row-gap: 12px;
+  }
+
+
+  .index-title {
+    font-size:
+      clamp(
+        23px,
+        2.4vw,
+        32px
+      );
+  }
+
+
+  .index-subcategory {
+    font-size: 15px;
+  }
+
+
+  .index-author {
+    font-size: 14px;
+  }
+
+
+  .index-date {
+    font-size: 14px;
+  }
 }
 
 
@@ -1036,12 +1025,11 @@ a,
 
 
   /* =======================================================
-     모바일 전체
+     전체
   ======================================================= */
 
   .site-main {
-    width:
-      100%;
+    width: 100%;
 
     padding:
       0
@@ -1051,12 +1039,11 @@ a,
 
 
   /* =======================================================
-     모바일 헤더
+     헤더
   ======================================================= */
 
   .archive-header {
-    width:
-      100%;
+    width: 100%;
 
     padding:
       calc(
@@ -1069,45 +1056,32 @@ a,
       18px
       16px;
 
-    background-color:
-      #ffffff;
+    background-color: #ffffff;
   }
 
 
   /* =======================================================
-     모바일 상단 필터
+     상단 필터
   ======================================================= */
 
   .archive-filter {
-    display:
-      flex;
+    display: flex;
 
-    align-items:
-      center;
+    align-items: center;
 
-    width:
-      100%;
+    width: 100%;
+    max-width: 100%;
 
-    max-width:
-      100%;
+    min-height: 58px;
 
-    min-height:
-      58px;
+    padding-right: 8px;
 
-    padding-right:
-      8px;
+    overflow-x: auto;
+    overflow-y: visible;
 
-    overflow-x:
-      auto;
+    white-space: nowrap;
 
-    overflow-y:
-      visible;
-
-    white-space:
-      nowrap;
-
-    scrollbar-width:
-      none;
+    scrollbar-width: none;
 
     -webkit-overflow-scrolling:
       touch;
@@ -1115,75 +1089,57 @@ a,
 
 
   .archive-filter::-webkit-scrollbar {
-    display:
-      none;
+    display: none;
   }
 
 
   /* =======================================================
-     모바일 ALL
+     ALL
   ======================================================= */
 
   .archive-filter-all {
-    display:
-      flex;
+    display: flex;
 
-    align-items:
-      center;
+    align-items: center;
 
     flex:
       0
       0
       auto;
 
-    margin:
-      0;
+    margin: 0;
 
-    font-size:
-      42px;
+    font-size: 42px;
 
-    line-height:
-      1;
+    line-height: 1;
 
-    letter-spacing:
-      -0.045em;
+    letter-spacing: -0.045em;
   }
 
 
   /* =======================================================
-     모바일 펼쳐지는 메뉴
+     펼쳐지는 메뉴
   ======================================================= */
 
   .archive-filter-items {
-    display:
-      flex;
+    display: flex;
 
-    align-items:
-      center;
+    align-items: center;
 
-    gap:
-      12px;
+    gap: 12px;
 
-    width:
-      0;
+    width: 0;
+    min-width: 0;
 
-    min-width:
-      0;
+    min-height: 34px;
 
-    min-height:
-      34px;
+    margin: 0;
 
-    margin:
-      0;
+    opacity: 0;
 
-    opacity:
-      0;
+    overflow: hidden;
 
-    overflow:
-      hidden;
-
-    transform:
-      none;
+    transform: none;
   }
 
 
@@ -1195,70 +1151,53 @@ a,
         0px
       );
 
-    margin-left:
-      16px;
+    margin-left: 16px;
 
-    opacity:
-      1;
+    opacity: 1;
 
-    overflow:
-      visible;
+    overflow: visible;
   }
 
 
   .archive-filter-items a {
-    display:
-      flex;
+    display: flex;
 
-    align-items:
-      center;
+    align-items: center;
 
     flex:
       0
       0
       auto;
 
-    height:
-      34px;
+    height: 34px;
 
-    padding-top:
-      2px;
+    padding-top: 2px;
 
-    font-size:
-      20px;
+    font-size: 20px;
 
-    line-height:
-      1;
+    line-height: 1;
 
-    letter-spacing:
-      -0.03em;
+    letter-spacing: -0.03em;
   }
 
 
   /* =======================================================
-     모바일 상단 검정 네모
+     상단 네모 버튼
   ======================================================= */
 
   .archive-filter-toggle {
-    display:
-      flex;
+    display: flex;
 
-    align-items:
-      center;
-
-    justify-content:
-      center;
+    align-items: center;
+    justify-content: center;
 
     flex:
       0
       0
       auto;
 
-    width:
-      24px;
-
-    height:
-      34px;
+    width: 24px;
+    height: 34px;
 
     margin:
       0
@@ -1266,20 +1205,15 @@ a,
       0
       10px;
 
-    padding:
-      0;
+    padding: 0;
 
-    transform:
-      none;
+    transform: none;
   }
 
 
   .archive-filter-toggle span {
-    width:
-      11px;
-
-    height:
-      11px;
+    width: 11px;
+    height: 11px;
   }
 
 
@@ -1294,46 +1228,50 @@ a,
       48px
       66px;
 
-    column-gap:
-      8px;
+    column-gap: 8px;
 
-    min-height:
-      42px;
+    min-height: 42px;
 
     margin:
       34px
       0
       0;
 
+    /*
+      모바일 카드 좌우 여백과 같은 10px
+    */
     padding:
       0
       10px;
   }
 
 
-@media (max-width: 767px) {
+  /* =======================================================
+     모바일 흰색 블록
+  ======================================================= */
 
   .archive-sort-blocks {
+    grid-column: 1;
+
     display: flex;
     flex-direction: column;
 
     align-items: center;
     justify-content: center;
 
-    gap: 3px;
+    gap: 2px;
 
-    width: 100%;
+    width: 9px;
     height: 24px;
 
     margin: 0;
     padding: 0;
 
-    justify-self: center;
+    justify-self: start;
   }
 
-  .archive-sort-blocks span {
-    display: block;
 
+  .archive-sort-blocks span {
     width: 9px;
     height: 9px;
 
@@ -1349,28 +1287,27 @@ a,
     border-radius: 2px;
   }
 
-  .archive-sort-blocks span:nth-child(2) {
-    margin-left: 0;
+
+  .archive-sort-blocks
+  span:nth-child(2) {
+    margin: 0;
+
     transform: none;
   }
-}
+
 
   /* =======================================================
      모바일 정렬 버튼
   ======================================================= */
 
   .archive-sort-button {
-    min-height:
-      42px;
+    min-height: 42px;
 
-    font-size:
-      11px;
+    font-size: 11px;
 
-    justify-content:
-      flex-end;
+    justify-content: flex-end;
 
-    text-align:
-      right;
+    text-align: right;
   }
 
 
@@ -1388,14 +1325,11 @@ a,
       "title title"
       "author date";
 
-    column-gap:
-      12px;
+    column-gap: 12px;
 
-    row-gap:
-      10px;
+    row-gap: 10px;
 
-    min-height:
-      120px;
+    min-height: 120px;
 
     padding:
       12px
@@ -1409,11 +1343,9 @@ a,
       "Pretendard",
       sans-serif;
 
-    font-size:
-      15px;
+    font-size: 15px;
 
-    text-align:
-      left;
+    text-align: left;
   }
 
 
@@ -1425,20 +1357,16 @@ a,
         30px
       );
 
-    font-weight:
-      600;
+    font-weight: 600;
 
-    line-height:
-      1.35;
+    line-height: 1.35;
 
-    letter-spacing:
-      -0.035em;
+    letter-spacing: -0.035em;
   }
 
 
   .index-author {
-    font-size:
-      14px;
+    font-size: 14px;
   }
 
 
@@ -1447,14 +1375,11 @@ a,
       "Pretendard",
       sans-serif;
 
-    font-size:
-      14px;
+    font-size: 14px;
 
-    line-height:
-      1.3;
+    line-height: 1.3;
 
-    text-align:
-      right;
+    text-align: right;
   }
 
 
@@ -1463,8 +1388,7 @@ a,
   ======================================================= */
 
   .index-item--placeholder {
-    display:
-      none;
+    display: none;
   }
 
 
@@ -1475,18 +1399,15 @@ a,
   .archive-loading,
   .archive-error,
   .archive-empty {
-    margin:
-      0;
+    margin: 0;
 
     padding:
       28px
       0;
 
-    font-size:
-      14px;
+    font-size: 14px;
 
-    line-height:
-      1.6;
+    line-height: 1.6;
   }
 }
 
@@ -1503,7 +1424,6 @@ a,
   .archive-filter-toggle span,
   .archive-sort-button,
   .index-item {
-    transition:
-      none;
+    transition: none;
   }
 }
