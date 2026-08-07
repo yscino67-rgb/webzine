@@ -1315,6 +1315,11 @@
       0 !important;
   }
 
+    .archive-filter-items
+  a[href="./about.html"] {
+    display: none !important;
+  }
+
 
   /* =======================================================
      기사
