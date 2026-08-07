@@ -741,6 +741,13 @@ button.footnote-marker:focus-visible {
       auto;
   }
 
+    .about-detail-page
+  .about-filter-items
+  a[href="./about.html"] {
+    display: none !important;
+  }
+
+
   .about-page-title {
     margin-bottom: 38px;
 

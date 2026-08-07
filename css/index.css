@@ -1118,6 +1118,11 @@ a,
     overflow: hidden;
 
     transform: none;
+
+      a[href="./about.html"] {
+    display: none !important;
+  }
+  
   }
 
 
