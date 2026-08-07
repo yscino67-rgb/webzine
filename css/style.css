@@ -698,6 +698,40 @@ select {
 }
 
 /* =========================================================
+   서브페이지 상단 브랜드
+   기존 레이아웃을 밀지 않고 블록처럼 위에 추가
+========================================================= */
+
+.page-brand {
+  width: 100%;
+
+  padding:
+    26px
+    44px
+    0;
+
+  color: #111111;
+
+  font-family:
+    "KoPubWorldDotum",
+    "Pretendard",
+    sans-serif;
+
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1;
+
+  letter-spacing: -0.03em;
+
+  background-color: #ffffff;
+}
+.archive-page .page-brand,
+.article-detail-page .page-brand,
+.about-page .page-brand {
+  position: relative;
+  z-index: 1100;
+}
+/* =========================================================
    모바일
 ========================================================= */
 
@@ -766,6 +800,23 @@ select {
       var(--article-title-top-gap);
 
     margin-bottom: 38px;
+  }
+}
+@media (max-width: 767px) {
+  .page-brand {
+    padding:
+      calc(
+        env(safe-area-inset-top, 0px) +
+        18px
+      )
+      18px
+      0;
+
+    font-size: 22px;
+  }
+
+  .page-brand + .site-header {
+    top: 50px;
   }
 }
 
