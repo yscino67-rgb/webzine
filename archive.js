@@ -395,29 +395,24 @@ function createPlaceholderItem() {
 /* =========================================================
    현재 상태에 맞게 기사 가공
 ========================================================= */
-
 function getVisiblePosts() {
   const currentMode =
     SORT_MODES[
       currentModeIndex
     ];
 
-
   /*
     비공개 기사 제외
   */
-
   let visiblePosts =
     allPosts.filter(
       (post) =>
         post.published !== false
     );
 
-
   /*
     카테고리 모드인지 확인
   */
-
   const isCategoryMode =
     ![
       "newest",
@@ -426,12 +421,10 @@ function getVisiblePosts() {
       currentMode.id
     );
 
-
   /*
     카테고리 상태라면
     해당 카테고리만 남김
   */
-
   if (isCategoryMode) {
     visiblePosts =
       visiblePosts.filter(
@@ -446,11 +439,9 @@ function getVisiblePosts() {
       );
   }
 
-
   /*
     OLDEST
   */
-
   if (
     currentMode.id ===
     "oldest"
@@ -460,12 +451,34 @@ function getVisiblePosts() {
         firstPost,
         secondPost
       ) => {
-        return (
+        const dateDifference =
           parseDate(
             firstPost.date
           ) -
           parseDate(
             secondPost.date
+          );
+
+        /*
+          날짜가 다르면
+          오래된 날짜부터
+        */
+        if (
+          dateDifference !== 0
+        ) {
+          return dateDifference;
+        }
+
+        /*
+          같은 날짜면
+          먼저 등록된 글부터
+        */
+        return (
+          allPosts.indexOf(
+            firstPost
+          ) -
+          allPosts.indexOf(
+            secondPost
           )
         );
       }
@@ -475,18 +488,39 @@ function getVisiblePosts() {
       LATEST 및 카테고리 상태는
       모두 최신순
     */
-
     visiblePosts.sort(
       (
         firstPost,
         secondPost
       ) => {
-        return (
+        const dateDifference =
           parseDate(
             secondPost.date
           ) -
           parseDate(
             firstPost.date
+          );
+
+        /*
+          날짜가 다르면
+          최신 날짜부터
+        */
+        if (
+          dateDifference !== 0
+        ) {
+          return dateDifference;
+        }
+
+        /*
+          같은 날짜면
+          나중에 등록된 글부터
+        */
+        return (
+          allPosts.indexOf(
+            secondPost
+          ) -
+          allPosts.indexOf(
+            firstPost
           )
         );
       }
@@ -495,8 +529,6 @@ function getVisiblePosts() {
 
   return visiblePosts;
 }
-
-
 /* =========================================================
    정렬 버튼 표시 갱신
 ========================================================= */
