@@ -548,9 +548,9 @@ button.footnote-marker:focus-visible {
 
   margin-top:
     clamp(
-      60px,
-      6vw,
-      80px
+      32px,
+      3vw,
+      46px
     );
 
   padding: 0;
@@ -954,7 +954,7 @@ button.footnote-marker:focus-visible {
   }
 
   .about-footer {
-    margin-top: 54px;
+    margin-top: 52px;
   }
 
   .about-footer-date {
@@ -965,7 +965,7 @@ button.footnote-marker:focus-visible {
       18px
     );
   }
-  
+
   .about-publication-info {
     font-size: 11px;
   }
