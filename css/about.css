@@ -546,12 +546,7 @@ button.footnote-marker:focus-visible {
 .about-footer {
   width: 100%;
 
-  margin-top:
-    clamp(
-      32px,
-      3vw,
-      46px
-    );
+  margin-top: 46px;
 
   padding: 0;
 }
