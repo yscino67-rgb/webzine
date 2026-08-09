@@ -558,12 +558,17 @@ button.footnote-marker:focus-visible {
 ========================================================= */
 
 .about-footer-date {
+  display: flex;
+
+  align-items: center;
+  justify-content: flex-end;
   width: 100%;
 
+  min-height: 56px;
   margin:
     0
     0
-    8px;
+    30px;
 
   font-family:
     "Pretendard",
@@ -593,11 +598,9 @@ button.footnote-marker:focus-visible {
   align-items: flex-start;
   justify-content: space-between;
 
-  gap: 30px;
-
   width: 100%;
 
-  padding-top: 14px;
+  padding-top: 18px;
 
   border-top:
     1px solid #111111;
@@ -953,7 +956,21 @@ button.footnote-marker:focus-visible {
   }
 
   .about-footer-date {
-     font-size:
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    width: 100%; 
+
+    min-height: 50px;
+    
+    margin:
+    0
+    0
+    52px;
+    
+    font-size:
     clamp(
       16px,
       4.3vw,
