@@ -560,7 +560,7 @@ button.footnote-marker:focus-visible {
 .about-footer-date {
   width: 100%;
 
-  margin: 10;
+  margin: 0;
   padding: 0;
 
   font-family:
@@ -670,6 +670,25 @@ button.footnote-marker:focus-visible {
   margin-top: 2px;
 }
 
+/* =========================================================
+   ABOUT / ARTICLE 하단 위치 정렬
+   데스크톱
+========================================================= */
+
+@media (min-width: 768px) {
+
+  /* 2026년 8월을 기사 페이지의 '박하나' 윗선과 맞춤
+     relative라서 날짜만 움직이고 하단 선 위치에는 영향 없음 */
+  .about-footer-date {
+    position: relative;
+    top: -28px;
+  }
+
+  /* ARTICLE의 하단 선 / INDEX와 정확히 맞춤 */
+  .about-footer-bottom {
+    margin-top: 34px;
+  }
+}
 
 /* =========================================================
    모바일
