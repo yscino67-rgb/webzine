@@ -670,20 +670,6 @@ button.footnote-marker:focus-visible {
   margin-top: 2px;
 }
 
-@media (min-width: 768px) {
-
-  /* 2026년 8월 → 기사 작성자 이름 윗선과 맞춤 */
-  .about-footer-date {
-    position: relative;
-    top: -17px;
-  }
-
-  /* 하단 선 + INDEX → 기사 페이지와 맞춤 */
-  .about-footer-bottom {
-    margin-top: 38px;
-  }
-}
-
 /* =========================================================
    모바일
 ========================================================= */
