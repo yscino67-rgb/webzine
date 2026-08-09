@@ -574,7 +574,12 @@ button.footnote-marker:focus-visible {
     "Pretendard",
     sans-serif;
 
-  font-size: 11px;
+  font-size:
+    clamp(
+      17px,
+      1.2vw,
+      21px
+    );
   font-weight: 500;
   line-height: 1.5;
 
@@ -952,7 +957,15 @@ button.footnote-marker:focus-visible {
     margin-top: 54px;
   }
 
-  .about-footer-date,
+  .about-footer-date {
+     font-size:
+    clamp(
+      16px,
+      4.3vw,
+      18px
+    );
+  }
+  
   .about-publication-info {
     font-size: 11px;
   }
