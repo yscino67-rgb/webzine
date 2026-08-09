@@ -670,23 +670,17 @@ button.footnote-marker:focus-visible {
   margin-top: 2px;
 }
 
-/* =========================================================
-   ABOUT / ARTICLE 하단 위치 정렬
-   데스크톱
-========================================================= */
-
 @media (min-width: 768px) {
 
-  /* 2026년 8월을 기사 페이지의 '박하나' 윗선과 맞춤
-     relative라서 날짜만 움직이고 하단 선 위치에는 영향 없음 */
+  /* 2026년 8월 → 기사 작성자 이름 윗선과 맞춤 */
   .about-footer-date {
     position: relative;
-    top: -28px;
+    top: -17px;
   }
 
-  /* ARTICLE의 하단 선 / INDEX와 정확히 맞춤 */
+  /* 하단 선 + INDEX → 기사 페이지와 맞춤 */
   .about-footer-bottom {
-    margin-top: 34px;
+    margin-top: 38px;
   }
 }
 
