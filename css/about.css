@@ -575,13 +575,13 @@ button.footnote-marker:focus-visible {
 
   font-size:
     clamp(
-      15px,
-      1vw,
-      18px
+      17px,
+      1.2vw,
+      21px
     );
-  font-weight: 600;
-  line-height: 1.6;
-  letter-spacing: -0.02em;
+  font-weight: 500;
+  line-height: 1.5;
+
   text-align: right;
 }
 
