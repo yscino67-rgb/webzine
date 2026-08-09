@@ -534,7 +534,7 @@
 ========================================================= */
 
 .article-visual {
-  position: sticky;
+  position: static;
 
   top: 150px;
 
