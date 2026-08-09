@@ -373,19 +373,10 @@ function createPlaceholderItem() {
   );
 
   item.innerHTML = `
-    <span class="index-author">.</span>
-
-    <h2 class="index-title">
-      .
-    </h2>
-
-    <time class="index-date">
-      .
-    </time>
-
-    <span class="index-subcategory">
-      .
-    </span>
+    <span class="index-author"></span>
+    <h2 class="index-title"></h2>
+    <time class="index-date"></time>
+    <span class="index-subcategory"></span>
   `;
 
   return item;
