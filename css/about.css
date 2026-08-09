@@ -546,7 +546,7 @@ button.footnote-marker:focus-visible {
 .about-footer {
   width: 100%;
 
-  margin-top: 54px;
+  margin-top: 46px;
 
   padding: 0;
 }
@@ -558,6 +558,11 @@ button.footnote-marker:focus-visible {
 ========================================================= */
 
 .about-footer-date {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: flex-end;
+  min-height: 60px;
   width: 100%;
 
   margin: 0;
