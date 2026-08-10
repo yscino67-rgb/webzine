@@ -1387,8 +1387,10 @@
     flex-basis: 9px;
   }
 }
+
 /* =========================================================
-   Galaxy S8+ 등 좁은 모바일
+   초소형 모바일
+   Galaxy S8+ 등 좁은 화면 대응
 ========================================================= */
 
 @media (max-width: 380px) {
@@ -1401,70 +1403,47 @@
         env(safe-area-inset-top, 0px) +
         14px
       )
-      12px
+      14px
       0 !important;
 
     font-size: 20px !important;
   }
 
 
-  /* 상단 메뉴 영역 */
+  /* 상단 메뉴 전체 좌우 여백 축소 */
   .article-detail-page
   .article-archive-header {
     padding:
       14px
-      12px
+      14px
       10px !important;
-  }
-
-
-  /* 메뉴 전체를 화면 폭만큼 사용 */
-  .article-detail-page
-  .archive-filter {
-    width: 100% !important;
-    max-width: none !important;
-
-    display: flex !important;
-    align-items: flex-start !important;
   }
 
 
   /* ALL */
   .article-detail-page
   .archive-filter-all {
-    flex: 0 0 auto;
-
-    font-size: 38px !important;
+    font-size: 36px !important;
   }
 
 
-  /* CRITICISM ~ ARTICLE */
+  /* CRITICISM / INTERVIEW / ESSAY ... */
   .article-detail-page
   .archive-filter-items {
-    flex: 1 1 auto;
-
-    display: flex !important;
-    align-items: flex-start;
-
-    justify-content:
-      space-between !important;
-
-    gap: 0 !important;
-
-    min-width: 0;
+    gap: 8px !important;
   }
-
 
   .article-detail-page
   .archive-filter.is-open
   .archive-filter-items {
-    margin-left: 9px !important;
+    margin-left: 10px !important;
   }
-
 
   .article-detail-page
   .archive-filter-items a {
-    flex: 0 0 auto;
+    height: 30px;
+
+    padding-top: 1px;
 
     font-size: 17px !important;
   }
@@ -1473,19 +1452,39 @@
   /* 오른쪽 검정 네모 */
   .article-detail-page
   .archive-filter-toggle {
-    flex: 0 0 auto;
+    width: 20px;
+    height: 30px;
 
-    margin-left: 7px !important;
+    margin-left: 6px !important;
+  }
+
+  .article-detail-page
+  .archive-filter-toggle span {
+    width: 9px;
+    height: 9px;
   }
 
 
-  /* 본문 좌우 */
+  /* 기사 본문 좌우 여백도 살짝 축소 */
   .article-detail-page
   .article-page {
     padding-right: 14px !important;
     padding-left: 14px !important;
   }
+
+
+  /* 긴 제목이 너무 크게 차지하지 않게 */
+  .article-detail-page
+  .article-title {
+    font-size:
+      clamp(
+        25px,
+        7vw,
+        29px
+      );
+  }
 }
+
 /* =========================================================
    움직임 최소화
 ========================================================= */
