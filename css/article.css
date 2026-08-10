@@ -1393,7 +1393,7 @@
 
   .article-detail-page
   .archive-filter-toggle {
-    transform: translateY(7px) !important;
+    transform: translateY(4px) !important;
   }
 
 }
