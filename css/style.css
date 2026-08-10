@@ -1069,6 +1069,57 @@ select {
   }
 }
 
+/* =========================================================
+   Galaxy S8+ 등 좁은 모바일
+   공통 상단바 위치 / 간격 보정
+   ABOUT / INDEX / ARTICLE
+========================================================= */
+
+@media (max-width: 380px) {
+
+  /* ALL */
+  .archive-filter-all {
+    font-size: 38px;
+  }
+
+
+  /* CRITICISM / INTERVIEW / ESSAY / ARTICLE / ABOUT */
+  .archive-filter-items {
+    gap: 7px;
+  }
+
+
+  /* ALL과 메뉴 사이 */
+  .archive-filter.is-open
+  .archive-filter-items {
+    margin-left: 10px;
+  }
+
+
+  /* 작은 메뉴 글자 */
+  .archive-filter-items a {
+    font-size: 17px;
+  }
+
+
+  /* 검정 네모 버튼 */
+  .archive-filter-toggle {
+    flex: 0 0 22px;
+
+    width: 22px;
+    height: 34px;
+
+    margin-left: 7px;
+  }
+
+
+  /* 실제 검정 네모 */
+  .archive-filter-toggle span {
+    width: 10px;
+    height: 10px;
+  }
+}
+
 
 /* =========================================================
    움직임 최소화
