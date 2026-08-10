@@ -148,7 +148,7 @@
 
   font-weight: 500;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 
@@ -449,7 +449,6 @@ select {
 
   font-family:
     "KoPubWorldDotum",
-    "Pretendard",
     sans-serif;
 
   font-size:
