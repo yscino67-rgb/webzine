@@ -1071,55 +1071,52 @@ select {
 
 /* =========================================================
    Galaxy S8+ 등 좁은 모바일
-   공통 상단바 위치 / 간격 보정
-   ABOUT / INDEX / ARTICLE
+   ABOUT / INDEX / ARTICLE 공통 상단바
 ========================================================= */
 
 @media (max-width: 380px) {
 
-  /* ALL */
-  .archive-filter-all {
-    font-size: 38px;
+  body .archive-filter-all {
+    font-size: 38px !important;
   }
 
 
-  /* CRITICISM / INTERVIEW / ESSAY / ARTICLE / ABOUT */
+  body .archive-filter-items {
+    gap: 6px !important;
+  }
+
+
+  body .archive-filter.is-open
   .archive-filter-items {
-    gap: 7px;
+    margin-left: 9px !important;
   }
 
 
-  /* ALL과 메뉴 사이 */
-  .archive-filter.is-open
-  .archive-filter-items {
-    margin-left: 10px;
+  body .archive-filter-items a {
+    font-size: 16px !important;
   }
 
 
-  /* 작은 메뉴 글자 */
-  .archive-filter-items a {
-    font-size: 17px;
+  body .archive-filter-toggle {
+    flex:
+      0
+      0
+      20px !important;
+
+    width: 20px !important;
+    min-width: 20px !important;
+
+    height: 24px !important;
+
+    margin-left: 6px !important;
   }
 
 
-  /* 검정 네모 버튼 */
-  .archive-filter-toggle {
-    flex: 0 0 22px;
-
-    width: 22px;
-    height: 34px;
-
-    margin-left: 7px;
-  }
-
-
-  /* 실제 검정 네모 */
-  .archive-filter-toggle span {
-    width: 10px;
-    height: 10px;
+  body .archive-filter-toggle span {
+    width: 9px !important;
+    height: 9px !important;
   }
 }
-
 
 /* =========================================================
    움직임 최소화
