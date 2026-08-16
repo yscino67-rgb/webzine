@@ -72,16 +72,39 @@ function createImageMarkup(post) {
       post.thumbnail || ""
     ).trim();
 
+  const extraImages =
+    Array.isArray(post.images)
+      ? post.images
+          .map((item) => {
+            if (typeof item === "string") {
+              return item.trim();
+            }
 
-  /*
-    이미지가 없으면
-    이미지 영역 자체를 출력하지 않습니다.
-  */
+            if (
+              item &&
+              typeof item === "object"
+            ) {
+              return String(
+                item.image || ""
+              ).trim();
+            }
 
-  if (!thumbnail) {
+            return "";
+          })
+          .filter(Boolean)
+          .slice(0, 5)
+      : [];
+
+  const images = [
+    ...(thumbnail
+      ? [thumbnail]
+      : []),
+    ...extraImages
+  ];
+
+  if (images.length === 0) {
     return "";
   }
-
 
   const imageAlt =
     escapeHtml(
@@ -90,24 +113,18 @@ function createImageMarkup(post) {
       ""
     );
 
-
   const imageCaption =
     escapeHtml(
-      post.imageCaption ||
-      ""
+      post.imageCaption || ""
     );
-
 
   const imageSource =
     escapeHtml(
-      post.imageSource ||
-      ""
+      post.imageSource || ""
     );
 
-
   const captionMarkup =
-    imageCaption ||
-    imageSource
+    imageCaption || imageSource
       ? `
         <figcaption class="article-caption">
           ${
@@ -135,20 +152,34 @@ function createImageMarkup(post) {
       `
       : "";
 
-
   return `
-    <figure class="article-visual">
-      <img
-        class="article-image"
-        src="${escapeHtml(thumbnail)}"
-        alt="${imageAlt}"
-      />
+    <div class="article-visuals">
+      ${images
+        .map(
+          (src, index) => `
+            <figure class="article-visual">
+              <img
+                class="article-image"
+                src="${escapeHtml(src)}"
+                alt="${imageAlt}${
+                  images.length > 1
+                    ? ` ${index + 1}`
+                    : ""
+                }"
+              />
 
-      ${captionMarkup}
-    </figure>
+              ${
+                index === 0
+                  ? captionMarkup
+                  : ""
+              }
+            </figure>
+          `
+        )
+        .join("")}
+    </div>
   `;
 }
-
 
 /* =========================================================
    작성자 + 한 줄 소개
@@ -321,7 +352,136 @@ function renderArticle(post) {
     </div>
   `;
 
+function initializeVideoEmbeds() {
+  const articleBody =
+    document.querySelector(
+      ".article-body"
+    );
 
+  if (!articleBody) {
+    return;
+  }
+
+  const links =
+    articleBody.querySelectorAll(
+      "a[href]"
+    );
+
+  links.forEach((link) => {
+    const href =
+      link.getAttribute("href");
+
+    if (!href) {
+      return;
+    }
+
+    let videoId = "";
+
+    try {
+      const url =
+        new URL(
+          href,
+          window.location.origin
+        );
+
+      /*
+        youtube.com/watch?v=...
+      */
+      if (
+        url.hostname.includes(
+          "youtube.com"
+        )
+      ) {
+        if (
+          url.pathname === "/watch"
+        ) {
+          videoId =
+            url.searchParams.get("v") ||
+            "";
+        }
+
+        /*
+          youtube.com/shorts/...
+          youtube.com/embed/...
+        */
+        if (
+          url.pathname.startsWith(
+            "/shorts/"
+          ) ||
+          url.pathname.startsWith(
+            "/embed/"
+          )
+        ) {
+          videoId =
+            url.pathname
+              .split("/")
+              .filter(Boolean)[1] ||
+            "";
+        }
+      }
+
+      /*
+        youtu.be/...
+      */
+      if (
+        url.hostname.includes(
+          "youtu.be"
+        )
+      ) {
+        videoId =
+          url.pathname
+            .split("/")
+            .filter(Boolean)[0] ||
+          "";
+      }
+    } catch (error) {
+      return;
+    }
+
+    if (!videoId) {
+      return;
+    }
+
+    const parent =
+      link.parentElement;
+
+    const wrapper =
+      document.createElement("div");
+
+    wrapper.className =
+      "article-video";
+
+    wrapper.innerHTML = `
+      <iframe
+        src="https://www.youtube.com/embed/${encodeURIComponent(
+          videoId
+        )}"
+        title="YouTube video"
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+    `;
+
+    /*
+      링크 하나만 있는 문단이면
+      문단 전체를 영상으로 교체
+    */
+
+    if (
+      parent &&
+      parent.tagName === "P" &&
+      parent.textContent.trim() ===
+        link.textContent.trim()
+    ) {
+      parent.replaceWith(wrapper);
+    } else {
+      link.replaceWith(wrapper);
+    }
+  });
+}
+
+  initializeVideoEmbeds();
   initializeFootnotes();
 }
 

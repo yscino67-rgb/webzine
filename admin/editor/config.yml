@@ -91,6 +91,16 @@ collections:
         widget: "image"
         required: false
 
+      - label: "추가 이미지"
+        name: "images"
+        widget: "list"
+        required: false
+        max: 5
+        field:
+          label: "이미지"
+          name: "image"
+          widget: "image"
+
       - label: "이미지 설명"
         name: "image_caption"
         widget: "string"

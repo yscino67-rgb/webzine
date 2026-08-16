@@ -61,18 +61,42 @@ function normalizePost(post) {
         category.toUpperCase()
       ).trim(),
 
-    /* 업로드 완료 후 저장되는 이미지 경로 */
-    thumbnail:
-      String(
-        post.thumbnail || ""
-      ).trim(),
+    /* 업로드 완료 후 저장되는 대표 이미지 경로 */
+thumbnail:
+  String(
+    post.thumbnail || ""
+  ).trim(),
 
-    imageAlt:
-      String(
-        post.imageAlt ||
-        post.title ||
-        ""
-      ).trim(),
+/* 추가 이미지 최대 5개 */
+images:
+  Array.isArray(post.images)
+    ? post.images
+        .map((item) => {
+          if (typeof item === "string") {
+            return item.trim();
+          }
+
+          if (
+            item &&
+            typeof item === "object"
+          ) {
+            return String(
+              item.image || ""
+            ).trim();
+          }
+
+          return "";
+        })
+        .filter(Boolean)
+        .slice(0, 4)
+    : [],
+
+imageAlt:
+  String(
+    post.imageAlt ||
+    post.title ||
+    ""
+  ).trim(),
 
     imageCaption:
       String(
