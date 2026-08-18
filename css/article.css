@@ -1291,23 +1291,33 @@
      이미지
   ======================================================= */
 
-  .article-visual {
-    position: static;
+  .article-visuals {
+  order: -1;
 
-    order: -1;
+  width: 100%;
+  max-width: none;
 
-    width: 100%;
-    max-width: none;
-
-    margin: 0;
-  }
+  margin: 0;
+}
 
 
-  .article-image {
-    width: 100%;
+.article-visual {
+  position: static;
 
-    aspect-ratio: 5 / 3;
-  }
+  order: -1;
+
+  width: 100%;
+  max-width: none;
+
+  margin: 0;
+}
+
+
+.article-image {
+  width: 100%;
+
+  aspect-ratio: 5 / 3;
+}
 
 
   .article-caption {
