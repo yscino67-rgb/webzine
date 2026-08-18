@@ -421,6 +421,9 @@ select {
 
   white-space:
     nowrap;
+
+    cursor:
+    pointer;
 }
 
 
