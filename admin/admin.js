@@ -82,6 +82,9 @@ const footnoteDeleteButton =
 const footnoteCloseButton =
   document.getElementById("footnote-editor-close");
 
+const videoButton =
+  document.getElementById("video-button");
+
 /* =========================================================
    상태
 ========================================================= */
@@ -1400,7 +1403,346 @@ document.getElementById(
     refreshEditorSelection();
   }
 );
+/* =========================================================
+   동영상 임베드
+========================================================= */
 
+function getVideoEmbedUrl(
+  value
+) {
+  let url;
+
+  try {
+    url =
+      new URL(
+        value.trim()
+      );
+  } catch {
+    return null;
+  }
+
+
+  /* =======================================================
+     YouTube
+  ======================================================= */
+
+  const hostname =
+    url.hostname
+      .replace(
+        /^www\./,
+        ""
+      );
+
+
+  /* youtu.be/VIDEO_ID */
+
+  if (
+    hostname ===
+    "youtu.be"
+  ) {
+    const videoId =
+      url.pathname
+        .split("/")
+        .filter(Boolean)[0];
+
+    return videoId
+      ? `https://www.youtube.com/embed/${videoId}`
+      : null;
+  }
+
+
+  /* youtube.com */
+
+  if (
+    hostname ===
+      "youtube.com" ||
+    hostname ===
+      "m.youtube.com"
+  ) {
+
+    /* watch?v=VIDEO_ID */
+
+    if (
+      url.pathname ===
+      "/watch"
+    ) {
+      const videoId =
+        url.searchParams.get(
+          "v"
+        );
+
+      return videoId
+        ? `https://www.youtube.com/embed/${videoId}`
+        : null;
+    }
+
+
+    /* shorts/VIDEO_ID */
+
+    if (
+      url.pathname.startsWith(
+        "/shorts/"
+      )
+    ) {
+      const videoId =
+        url.pathname
+          .split("/")
+          .filter(Boolean)[1];
+
+      return videoId
+        ? `https://www.youtube.com/embed/${videoId}`
+        : null;
+    }
+
+
+    /* embed/VIDEO_ID */
+
+    if (
+      url.pathname.startsWith(
+        "/embed/"
+      )
+    ) {
+      const videoId =
+        url.pathname
+          .split("/")
+          .filter(Boolean)[1];
+
+      return videoId
+        ? `https://www.youtube.com/embed/${videoId}`
+        : null;
+    }
+  }
+
+
+  /* =======================================================
+     Vimeo
+  ======================================================= */
+
+  if (
+    hostname ===
+      "vimeo.com" ||
+    hostname ===
+      "player.vimeo.com"
+  ) {
+    const parts =
+      url.pathname
+        .split("/")
+        .filter(Boolean);
+
+    const videoId =
+      [...parts]
+        .reverse()
+        .find(
+          (part) =>
+            /^\d+$/.test(
+              part
+            )
+        );
+
+    return videoId
+      ? `https://player.vimeo.com/video/${videoId}`
+      : null;
+  }
+
+
+  return null;
+}
+
+
+/* =========================================================
+   영상 삽입
+========================================================= */
+
+function insertVideoEmbed() {
+
+  /*
+    프롬프트를 띄우기 전에
+    본문 커서 위치를 기억합니다.
+  */
+
+  if (
+    isSelectionInsideEditor()
+  ) {
+    saveEditorSelection();
+  }
+
+
+  const videoUrl =
+    window.prompt(
+      "YouTube 또는 Vimeo 영상 주소를 입력하세요."
+    );
+
+
+  if (!videoUrl) {
+    return;
+  }
+
+
+  const embedUrl =
+    getVideoEmbedUrl(
+      videoUrl
+    );
+
+
+  if (!embedUrl) {
+    saveMessage.textContent =
+      "지원하지 않는 동영상 주소입니다. YouTube 또는 Vimeo 링크를 입력해 주세요.";
+
+    return;
+  }
+
+
+  if (
+    !restoreEditorSelection()
+  ) {
+    saveMessage.textContent =
+      "본문에서 영상을 넣을 위치를 먼저 클릭해 주세요.";
+
+    return;
+  }
+
+
+  const selection =
+    window.getSelection();
+
+
+  if (
+    !selection ||
+    selection.rangeCount === 0
+  ) {
+    return;
+  }
+
+
+  const range =
+    selection
+      .getRangeAt(0);
+
+
+  /* =======================================================
+     영상 영역 생성
+  ======================================================= */
+
+  const video =
+    document.createElement(
+      "div"
+    );
+
+  video.className =
+    "article-video";
+
+  video.setAttribute(
+    "contenteditable",
+    "false"
+  );
+
+
+  const iframe =
+    document.createElement(
+      "iframe"
+    );
+
+  iframe.src =
+    embedUrl;
+
+  iframe.title =
+    "동영상";
+
+  iframe.loading =
+    "lazy";
+
+  iframe.setAttribute(
+    "allow",
+    "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  );
+
+  iframe.setAttribute(
+    "allowfullscreen",
+    ""
+  );
+
+
+  video.appendChild(
+    iframe
+  );
+
+
+  /* =======================================================
+     현재 커서 위치에 삽입
+  ======================================================= */
+
+  range.deleteContents();
+
+  range.insertNode(
+    video
+  );
+
+
+  /*
+    영상 다음에 새 문단을 만들어
+    계속 글을 쓸 수 있게 합니다.
+  */
+
+  const paragraph =
+    document.createElement(
+      "p"
+    );
+
+  paragraph.innerHTML =
+    "<br>";
+
+
+  video.after(
+    paragraph
+  );
+
+
+  /* =======================================================
+     커서를 영상 다음 문단으로 이동
+  ======================================================= */
+
+  const nextRange =
+    document.createRange();
+
+  nextRange.selectNodeContents(
+    paragraph
+  );
+
+  nextRange.collapse(
+    true
+  );
+
+
+  selection.removeAllRanges();
+
+  selection.addRange(
+    nextRange
+  );
+
+
+  savedEditorRange =
+    nextRange.cloneRange();
+
+
+  saveMessage.textContent =
+    "";
+}
+
+
+/* =========================================================
+   VIDEO 버튼
+========================================================= */
+
+if (videoButton) {
+  videoButton.addEventListener(
+    "click",
+    (event) => {
+      event.preventDefault();
+
+      insertVideoEmbed();
+    }
+  );
+}
 /* =========================================================
    참고문헌 / 각주
 ========================================================= */
