@@ -132,7 +132,7 @@
 
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 
@@ -148,7 +148,7 @@
 
   font-weight: 500;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 
@@ -164,7 +164,7 @@
 
   font-weight: 700;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 
@@ -404,7 +404,6 @@ select {
 
   font-family:
     "KoPubWorldDotum",
-    "Pretendard",
     sans-serif;
 
   font-size:
@@ -452,7 +451,6 @@ select {
 
   font-family:
     "KoPubWorldDotum",
-    "Pretendard",
     sans-serif;
 
   font-size:
@@ -690,7 +688,6 @@ select {
   font-family:
     "CossetteTitre",
     "Special Gothic Condensed One",
-    "Pretendard",
     sans-serif;
 
   font-size:
