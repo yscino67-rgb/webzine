@@ -1409,7 +1409,7 @@ a,
 @media (max-width: 767px) {
 
   body.archive-page .archive-filter {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
   }
 
 }
