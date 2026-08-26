@@ -1403,21 +1403,28 @@ a,
 
 /* =========================================================
    모바일 INDEX 상단 메뉴
-   ARTICLE의 ALL 위치와 동일하게
+   ARTICLE과 위치 정렬
 ========================================================= */
 
 @media (max-width: 767px) {
 
+  /* ALL 포함 메뉴 전체를 위로 6px */
   body.archive-page .archive-filter {
     transform: translateY(-6px);
   }
 
-}
+  /* 작은 카테고리 메뉴 + 검정 네모만 추가로 위로 */
+  body.archive-page .archive-filter-items,
+  body.archive-page .archive-filter-toggle {
+    transform: translateY(-7px) !important;
+  }
 
-/* ALL 제외, 작은 메뉴만 상대적으로 위로 */
-body.archive-page .archive-filter-items,
-body.archive-page .archive-filter-toggle {
-  transform: translateY(-7px) !important;
+  /* 모바일에서 ABOUT 숨김 */
+  body.archive-page
+  .archive-filter-items
+  a[href="./about.html"] {
+    display: none !important;
+  }
 }
 
 /* =========================================================
