@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="_레이어_1" data-name="레이어 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 390">
+<svg id="_레이어_1" data-name=" 레이어 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
   <g>
-    <rect width="67.7" height="67.7"/>
-    <rect x="161.2" width="67.7" height="67.7"/>
-    <rect x="322.3" width="67.7" height="67.7"/>
+    <rect x="4.1" y="4.1" width="40.2" height="40.2"/>
+    <rect x="99.9" y="4.1" width="40.2" height="40.2"/>
+    <rect x="195.6" y="4.1" width="40.2" height="40.2"/>
   </g>
   <g>
-    <rect y="161.2" width="67.7" height="67.7"/>
-    <rect x="161.2" y="161.2" width="67.7" height="67.7"/>
-    <rect x="322.3" y="161.2" width="67.7" height="67.7"/>
+    <rect x="4.1" y="99.9" width="40.2" height="40.2"/>
+    <rect x="99.9" y="99.9" width="40.2" height="40.2"/>
+    <rect x="195.6" y="99.9" width="40.2" height="40.2"/>
   </g>
   <g>
-    <rect x="0" y="322.3" width="67.7" height="67.7"/>
-    <rect x="161.2" y="322.3" width="67.7" height="67.7"/>
-    <rect x="322.3" y="322.3" width="67.7" height="67.7"/>
+    <rect x="4.1" y="195.6" width="40.2" height="40.2"/>
+    <rect x="99.9" y="195.6" width="40.2" height="40.2"/>
+    <rect x="195.6" y="195.6" width="40.2" height="40.2"/>
   </g>
 </svg>
