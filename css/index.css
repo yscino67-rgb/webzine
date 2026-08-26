@@ -1407,12 +1407,11 @@ a,
 ========================================================= */
 
 @media (max-width: 767px) {
-  .archive-page .archive-header {
-    padding:
-      20px
-      18px
-      12px !important;
+
+  body.archive-page .archive-filter {
+    transform: translateY(-8px);
   }
+
 }
 
 /* =========================================================
