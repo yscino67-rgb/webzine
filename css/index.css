@@ -1414,6 +1414,12 @@ a,
 
 }
 
+/* ALL 제외, 작은 메뉴만 상대적으로 위로 */
+body.archive-page .archive-filter-items,
+body.archive-page .archive-filter-toggle {
+  transform: translateY(-7px) !important;
+}
+
 /* =========================================================
    움직임 최소화
 ========================================================= */
