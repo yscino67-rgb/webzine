@@ -408,6 +408,16 @@ body.intro-body {
       1800ms;
   }
 
+  .intro-body .site-header {
+    padding:
+      calc(
+        env(safe-area-inset-top, 0px) +
+        20px
+      )
+      22px
+      0;
+  }
+
   .galaxy-category {
     min-width: 58px;
     height: 23px;
