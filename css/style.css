@@ -1119,6 +1119,38 @@ select {
 }
 
 /* =========================================================
+   모바일 서브페이지 횡단
+   오프닝 횡단과 완전히 동일하게
+========================================================= */
+
+@media (max-width: 767px) {
+
+  body.archive-page .page-brand,
+  body.article-detail-page .page-brand,
+  body.about-page .page-brand {
+    padding:
+      calc(
+        env(safe-area-inset-top, 0px) +
+        20px
+      )
+      22px
+      0 !important;
+
+    font-size:
+      23px !important;
+
+    font-weight:
+      700;
+
+    line-height:
+      1;
+
+    letter-spacing:
+      0 !important;
+  }
+}
+
+/* =========================================================
    움직임 최소화
 ========================================================= */
 
