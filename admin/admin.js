@@ -46,6 +46,16 @@ const thumbnailInput =
 const thumbnailFileInput =
   document.getElementById("post-thumbnail-file");
 
+  const postImageInputs = [
+  thumbnailInput,
+  document.getElementById("post-image-1"),
+  document.getElementById("post-image-2"),
+  document.getElementById("post-image-3"),
+  document.getElementById("post-image-4")
+];
+
+const MAX_IMAGES = 5;
+
 const imageUploadButton =
   document.getElementById("image-upload-button");
 
@@ -643,12 +653,73 @@ function fileToBase64(file) {
   );
 }
 
-async function uploadSelectedImage() {
-  const file =
-    thumbnailFileInput
-      .files?.[0];
+async function uploadSingleImage(
+  file
+) {
+  if (
+    file.size >
+    2.5 * 1024 * 1024
+  ) {
+    throw new Error(
+      `${file.name}은 2.5MB를 초과합니다.`
+    );
+  }
 
-  if (!file) {
+  const content =
+    await fileToBase64(
+      file
+    );
+
+  const response =
+    await fetch(
+      "/api/upload",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        credentials:
+          "same-origin",
+
+        body:
+          JSON.stringify({
+            mimeType:
+              file.type,
+
+            content
+          })
+      }
+    );
+
+  const data =
+    await readJsonResponse(
+      response
+    );
+
+  if (!response.ok) {
+    throw new Error(
+      data.error ||
+      "이미지 업로드에 실패했습니다."
+    );
+  }
+
+  return data.path;
+}
+
+
+async function uploadSelectedImage() {
+  const files =
+    Array.from(
+      thumbnailFileInput
+        .files || []
+    );
+
+  if (
+    files.length === 0
+  ) {
     imageUploadStatus.textContent =
       "업로드할 이미지를 선택해 주세요.";
 
@@ -656,78 +727,61 @@ async function uploadSelectedImage() {
   }
 
   if (
-    file.size >
-    2.5 * 1024 * 1024
+    files.length >
+    MAX_IMAGES
   ) {
     imageUploadStatus.textContent =
-      "이미지는 2.5MB 이하로 선택해 주세요.";
+      `이미지는 최대 ${MAX_IMAGES}장까지 업로드할 수 있습니다.`;
 
     return;
   }
-
-  imageUploadStatus.textContent =
-    "이미지 업로드 중입니다.";
 
   imageUploadButton.disabled =
     true;
 
   try {
-    const content =
-      await fileToBase64(
-        file
-      );
+    const uploadedPaths = [];
 
-    const response =
-      await fetch(
-        "/api/upload",
-        {
-          method: "POST",
+    for (
+      let i = 0;
+      i < files.length;
+      i += 1
+    ) {
+      imageUploadStatus.textContent =
+        `${i + 1}/${files.length} 이미지 업로드 중입니다.`;
 
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
+      const path =
+        await uploadSingleImage(
+          files[i]
+        );
 
-          credentials:
-            "same-origin",
-
-          body:
-            JSON.stringify({
-              mimeType:
-                file.type,
-
-              content
-            })
-        }
-      );
-
-    const data =
-      await readJsonResponse(
-        response
-      );
-
-    if (!response.ok) {
-      throw new Error(
-        data.error ||
-        "이미지 업로드에 실패했습니다."
+      uploadedPaths.push(
+        path
       );
     }
 
-    thumbnailInput.value =
-      data.path || "";
+    postImageInputs.forEach(
+      (input, index) => {
+        input.value =
+          uploadedPaths[index] ||
+          "";
+      }
+    );
 
     showImagePreview(
-      data.path
+      uploadedPaths[0] || ""
     );
 
     imageUploadStatus.textContent =
-      "이미지가 업로드되었습니다.";
+      `${uploadedPaths.length}장의 이미지가 업로드되었습니다. 첫 번째 이미지가 대표 이미지입니다.`;
+
   } catch (error) {
     console.error(error);
 
     imageUploadStatus.textContent =
       error.message ||
       "이미지 업로드에 실패했습니다.";
+
   } finally {
     imageUploadButton.disabled =
       false;
@@ -742,17 +796,57 @@ imageUploadButton.addEventListener(
 thumbnailFileInput.addEventListener(
   "change",
   () => {
-    const file =
-      thumbnailFileInput
-        .files?.[0];
+    const files =
+      Array.from(
+        thumbnailFileInput
+          .files || []
+      );
 
-    if (!file) {
+    if (
+      files.length === 0
+    ) {
+      return;
+    }
+
+    if (
+      files.length >
+      MAX_IMAGES
+    ) {
+      imageUploadStatus.textContent =
+        `이미지는 최대 ${MAX_IMAGES}장까지 선택할 수 있습니다.`;
+
+      thumbnailFileInput.value =
+        "";
+
+      showImagePreview("");
+
+      return;
+    }
+
+    const oversizedFile =
+      files.find(
+        (file) =>
+          file.size >
+          2.5 * 1024 * 1024
+      );
+
+    if (
+      oversizedFile
+    ) {
+      imageUploadStatus.textContent =
+        `${oversizedFile.name}은 2.5MB를 초과합니다.`;
+
+      thumbnailFileInput.value =
+        "";
+
+      showImagePreview("");
+
       return;
     }
 
     const previewUrl =
       URL.createObjectURL(
-        file
+        files[0]
       );
 
     showImagePreview(
@@ -760,7 +854,7 @@ thumbnailFileInput.addEventListener(
     );
 
     imageUploadStatus.textContent =
-      "파일 선택됨. 이미지 업로드를 눌러 주세요.";
+      `${files.length}장 선택됨. 이미지 업로드를 눌러 주세요.`;
   }
 );
 
@@ -771,6 +865,14 @@ imageRemoveButton.addEventListener(
 
     thumbnailFileInput.value =
       "";
+
+      postImageInputs
+  .slice(1)
+  .forEach(
+    (input) => {
+      input.value = "";
+    }
+  );
 
     imageUploadStatus.textContent =
       "대표 이미지를 제거했습니다.";
@@ -908,6 +1010,23 @@ function loadPostIntoEditor(
 
   thumbnailInput.value =
     post.thumbnail || "";
+
+    const additionalImages =
+  Array.isArray(
+    post.images
+  )
+    ? post.images
+    : [];
+
+postImageInputs
+  .slice(1)
+  .forEach(
+    (input, index) => {
+      input.value =
+        additionalImages[index] ||
+        "";
+    }
+  );
 
   document.getElementById(
     "post-image-caption"
@@ -2313,10 +2432,19 @@ postForm.addEventListener(
         category.toUpperCase(),
 
       thumbnail:
-        thumbnailInput.value.trim(),
+  thumbnailInput.value.trim(),
+
+      images:
+      postImageInputs
+      .slice(1)
+      .map(
+      (input) =>
+        input.value.trim()
+      )
+      .filter(Boolean),
 
       imageAlt:
-        title,
+      title,
 
       imageCaption:
         document.getElementById(
