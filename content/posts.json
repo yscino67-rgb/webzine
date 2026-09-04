@@ -335,6 +335,22 @@
       "imageSource": "",
       "published": true,
       "body": ""
+    },
+    {
+      "id": "article-1788549243201",
+      "title": "test",
+      "author": "test",
+      "authorBio": "",
+      "date": "2026-09-04",
+      "category": "criticism",
+      "subcategory": "CRITICISM",
+      "thumbnail": "/images/uploads/1788549240801-d1f4f542.jpg",
+      "images": [],
+      "imageAlt": "test",
+      "imageCaption": "",
+      "imageSource": "",
+      "published": true,
+      "body": ""
     }
   ]
 }
