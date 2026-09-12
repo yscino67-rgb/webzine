@@ -102,11 +102,24 @@ if (
   /*
     HTML에 is-open이 있다면 처음부터 펼쳐진 상태입니다.
   */
-  const defaultOpen =
-    archiveFilter.dataset
-      .defaultOpen === "true" ||
-    archiveFilter.classList
-      .contains("is-open");
+  const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const currentCategory =
+  (
+    params.get("category") ||
+    "all"
+  ).toLowerCase();
+
+const defaultOpen =
+  archiveFilter.dataset
+    .defaultOpen === "true" ||
+  archiveFilter.classList
+    .contains("is-open") ||
+  currentCategory !== "all";
+   
 
   function setArchiveMenuState(
     isOpen
