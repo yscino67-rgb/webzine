@@ -2482,108 +2482,115 @@ postForm.addEventListener(
     saveMessage.textContent =
       "저장 중입니다.";
 
-    const id =
-      document.getElementById(
-        "post-id"
-      ).value ||
-      createPostId();
-
-    const title =
-      document.getElementById(
-        "post-title"
-      ).value.trim();
-
-    const author =
-      document.getElementById(
-        "post-author"
-      ).value.trim();
-
-    const date =
-      document.getElementById(
-        "post-date"
-      ).value;
-
-    if (
-      !title ||
-      !author ||
-      !date
-    ) {
-      saveMessage.textContent =
-        "제목, 작성자, 날짜를 입력해 주세요.";
-
-      return;
-    }
-
-    const category =
-      document.getElementById(
-        "post-category"
-      ).value;
-
-    const subcategory =
-      document.getElementById(
-        "post-subcategory"
-      ).value.trim();
-
-    const post = {
-      id,
-
-      title,
-
-      author,
-
-      authorBio:
-        document.getElementById(
-          "post-author-bio"
-        ).value.trim(),
-
-      date,
-
-      category,
-
-      subcategory:
-        subcategory ||
-        category.toUpperCase(),
-
-      thumbnail:
-  thumbnailInput.value.trim(),
-
-      images:
-      postImageInputs
-      .slice(1)
-      .map(
-      (input) =>
-        input.value.trim()
-      )
-      .filter(Boolean),
-
-      imageAlt:
-      title,
-
-      imageCaption:
-        document.getElementById(
-          "post-image-caption"
-        ).value.trim(),
-
-      imageSource:
-        document.getElementById(
-          "post-image-source"
-        ).value.trim(),
-
-      published:
-        document.getElementById(
-          "post-published"
-        ).checked,
-
-      body:
-        bodyEditor.innerHTML
-    };
-
     try {
+      const id =
+        document.getElementById(
+          "post-id"
+        ).value ||
+        createPostId();
+
+      const title =
+        document.getElementById(
+          "post-title"
+        ).value.trim();
+
+      const author =
+        document.getElementById(
+          "post-author"
+        ).value.trim();
+
+      const date =
+        document.getElementById(
+          "post-date"
+        ).value;
+
+      if (
+        !title ||
+        !author ||
+        !date
+      ) {
+        saveMessage.textContent =
+          "제목, 작성자, 날짜를 입력해 주세요.";
+
+        return;
+      }
+
+      const category =
+        document.getElementById(
+          "post-category"
+        ).value;
+
+      const subcategory =
+        document.getElementById(
+          "post-subcategory"
+        ).value.trim();
+
+      const images =
+        additionalImageInputs.map(
+          (input) => {
+            if (!input) {
+              return "";
+            }
+
+            return input.value.trim();
+          }
+        );
+
+      const post = {
+        id,
+
+        title,
+
+        author,
+
+        authorBio:
+          document.getElementById(
+            "post-author-bio"
+          ).value.trim(),
+
+        date,
+
+        category,
+
+        subcategory:
+          subcategory ||
+          category.toUpperCase(),
+
+        thumbnail:
+          thumbnailInput
+            ? thumbnailInput.value.trim()
+            : "",
+
+        images,
+
+        imageAlt:
+          title,
+
+        imageCaption:
+          document.getElementById(
+            "post-image-caption"
+          ).value.trim(),
+
+        imageSource:
+          document.getElementById(
+            "post-image-source"
+          ).value.trim(),
+
+        published:
+          document.getElementById(
+            "post-published"
+          ).checked,
+
+        body:
+          bodyEditor.innerHTML
+      };
+
       const response =
         await fetch(
           "/api/posts",
           {
-            method: "POST",
+            method:
+              "POST",
 
             headers: {
               "Content-Type":
@@ -2611,7 +2618,7 @@ postForm.addEventListener(
       if (!response.ok) {
         throw new Error(
           data.error ||
-          "저장에 실패했습니다."
+          `저장에 실패했습니다. (${response.status})`
         );
       }
 
@@ -2622,18 +2629,23 @@ postForm.addEventListener(
           ? data.posts
           : posts;
 
-      selectedPostId = id;
+      selectedPostId =
+        id;
 
       renderPostList();
 
       saveMessage.textContent =
         "저장되었습니다. 잠시 후 사이트에 자동 반영됩니다.";
+
     } catch (error) {
-      console.error(error);
+      console.error(
+        "게시글 저장 오류:",
+        error
+      );
 
       saveMessage.textContent =
-        error.message ||
-        "저장에 실패했습니다.";
+        error?.message ||
+        "저장 중 오류가 발생했습니다.";
     }
   }
 );
