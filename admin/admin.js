@@ -46,16 +46,6 @@ const thumbnailInput =
 const thumbnailFileInput =
   document.getElementById("post-thumbnail-file");
 
-  const postImageInputs = [
-  thumbnailInput,
-  document.getElementById("post-image-1"),
-  document.getElementById("post-image-2"),
-  document.getElementById("post-image-3"),
-  document.getElementById("post-image-4")
-];
-
-const MAX_IMAGES = 5;
-
 const imageUploadButton =
   document.getElementById("image-upload-button");
 
@@ -70,6 +60,117 @@ const imagePreview =
 
 const imageRemoveButton =
   document.getElementById("image-remove-button");
+
+  const additionalImageInputs = [
+  document.getElementById("post-image-1"),
+  document.getElementById("post-image-2"),
+  document.getElementById("post-image-3"),
+  document.getElementById("post-image-4")
+];
+
+const imageSlots = [
+  {
+    hiddenInput: thumbnailInput,
+    fileInput: thumbnailFileInput,
+    uploadButton: imageUploadButton,
+    status: imageUploadStatus,
+    previewWrap: imagePreviewWrap,
+    preview: imagePreview,
+    removeButton: imageRemoveButton
+  },
+
+  {
+    hiddenInput:
+      document.getElementById("post-image-1"),
+
+    fileInput:
+      document.getElementById("post-image-file-1"),
+
+    uploadButton:
+      document.getElementById("image-upload-button-1"),
+
+    status:
+      document.getElementById("image-upload-status-1"),
+
+    previewWrap:
+      document.getElementById("image-upload-preview-wrap-1"),
+
+    preview:
+      document.getElementById("image-upload-preview-1"),
+
+    removeButton:
+      document.getElementById("image-remove-button-1")
+  },
+
+  {
+    hiddenInput:
+      document.getElementById("post-image-2"),
+
+    fileInput:
+      document.getElementById("post-image-file-2"),
+
+    uploadButton:
+      document.getElementById("image-upload-button-2"),
+
+    status:
+      document.getElementById("image-upload-status-2"),
+
+    previewWrap:
+      document.getElementById("image-upload-preview-wrap-2"),
+
+    preview:
+      document.getElementById("image-upload-preview-2"),
+
+    removeButton:
+      document.getElementById("image-remove-button-2")
+  },
+
+  {
+    hiddenInput:
+      document.getElementById("post-image-3"),
+
+    fileInput:
+      document.getElementById("post-image-file-3"),
+
+    uploadButton:
+      document.getElementById("image-upload-button-3"),
+
+    status:
+      document.getElementById("image-upload-status-3"),
+
+    previewWrap:
+      document.getElementById("image-upload-preview-wrap-3"),
+
+    preview:
+      document.getElementById("image-upload-preview-3"),
+
+    removeButton:
+      document.getElementById("image-remove-button-3")
+  },
+
+  {
+    hiddenInput:
+      document.getElementById("post-image-4"),
+
+    fileInput:
+      document.getElementById("post-image-file-4"),
+
+    uploadButton:
+      document.getElementById("image-upload-button-4"),
+
+    status:
+      document.getElementById("image-upload-status-4"),
+
+    previewWrap:
+      document.getElementById("image-upload-preview-wrap-4"),
+
+    preview:
+      document.getElementById("image-upload-preview-4"),
+
+    removeButton:
+      document.getElementById("image-remove-button-4")
+  }
+];
 
 const footnoteButton =
   document.getElementById("footnote-button");
@@ -581,23 +682,33 @@ document
    이미지
 ========================================================= */
 
-function showImagePreview(
+function showSlotPreview(
+  slot,
   src
 ) {
+  if (
+    !slot ||
+    !slot.previewWrap ||
+    !slot.preview
+  ) {
+    return;
+  }
+
   if (!src) {
-    imagePreviewWrap.hidden =
+    slot.previewWrap.hidden =
       true;
 
-    imagePreview.removeAttribute(
+    slot.preview.removeAttribute(
       "src"
     );
 
     return;
   }
 
-  imagePreview.src = src;
+  slot.preview.src =
+    src;
 
-  imagePreviewWrap.hidden =
+  slot.previewWrap.hidden =
     false;
 }
 
@@ -653,9 +764,15 @@ function fileToBase64(file) {
   );
 }
 
-async function uploadSingleImage(
+async function uploadSingleImageFile(
   file
 ) {
+  if (!file) {
+    throw new Error(
+      "업로드할 이미지를 선택해 주세요."
+    );
+  }
+
   if (
     file.size >
     2.5 * 1024 * 1024
@@ -706,178 +823,150 @@ async function uploadSingleImage(
     );
   }
 
-  return data.path;
+  return data.path || "";
 }
 
 
-async function uploadSelectedImage() {
-  const files =
-    Array.from(
-      thumbnailFileInput
-        .files || []
-    );
+async function uploadImageForSlot(
+  slot
+) {
+  const file =
+    slot.fileInput
+      .files?.[0];
 
-  if (
-    files.length === 0
-  ) {
-    imageUploadStatus.textContent =
+  if (!file) {
+    slot.status.textContent =
       "업로드할 이미지를 선택해 주세요.";
 
     return;
   }
 
-  if (
-    files.length >
-    MAX_IMAGES
-  ) {
-    imageUploadStatus.textContent =
-      `이미지는 최대 ${MAX_IMAGES}장까지 업로드할 수 있습니다.`;
+  slot.status.textContent =
+    "이미지 업로드 중입니다.";
 
-    return;
-  }
-
-  imageUploadButton.disabled =
+  slot.uploadButton.disabled =
     true;
 
   try {
-    const uploadedPaths = [];
-
-    for (
-      let i = 0;
-      i < files.length;
-      i += 1
-    ) {
-      imageUploadStatus.textContent =
-        `${i + 1}/${files.length} 이미지 업로드 중입니다.`;
-
-      const path =
-        await uploadSingleImage(
-          files[i]
-        );
-
-      uploadedPaths.push(
-        path
+    const path =
+      await uploadSingleImageFile(
+        file
       );
-    }
 
-    postImageInputs.forEach(
-      (input, index) => {
-        input.value =
-          uploadedPaths[index] ||
-          "";
-      }
+    slot.hiddenInput.value =
+      path;
+
+    showSlotPreview(
+      slot,
+      path
     );
 
-    showImagePreview(
-      uploadedPaths[0] || ""
-    );
-
-    imageUploadStatus.textContent =
-      `${uploadedPaths.length}장의 이미지가 업로드되었습니다. 첫 번째 이미지가 대표 이미지입니다.`;
+    slot.status.textContent =
+      "이미지가 업로드되었습니다.";
 
   } catch (error) {
     console.error(error);
 
-    imageUploadStatus.textContent =
+    slot.status.textContent =
       error.message ||
       "이미지 업로드에 실패했습니다.";
 
   } finally {
-    imageUploadButton.disabled =
+    slot.uploadButton.disabled =
       false;
   }
 }
 
-imageUploadButton.addEventListener(
-  "click",
-  uploadSelectedImage
-);
 
-thumbnailFileInput.addEventListener(
-  "change",
-  () => {
-    const files =
-      Array.from(
-        thumbnailFileInput
-          .files || []
-      );
+/* =========================================================
+   이미지 슬롯 이벤트
+========================================================= */
 
+imageSlots.forEach(
+  (slot) => {
     if (
-      files.length === 0
+      !slot.hiddenInput ||
+      !slot.fileInput ||
+      !slot.uploadButton ||
+      !slot.status ||
+      !slot.previewWrap ||
+      !slot.preview ||
+      !slot.removeButton
     ) {
       return;
     }
 
-    if (
-      files.length >
-      MAX_IMAGES
-    ) {
-      imageUploadStatus.textContent =
-        `이미지는 최대 ${MAX_IMAGES}장까지 선택할 수 있습니다.`;
-
-      thumbnailFileInput.value =
-        "";
-
-      showImagePreview("");
-
-      return;
-    }
-
-    const oversizedFile =
-      files.find(
-        (file) =>
-          file.size >
-          2.5 * 1024 * 1024
-      );
-
-    if (
-      oversizedFile
-    ) {
-      imageUploadStatus.textContent =
-        `${oversizedFile.name}은 2.5MB를 초과합니다.`;
-
-      thumbnailFileInput.value =
-        "";
-
-      showImagePreview("");
-
-      return;
-    }
-
-    const previewUrl =
-      URL.createObjectURL(
-        files[0]
-      );
-
-    showImagePreview(
-      previewUrl
+    slot.uploadButton.addEventListener(
+      "click",
+      () => {
+        uploadImageForSlot(
+          slot
+        );
+      }
     );
 
-    imageUploadStatus.textContent =
-      `${files.length}장 선택됨. 이미지 업로드를 눌러 주세요.`;
-  }
-);
+    slot.fileInput.addEventListener(
+      "change",
+      () => {
+        const file =
+          slot.fileInput
+            .files?.[0];
 
-imageRemoveButton.addEventListener(
-  "click",
-  () => {
-    thumbnailInput.value = "";
+        if (!file) {
+          return;
+        }
 
-    thumbnailFileInput.value =
-      "";
+        if (
+          file.size >
+          2.5 * 1024 * 1024
+        ) {
+          slot.status.textContent =
+            `${file.name}은 2.5MB를 초과합니다.`;
 
-      postImageInputs
-  .slice(1)
-  .forEach(
-    (input) => {
-      input.value = "";
-    }
-  );
+          slot.fileInput.value =
+            "";
 
-    imageUploadStatus.textContent =
-      "대표 이미지를 제거했습니다.";
+          showSlotPreview(
+            slot,
+            ""
+          );
 
-    showImagePreview("");
+          return;
+        }
+
+        const previewUrl =
+          URL.createObjectURL(
+            file
+          );
+
+        showSlotPreview(
+          slot,
+          previewUrl
+        );
+
+        slot.status.textContent =
+          "파일 선택됨. 이미지 업로드를 눌러 주세요.";
+      }
+    );
+
+    slot.removeButton.addEventListener(
+      "click",
+      () => {
+        slot.hiddenInput.value =
+          "";
+
+        slot.fileInput.value =
+          "";
+
+        slot.status.textContent =
+          "이미지를 제거했습니다.";
+
+        showSlotPreview(
+          slot,
+          ""
+        );
+      }
+    );
   }
 );
 
@@ -922,11 +1011,6 @@ function clearEditor() {
   ).value =
     "CRITICISM";
 
-  thumbnailInput.value = "";
-
-  thumbnailFileInput.value =
-    "";
-
   document.getElementById(
     "post-image-caption"
   ).value = "";
@@ -941,10 +1025,23 @@ function clearEditor() {
 
   bodyEditor.innerHTML = "";
 
-  imageUploadStatus.textContent =
-    "";
+imageSlots.forEach(
+  (slot) => {
+    slot.hiddenInput.value =
+      "";
 
-  showImagePreview("");
+    slot.fileInput.value =
+      "";
+
+    slot.status.textContent =
+      "";
+
+    showSlotPreview(
+      slot,
+      ""
+    );
+  }
+);
 
   footnotePanel.hidden = true;
 
@@ -1008,25 +1105,23 @@ function loadPostIntoEditor(
   ).value =
     post.subcategory || "";
 
-  thumbnailInput.value =
-    post.thumbnail || "";
+thumbnailInput.value =
+  post.thumbnail || "";
 
-    const additionalImages =
+const additionalImages =
   Array.isArray(
     post.images
   )
     ? post.images
     : [];
 
-postImageInputs
-  .slice(1)
-  .forEach(
-    (input, index) => {
-      input.value =
-        additionalImages[index] ||
-        "";
-    }
-  );
+additionalImageInputs.forEach(
+  (input, index) => {
+    input.value =
+      additionalImages[index] ||
+      "";
+  }
+);
 
   document.getElementById(
     "post-image-caption"
@@ -1058,12 +1153,30 @@ postImageInputs
     }
   );
 
-  showImagePreview(
-    post.thumbnail || ""
-  );
+showSlotPreview(
+  imageSlots[0],
+  post.thumbnail || ""
+);
 
-  imageUploadStatus.textContent =
-    "";
+for (
+  let index = 1;
+  index < imageSlots.length;
+  index += 1
+) {
+  showSlotPreview(
+    imageSlots[index],
+    additionalImages[
+      index - 1
+    ] || ""
+  );
+}
+
+imageSlots.forEach(
+  (slot) => {
+    slot.status.textContent =
+      "";
+  }
+);
 
   footnotePanel.hidden = true;
 
