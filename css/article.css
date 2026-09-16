@@ -1107,7 +1107,6 @@
   border: 0;
 }
 
-
 /* =========================================================
    ARTICLE MULTIPLE IMAGES
 ========================================================= */
@@ -1115,7 +1114,9 @@
 .article-visuals {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+
+  gap: 48px;
+
   min-width: 0;
 }
 
@@ -1125,10 +1126,10 @@
 
 .article-visuals .article-image {
   display: block;
+
   width: 100%;
   height: auto;
 }
-
 
 /* =========================================================
    모바일
@@ -1291,8 +1292,13 @@
      이미지
   ======================================================= */
 
-  .article-visuals {
+.article-visuals {
   order: -1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 32px;
 
   width: 100%;
   max-width: none;
@@ -1304,8 +1310,6 @@
 .article-visual {
   position: static;
 
-  order: -1;
-
   width: 100%;
   max-width: none;
 
@@ -1314,17 +1318,22 @@
 
 
 .article-image {
+  display: block;
+
   width: 100%;
+  height: auto;
 
   aspect-ratio: 5 / 3;
+
+  object-fit: cover;
 }
 
 
-  .article-caption {
-    margin-top: 10px;
+.article-caption {
+  margin-top: 10px;
 
-    font-size: 11px;
-  }
+  font-size: 11px;
+}
 
 
   /* =======================================================
@@ -1448,7 +1457,7 @@
 }
 
 /* =========================================================
-   움직임 최소화git add css/article.css
+   움직임 최소화
 ========================================================= */
 
 @media (

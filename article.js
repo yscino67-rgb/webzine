@@ -92,7 +92,7 @@ function createImageMarkup(post) {
             return "";
           })
           .filter(Boolean)
-          .slice(0, 5)
+          .slice(0, 4)
       : [];
 
   const images = [
@@ -267,12 +267,19 @@ function renderArticle(post) {
   ======================================================= */
 
   const hasImage =
-    Boolean(
-      String(
-        post.thumbnail || ""
-      ).trim()
-    );
-
+  Boolean(
+    String(
+      post.thumbnail || ""
+    ).trim()
+  ) ||
+  (
+    Array.isArray(post.images) &&
+    post.images.some((image) =>
+      Boolean(
+        String(image || "").trim()
+      )
+    )
+  );
 
   /*
     이미지 없는 기사:
