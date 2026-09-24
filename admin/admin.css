@@ -1184,6 +1184,16 @@ textarea,
   font-size: 0.78em;
 }
 
+.body-editor .cms-large-text {
+  font-size: 1.5em;
+}
+
+.body-editor .cms-bookk-font {
+  font-family:
+    "BookkMyungjo",
+    serif;
+}
+
 /* =========================================================
    CMS 본문 속 각주
 ========================================================= */

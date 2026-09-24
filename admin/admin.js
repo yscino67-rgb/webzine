@@ -1606,166 +1606,129 @@ smallTextButton.addEventListener(
   }
 );
 
+/* =========================================================
+   선택한 글자에 클래스 적용
+========================================================= */
+
+function wrapSelectedTextWithClass(
+  className,
+  errorMessage
+) {
+  if (
+    !restoreEditorSelection()
+  ) {
+    saveMessage.textContent =
+      errorMessage;
+
+    return false;
+  }
+
+  const selection =
+    window.getSelection();
+
+  if (
+    !selection ||
+    selection.rangeCount === 0
+  ) {
+    saveMessage.textContent =
+      errorMessage;
+
+    return false;
+  }
+
+  const range =
+    selection
+      .getRangeAt(0)
+      .cloneRange();
+
+  if (range.collapsed) {
+    saveMessage.textContent =
+      errorMessage;
+
+    return false;
+  }
+
+  const span =
+    document.createElement(
+      "span"
+    );
+
+  span.className =
+    className;
+
+  try {
+    range.surroundContents(
+      span
+    );
+  } catch {
+    const contents =
+      range.extractContents();
+
+    span.appendChild(
+      contents
+    );
+
+    range.insertNode(
+      span
+    );
+  }
+
+  const nextRange =
+    document.createRange();
+
+  nextRange.selectNodeContents(
+    span
+  );
+
+  selection.removeAllRanges();
+
+  selection.addRange(
+    nextRange
+  );
+
+  savedEditorRange =
+    nextRange.cloneRange();
+
+  saveMessage.textContent =
+    "";
+
+  return true;
+}
+
+
+/* =========================================================
+   큰 글씨
+========================================================= */
+
 if (largeTextButton) {
   largeTextButton.addEventListener(
     "click",
-    () => {
-      if (
-        !restoreEditorSelection()
-      ) {
-        saveMessage.textContent =
-          "크게 만들 글자를 먼저 선택해 주세요.";
+    (event) => {
+      event.preventDefault();
 
-        return;
-      }
-
-      document.execCommand(
-        "fontSize",
-        false,
-        "6"
+      wrapSelectedTextWithClass(
+        "cms-large-text",
+        "크게 만들 글자를 먼저 선택해 주세요."
       );
-
-      bodyEditor
-        .querySelectorAll(
-          'font[size="6"]'
-        )
-        .forEach(
-          (font) => {
-            const span =
-              document.createElement(
-                "span"
-              );
-
-            span.className =
-              "cms-large-text";
-
-            while (
-              font.firstChild
-            ) {
-              span.appendChild(
-                font.firstChild
-              );
-            }
-
-            font.replaceWith(
-              span
-            );
-          }
-        );
-
-      saveMessage.textContent =
-        "";
-
-      refreshEditorSelection();
     }
   );
 }
-if (largeTextButton) {
-  largeTextButton.addEventListener(
-    "click",
-    () => {
-      if (
-        !restoreEditorSelection()
-      ) {
-        saveMessage.textContent =
-          "크게 만들 글자를 먼저 선택해 주세요.";
 
-        return;
-      }
 
-      document.execCommand(
-        "fontSize",
-        false,
-        "6"
-      );
-
-      bodyEditor
-        .querySelectorAll(
-          'font[size="6"]'
-        )
-        .forEach(
-          (font) => {
-            const span =
-              document.createElement(
-                "span"
-              );
-
-            span.className =
-              "cms-large-text";
-
-            while (
-              font.firstChild
-            ) {
-              span.appendChild(
-                font.firstChild
-              );
-            }
-
-            font.replaceWith(
-              span
-            );
-          }
-        );
-
-      saveMessage.textContent =
-        "";
-
-      refreshEditorSelection();
-    }
-  );
-}
+/* =========================================================
+   부크크명조
+========================================================= */
 
 if (bookkFontButton) {
   bookkFontButton.addEventListener(
     "click",
-    () => {
-      if (
-        !restoreEditorSelection()
-      ) {
-        saveMessage.textContent =
-          "폰트를 바꿀 글자를 먼저 선택해 주세요.";
+    (event) => {
+      event.preventDefault();
 
-        return;
-      }
-
-      document.execCommand(
-        "fontName",
-        false,
-        "BookkMyungjo"
+      wrapSelectedTextWithClass(
+        "cms-bookk-font",
+        "폰트를 바꿀 글자를 먼저 선택해 주세요."
       );
-
-      bodyEditor
-        .querySelectorAll(
-          'font[face="BookkMyungjo"]'
-        )
-        .forEach(
-          (font) => {
-            const span =
-              document.createElement(
-                "span"
-              );
-
-            span.className =
-              "cms-bookk-font";
-
-            while (
-              font.firstChild
-            ) {
-              span.appendChild(
-                font.firstChild
-              );
-            }
-
-            font.replaceWith(
-              span
-            );
-          }
-        );
-
-      saveMessage.textContent =
-        "";
-
-      refreshEditorSelection();
     }
   );
 }
