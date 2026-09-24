@@ -1705,6 +1705,7 @@ if (largeTextButton) {
     "click",
     (event) => {
       event.preventDefault();
+      event.stopPropagation();
 
       wrapSelectedTextWithClass(
         "cms-large-text",
