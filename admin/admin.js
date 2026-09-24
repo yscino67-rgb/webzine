@@ -178,6 +178,12 @@ const footnoteButton =
 const smallTextButton =
   document.getElementById("small-text-button");
 
+const largeTextButton =
+  document.getElementById("large-text-button");
+
+const bookkFontButton =
+  document.getElementById("bookk-font-button");
+
 const footnotePanel =
   document.getElementById("footnote-editor-panel");
 
@@ -1599,6 +1605,170 @@ smallTextButton.addEventListener(
     refreshEditorSelection();
   }
 );
+
+if (largeTextButton) {
+  largeTextButton.addEventListener(
+    "click",
+    () => {
+      if (
+        !restoreEditorSelection()
+      ) {
+        saveMessage.textContent =
+          "크게 만들 글자를 먼저 선택해 주세요.";
+
+        return;
+      }
+
+      document.execCommand(
+        "fontSize",
+        false,
+        "6"
+      );
+
+      bodyEditor
+        .querySelectorAll(
+          'font[size="6"]'
+        )
+        .forEach(
+          (font) => {
+            const span =
+              document.createElement(
+                "span"
+              );
+
+            span.className =
+              "cms-large-text";
+
+            while (
+              font.firstChild
+            ) {
+              span.appendChild(
+                font.firstChild
+              );
+            }
+
+            font.replaceWith(
+              span
+            );
+          }
+        );
+
+      saveMessage.textContent =
+        "";
+
+      refreshEditorSelection();
+    }
+  );
+}
+if (largeTextButton) {
+  largeTextButton.addEventListener(
+    "click",
+    () => {
+      if (
+        !restoreEditorSelection()
+      ) {
+        saveMessage.textContent =
+          "크게 만들 글자를 먼저 선택해 주세요.";
+
+        return;
+      }
+
+      document.execCommand(
+        "fontSize",
+        false,
+        "6"
+      );
+
+      bodyEditor
+        .querySelectorAll(
+          'font[size="6"]'
+        )
+        .forEach(
+          (font) => {
+            const span =
+              document.createElement(
+                "span"
+              );
+
+            span.className =
+              "cms-large-text";
+
+            while (
+              font.firstChild
+            ) {
+              span.appendChild(
+                font.firstChild
+              );
+            }
+
+            font.replaceWith(
+              span
+            );
+          }
+        );
+
+      saveMessage.textContent =
+        "";
+
+      refreshEditorSelection();
+    }
+  );
+}
+
+if (bookkFontButton) {
+  bookkFontButton.addEventListener(
+    "click",
+    () => {
+      if (
+        !restoreEditorSelection()
+      ) {
+        saveMessage.textContent =
+          "폰트를 바꿀 글자를 먼저 선택해 주세요.";
+
+        return;
+      }
+
+      document.execCommand(
+        "fontName",
+        false,
+        "BookkMyungjo"
+      );
+
+      bodyEditor
+        .querySelectorAll(
+          'font[face="BookkMyungjo"]'
+        )
+        .forEach(
+          (font) => {
+            const span =
+              document.createElement(
+                "span"
+              );
+
+            span.className =
+              "cms-bookk-font";
+
+            while (
+              font.firstChild
+            ) {
+              span.appendChild(
+                font.firstChild
+              );
+            }
+
+            font.replaceWith(
+              span
+            );
+          }
+        );
+
+      saveMessage.textContent =
+        "";
+
+      refreshEditorSelection();
+    }
+  );
+}
 
 /* =========================================================
    링크
