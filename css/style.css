@@ -462,6 +462,9 @@ select {
   line-height:
     1;
 
+  letter-spacing:
+    -0.03em;
+
   white-space:
     nowrap;
 }
@@ -997,9 +1000,6 @@ select {
   .site-logo-name {
     font-size:
       23px;
-
-    letter-spacing:
-      -0.03em;
   }
 
 
