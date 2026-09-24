@@ -2723,6 +2723,9 @@ const seriesOrder =
           subcategory ||
           category.toUpperCase(),
 
+          series,
+          seriesOrder,
+
         thumbnail:
           thumbnailInput
             ? thumbnailInput.value.trim()
