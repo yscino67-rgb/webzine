@@ -182,6 +182,97 @@ function createImageMarkup(post) {
 }
 
 /* =========================================================
+   이어지는 기사
+========================================================= */
+
+function createSeriesMarkup(
+  post,
+  posts
+) {
+  const series =
+    String(
+      post.series || ""
+    ).trim();
+
+  if (!series) {
+    return "";
+  }
+
+  const seriesPosts =
+    posts
+      .filter((item) => {
+        return (
+          item.published !== false &&
+          String(
+            item.series || ""
+          ).trim() === series
+        );
+      })
+      .sort((a, b) => {
+        const orderA =
+          Number(
+            a.seriesOrder
+          ) || 9999;
+
+        const orderB =
+          Number(
+            b.seriesOrder
+          ) || 9999;
+
+        return orderA - orderB;
+      });
+
+  if (
+    seriesPosts.length < 2
+  ) {
+    return "";
+  }
+
+  const total =
+    seriesPosts.length;
+
+  return `
+    <section class="article-series">
+      <div class="article-series-title">
+        이어지는 기사
+      </div>
+
+      <ol class="article-series-list">
+        ${seriesPosts
+          .map(
+            (
+              item,
+              index
+            ) => `
+              <li class="article-series-item${
+                item.id === post.id
+                  ? " is-current"
+                  : ""
+              }">
+                <span class="article-series-number">
+                  ${index + 1}/${total}
+                </span>
+
+                <a
+                  class="article-series-link"
+                  href="./article.html?id=${encodeURIComponent(
+                    item.id
+                  )}"
+                >
+                  ${escapeHtml(
+                    item.title || ""
+                  )}
+                </a>
+              </li>
+            `
+          )
+          .join("")}
+      </ol>
+    </section>
+  `;
+}
+
+/* =========================================================
    작성자 + 한 줄 소개
 ========================================================= */
 
@@ -236,7 +327,7 @@ function createAuthorMarkup(post) {
    기사 출력
 ========================================================= */
 
-function renderArticle(post) {
+function renderArticle(post,posts) {
   if (!articleDetail) {
     return;
   }
@@ -304,6 +395,10 @@ function renderArticle(post) {
       <h1 class="article-title">
         ${escapeHtml(post.title || "")}
       </h1>
+      ${createSeriesMarkup(
+        post,
+        posts
+       )}
     </header>
 
 
@@ -743,7 +838,7 @@ async function loadArticle() {
     }
 
 
-    renderArticle(post);
+    renderArticle(post,posts);
 
   } catch (error) {
     console.error(
