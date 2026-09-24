@@ -399,6 +399,22 @@
       "imageSource": "",
       "published": true,
       "body": "<span class=\"cms-small-text\"><span class=\"cms-bookk-font\">ㄱㄱㄱㄱ</span></span>"
+    },
+    {
+      "id": "article-1790230360853",
+      "title": "ㄹㄹㄹㄹㄹㄹㄹ",
+      "author": "ㄹㄹㄹㄹㄹㄹㄹ",
+      "authorBio": "ㄹㄹㄹㄹㄹ",
+      "date": "2026-09-24",
+      "category": "criticism",
+      "subcategory": "CRITICISM",
+      "thumbnail": "",
+      "images": [],
+      "imageAlt": "ㄹㄹㄹㄹㄹㄹㄹ",
+      "imageCaption": "ㄹㄹㄹㄹ",
+      "imageSource": "",
+      "published": true,
+      "body": "<span class=\"cms-small-text\"><span class=\"cms-bookk-font\">ㄱㄱㄱㄱ</span></span>"
     }
   ]
 }
