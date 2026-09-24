@@ -1017,6 +1017,14 @@ function clearEditor() {
   ).value =
     "CRITICISM";
 
+    document.getElementById(
+  "post-series"
+).value = "";
+
+document.getElementById(
+  "post-series-order"
+).value = "";
+
   document.getElementById(
     "post-image-caption"
   ).value = "";
@@ -1110,6 +1118,16 @@ function loadPostIntoEditor(
     "post-subcategory"
   ).value =
     post.subcategory || "";
+
+    document.getElementById(
+  "post-series"
+).value =
+  post.series || "";
+
+document.getElementById(
+  "post-series-order"
+).value =
+  post.seriesOrder || "";
 
 thumbnailInput.value =
   post.thumbnail || "";
@@ -2658,6 +2676,21 @@ postForm.addEventListener(
         document.getElementById(
           "post-subcategory"
         ).value.trim();
+
+        const series =
+  document.getElementById(
+    "post-series"
+  ).value.trim();
+
+const seriesOrderValue =
+  document.getElementById(
+    "post-series-order"
+  ).value;
+
+const seriesOrder =
+  seriesOrderValue
+    ? Number(seriesOrderValue)
+    : null;
 
       const images =
         additionalImageInputs.map(
