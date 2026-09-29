@@ -357,7 +357,7 @@
       "title": "test",
       "author": "test",
       "authorBio": "",
-      "date": "2026-09-29",
+      "date": "2026-09-01",
       "category": "criticism",
       "subcategory": "CRITICISM",
       "thumbnail": "",
@@ -365,7 +365,7 @@
       "imageAlt": "test",
       "imageCaption": "",
       "imageSource": "",
-      "published": false,
+      "published": true,
       "body": "test"
     }
   ]
