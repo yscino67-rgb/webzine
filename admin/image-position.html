@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>
+    이미지 위치 설정 | 횡단 CMS
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="./image-position.css"
+  />
+</head>
+
+<body>
+  <main class="position-editor">
+    <!-- =========================================
+         상단
+    ========================================== -->
+
+    <header class="position-header">
+      <div class="position-header-left">
+        <button
+          type="button"
+          id="back-button"
+          class="position-back-button"
+        >
+          ← CMS로 돌아가기
+        </button>
+
+        <div>
+          <p class="position-label">
+            IMAGE POSITION
+          </p>
+
+          <h1
+            id="position-title"
+            class="position-title"
+          >
+            이미지 위치 설정
+          </h1>
+        </div>
+      </div>
+
+      <div class="position-header-actions">
+        <span
+          id="position-message"
+          class="position-message"
+        ></span>
+
+        <button
+          type="button"
+          id="save-position-button"
+          class="position-save-button"
+        >
+          위치 저장
+        </button>
+      </div>
+    </header>
+
+
+    <!-- =========================================
+         안내
+    ========================================== -->
+
+    <section class="position-guide">
+      <p>
+        이미지를 위아래로 이동해
+        기사에서 표시될 위치를 설정합니다.
+      </p>
+
+      <p>
+        위치는 본문의 문단을 기준으로 저장됩니다.
+      </p>
+    </section>
+
+
+    <!-- =========================================
+         기사 없음 / 로딩
+    ========================================== -->
+
+    <div
+      id="position-status"
+      class="position-status"
+    >
+      기사를 불러오는 중입니다.
+    </div>
+
+
+    <!-- =========================================
+         편집 영역
+    ========================================== -->
+
+    <section
+      id="position-workspace"
+      class="position-workspace"
+      hidden
+    >
+      <!-- =====================================
+           왼쪽: 본문 미리보기
+      ====================================== -->
+
+      <div class="position-copy-column">
+        <div class="position-column-heading">
+          본문
+        </div>
+
+        <article class="position-article-preview">
+          <h2
+            id="preview-title"
+            class="position-preview-title"
+          ></h2>
+
+          <div
+            id="preview-body"
+            class="position-preview-body"
+          ></div>
+        </article>
+      </div>
+
+
+      <!-- =====================================
+           오른쪽: 이미지
+      ====================================== -->
+
+      <aside class="position-image-column">
+        <div class="position-column-heading">
+          이미지
+        </div>
+
+        <div
+          id="position-image-list"
+          class="position-image-list"
+        ></div>
+      </aside>
+    </section>
+  </main>
+
+
+  <!-- =========================================
+       이미지 카드 템플릿
+  ========================================== -->
+
+  <template id="image-card-template">
+    <figure class="position-image-card">
+      <div class="position-image-toolbar">
+        <span class="position-image-number">
+          IMAGE 1
+        </span>
+
+        <div class="position-image-controls">
+          <button
+            type="button"
+            class="image-move-up"
+            title="위로 이동"
+          >
+            ↑
+          </button>
+
+          <button
+            type="button"
+            class="image-move-down"
+            title="아래로 이동"
+          >
+            ↓
+          </button>
+        </div>
+      </div>
+
+      <img
+        class="position-image-preview"
+        src=""
+        alt=""
+      />
+
+      <div class="position-anchor-info">
+        <span>
+          기준 위치
+        </span>
+
+        <strong
+          class="position-anchor-label"
+        >
+          본문 시작
+        </strong>
+      </div>
+    </figure>
+  </template>
+
+
+  <script
+    src="./image-position.js"
+  ></script>
+</body>
+</html>
