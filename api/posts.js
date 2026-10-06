@@ -56,13 +56,27 @@ function normalizePost(post) {
     category,
 
     subcategory:
-      String(
-        post.subcategory ||
-        category.toUpperCase()
-      ).trim(),
+  String(
+    post.subcategory ||
+    category.toUpperCase()
+  ).trim(),
 
-    /* 업로드 완료 후 저장되는 대표 이미지 경로 */
-thumbnail:
+series:
+  String(
+    post.series || ""
+  ).trim(),
+
+seriesOrder:
+  post.seriesOrder === null ||
+  post.seriesOrder === undefined ||
+  post.seriesOrder === ""
+    ? null
+    : Number(
+        post.seriesOrder
+      ),
+
+  /* 업로드 완료 후 저장되는 대표 이미지 경로 */
+  thumbnail:
   String(
     post.thumbnail || ""
   ).trim(),

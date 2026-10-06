@@ -234,7 +234,7 @@ function createSeriesMarkup(
   return `
     <section class="article-series">
       <div class="article-series-title">
-        이어지는 기사
+        시리즈
       </div>
 
       <ol class="article-series-list">
@@ -395,10 +395,6 @@ function renderArticle(post,posts) {
       <h1 class="article-title">
         ${escapeHtml(post.title || "")}
       </h1>
-      ${createSeriesMarkup(
-        post,
-        posts
-       )}
     </header>
 
 
@@ -424,7 +420,10 @@ function renderArticle(post,posts) {
 
         ${createAuthorMarkup(post)}
 
-
+        ${createSeriesMarkup(
+         post,
+         posts
+         )}
         <!-- ===========================================
              기사 하단
         ============================================ -->
