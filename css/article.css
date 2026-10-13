@@ -1430,6 +1430,9 @@
       13px !important;
   }
 
+  .article-series {
+  margin-top: 70px;
+  }
 
   /* =======================================================
      하단
@@ -1469,6 +1472,10 @@
   .article-detail-page
   .archive-filter-toggle {
     transform: translateY(6px) !important;
+  }
+
+   .article-series {
+  margin-top: 52px;
   }
 
 }

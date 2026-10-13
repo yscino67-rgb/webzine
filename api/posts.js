@@ -75,8 +75,36 @@ seriesOrder:
         post.seriesOrder
       ),
 
-  /* 업로드 완료 후 저장되는 대표 이미지 경로 */
-  thumbnail:
+imagePositions:
+  Array.isArray(
+    post.imagePositions
+  )
+    ? post.imagePositions
+        .map((item) => ({
+          imageIndex:
+            Number(
+              item?.imageIndex
+            ),
+
+          afterBlock:
+            Number(
+              item?.afterBlock
+            )
+        }))
+        .filter((item) => {
+          return (
+            Number.isFinite(
+              item.imageIndex
+            ) &&
+            Number.isFinite(
+              item.afterBlock
+            )
+          );
+        })
+    : [],
+
+/* 업로드 완료 후 저장되는 대표 이미지 경로 */
+thumbnail:
   String(
     post.thumbnail || ""
   ).trim(),

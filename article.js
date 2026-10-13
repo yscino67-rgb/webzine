@@ -102,6 +102,13 @@ function createImageMarkup(post) {
     ...extraImages
   ];
 
+  const imagePositions =
+    Array.isArray(
+      post.imagePositions
+    )
+      ? post.imagePositions
+      : [];
+
   if (images.length === 0) {
     return "";
   }
@@ -156,29 +163,169 @@ function createImageMarkup(post) {
     <div class="article-visuals">
       ${images
         .map(
-          (src, index) => `
-            <figure class="article-visual">
-              <img
-                class="article-image"
-                src="${escapeHtml(src)}"
-                alt="${imageAlt}${
-                  images.length > 1
-                    ? ` ${index + 1}`
-                    : ""
-                }"
-              />
+          (src, index) => {
+            const savedPosition =
+              imagePositions.find(
+                (item) =>
+                  Number(
+                    item.imageIndex
+                  ) === index
+              );
 
-              ${
-                index === 0
-                  ? captionMarkup
-                  : ""
-              }
-            </figure>
-          `
+            const afterBlock =
+              savedPosition
+                ? Math.max(
+                    0,
+                    Number(
+                      savedPosition.afterBlock
+                    ) || 0
+                  )
+                : 0;
+
+            return `
+              <figure
+                class="article-visual"
+                data-image-index="${index}"
+                data-after-block="${afterBlock}"
+              >
+                <img
+                  class="article-image"
+                  src="${escapeHtml(src)}"
+                  alt="${imageAlt}${
+                    images.length > 1
+                      ? ` ${index + 1}`
+                      : ""
+                  }"
+                />
+
+                ${
+                  index === 0
+                    ? captionMarkup
+                    : ""
+                }
+              </figure>
+            `;
+          }
         )
         .join("")}
     </div>
   `;
+}
+
+
+/* =========================================================
+   이미지 위치 적용
+========================================================= */
+
+function initializeImagePositions() {
+  const body =
+    document.querySelector(
+      ".article-body"
+    );
+
+  const visuals =
+    document.querySelector(
+      ".article-visuals"
+    );
+
+  if (
+    !body ||
+    !visuals
+  ) {
+    return;
+  }
+
+  if (
+    window.innerWidth <= 767
+  ) {
+    visuals.style.minHeight = "";
+
+    visuals
+      .querySelectorAll(
+        ".article-visual"
+      )
+      .forEach(
+        (figure) => {
+          figure.style.top = "";
+        }
+      );
+
+    return;
+  }
+
+  const blocks =
+    Array.from(
+      body.children
+    ).filter(
+      (element) =>
+        element.matches(
+          "p, h1, h2, h3, h4, blockquote, ul, ol, div"
+        )
+    );
+
+  const figures =
+    Array.from(
+      visuals.querySelectorAll(
+        ".article-visual"
+      )
+    );
+
+  if (
+    figures.length === 0
+  ) {
+    return;
+  }
+
+  let previousBottom = 0;
+
+  figures.forEach(
+    (figure) => {
+      const requestedIndex =
+        Number(
+          figure.dataset.afterBlock
+        ) || 0;
+
+      const safeIndex =
+        Math.max(
+          0,
+          Math.min(
+            requestedIndex,
+            Math.max(
+              blocks.length - 1,
+              0
+            )
+          )
+        );
+
+      const block =
+        blocks[safeIndex];
+
+      const desiredTop =
+        block
+          ? block.offsetTop
+          : 0;
+
+      const top =
+        Math.max(
+          desiredTop,
+          previousBottom
+        );
+
+      figure.style.top =
+        `${top}px`;
+
+      previousBottom =
+        top +
+        figure.offsetHeight +
+        48;
+    }
+  );
+
+  visuals.style.minHeight =
+    `${Math.max(
+      body.offsetHeight,
+      previousBottom
+    )}px`;
 }
 
 /* =========================================================
@@ -248,10 +395,7 @@ function createSeriesMarkup(
                 item.id === post.id
                   ? " is-current"
                   : ""
-              }">
-                <span class="article-series-number">
-                  ${index + 1}/${total}
-                </span>
+              }"
 
                 <a
                   class="article-series-link"

@@ -1,0 +1,452 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: #ffffff;
+  color: #111111;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Pretendard",
+    "Apple SD Gothic Neo",
+    sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+/* =========================================================
+   전체
+========================================================= */
+
+.position-editor {
+  width: 100%;
+  min-height: 100vh;
+
+  padding:
+    40px
+    48px
+    80px;
+}
+
+/* =========================================================
+   상단
+========================================================= */
+
+.position-header {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 40px;
+
+  padding-bottom: 28px;
+
+  border-bottom:
+    1px solid
+    #dddddd;
+}
+
+.position-header-left {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 28px;
+}
+
+.position-back-button,
+.position-save-button {
+  min-height: 44px;
+
+  padding:
+    0
+    18px;
+
+  border:
+    1px solid
+    #111111;
+
+  background: #ffffff;
+
+  color: #111111;
+
+  cursor: pointer;
+}
+
+.position-save-button {
+  background: #111111;
+  color: #ffffff;
+}
+
+.position-label {
+  margin:
+    0
+    0
+    8px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  letter-spacing: 0.08em;
+}
+
+.position-title {
+  margin: 0;
+
+  font-size: 30px;
+  font-weight: 600;
+
+  line-height: 1.25;
+}
+
+.position-header-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+}
+
+.position-message {
+  font-size: 13px;
+}
+
+/* =========================================================
+   안내
+========================================================= */
+
+.position-guide {
+  display: flex;
+
+  gap: 28px;
+
+  margin:
+    24px
+    0
+    36px;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+.position-guide p {
+  margin: 0;
+}
+
+/* =========================================================
+   상태
+========================================================= */
+
+.position-status {
+  padding:
+    60px
+    0;
+
+  font-size: 15px;
+}
+
+/* =========================================================
+   편집 영역
+========================================================= */
+
+.position-workspace {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 900px)
+    minmax(320px, 520px);
+
+  column-gap:
+    clamp(
+      60px,
+      8vw,
+      140px
+    );
+
+  align-items: start;
+}
+
+.position-column-heading {
+  margin-bottom: 18px;
+
+  padding-bottom: 10px;
+
+  border-bottom:
+    1px solid
+    #111111;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  letter-spacing: 0.06em;
+}
+
+/* =========================================================
+   본문 미리보기
+========================================================= */
+
+.position-article-preview {
+  width: 100%;
+}
+
+.position-preview-title {
+  margin:
+    0
+    0
+    54px;
+
+  font-size: 30px;
+  font-weight: 600;
+
+  line-height: 1.35;
+
+  word-break: keep-all;
+}
+
+.position-preview-body {
+  width: 100%;
+
+  font-size: 18px;
+  font-weight: 500;
+
+  line-height: 1.85;
+
+  word-break: keep-all;
+}
+
+.position-preview-body > * {
+  position: relative;
+}
+
+.position-preview-body > p {
+  margin:
+    0
+    0
+    38px;
+}
+
+.position-preview-body h2 {
+  margin:
+    54px
+    0
+    24px;
+}
+
+.position-preview-body blockquote {
+  margin:
+    0
+    0
+    48px;
+}
+
+/* 현재 이미지 기준이 된 문단 */
+
+.position-preview-body
+.position-anchor-target::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  right: -14px;
+
+  width: 6px;
+  height: 100%;
+
+  background:
+    #111111;
+}
+
+/* =========================================================
+   이미지 영역
+========================================================= */
+
+.position-image-column {
+  min-width: 0;
+}
+
+.position-image-list {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 500px;
+}
+
+/* =========================================================
+   이미지 카드
+========================================================= */
+
+.position-image-card {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+
+  margin: 0;
+
+  padding:
+    14px;
+
+  background: #ffffff;
+
+  border:
+    1px solid
+    #cccccc;
+
+  transition:
+    top
+    0.18s ease;
+}
+
+.position-image-toolbar {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-bottom: 10px;
+}
+
+.position-image-number {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.position-image-controls {
+  display: flex;
+
+  gap: 5px;
+}
+
+.position-image-controls button {
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  border:
+    1px solid
+    #bbbbbb;
+
+  background: #ffffff;
+
+  color: #111111;
+
+  cursor: pointer;
+}
+
+.position-image-controls button:hover {
+  background: #111111;
+  color: #ffffff;
+}
+
+.position-image-controls button:disabled {
+  opacity: 0.25;
+
+  cursor: default;
+}
+
+.position-image-preview {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  aspect-ratio: 5 / 3;
+
+  object-fit: cover;
+
+  background: #eeeeee;
+}
+
+.position-anchor-info {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 14px;
+
+  margin-top: 10px;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+.position-anchor-label {
+  text-align: right;
+}
+
+/* =========================================================
+   모바일
+========================================================= */
+
+@media (max-width: 900px) {
+  .position-editor {
+    padding:
+      24px
+      18px
+      60px;
+  }
+
+  .position-header {
+    flex-direction: column;
+  }
+
+  .position-header-left {
+    flex-direction: column;
+
+    gap: 18px;
+  }
+
+  .position-header-actions {
+    width: 100%;
+
+    justify-content: space-between;
+  }
+
+  .position-guide {
+    flex-direction: column;
+
+    gap: 4px;
+  }
+
+  .position-workspace {
+    display: block;
+  }
+
+  .position-image-column {
+    margin-top: 60px;
+  }
+
+  .position-image-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+
+    min-height: 0 !important;
+  }
+
+  .position-image-card {
+    position: static;
+  }
+}
