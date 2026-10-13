@@ -994,6 +994,10 @@
   white-space: normal !important;
 }
 
+.article-series {
+  margin-top: 70px;
+  }
+  
 
 /* =========================================================
    기사 하단
@@ -1430,8 +1434,8 @@
       13px !important;
   }
 
-  .article-series {
-  margin-top: 70px;
+     .article-series {
+  margin-top: 52px;
   }
 
   /* =======================================================
@@ -1472,10 +1476,6 @@
   .article-detail-page
   .archive-filter-toggle {
     transform: translateY(6px) !important;
-  }
-
-   .article-series {
-  margin-top: 52px;
   }
 
 }
