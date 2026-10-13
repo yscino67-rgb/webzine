@@ -37,6 +37,9 @@ const newPostButton =
 const deleteButton =
   document.getElementById("delete-post-button");
 
+const imagePositionButton =
+document.getElementById("image-position-button");
+
 const saveMessage =
   document.getElementById("save-message");
 
@@ -2894,6 +2897,29 @@ deleteButton.addEventListener(
     }
   }
 );
+
+/* =========================================================
+   이미지 위치 수정
+========================================================= */
+
+if (imagePositionButton) {
+  imagePositionButton.addEventListener(
+    "click",
+    () => {
+      if (!selectedPostId) {
+        saveMessage.textContent =
+          "먼저 게시글을 선택하거나 저장해 주세요.";
+
+        return;
+      }
+
+      window.location.href =
+        `./image-position.html?id=${encodeURIComponent(
+          selectedPostId
+        )}`;
+    }
+  );
+}
 
 /* =========================================================
    실행
