@@ -2905,10 +2905,12 @@ deleteButton.addEventListener(
 if (imagePositionButton) {
   imagePositionButton.addEventListener(
     "click",
-    () => {
+    (event) => {
+      event.preventDefault();
+
       if (!selectedPostId) {
         saveMessage.textContent =
-          "먼저 게시글을 선택하거나 저장해 주세요.";
+          "먼저 왼쪽 게시글 목록에서 수정할 게시글을 선택해 주세요.";
 
         return;
       }
