@@ -147,7 +147,12 @@
       "subcategory": "ANIMATION",
       "series": "",
       "seriesOrder": null,
-      "imagePositions": [],
+      "imagePositions": [
+        {
+          "imageIndex": 0,
+          "afterBlock": 2
+        }
+      ],
       "thumbnail": "/images/uploads/1786307778860-c60fa24d.png",
       "images": [],
       "imageAlt": "재현된 온기: 하츠네 미쿠의 공연",
