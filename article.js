@@ -375,9 +375,6 @@ function createSeriesMarkup(
     return "";
   }
 
-  const total =
-    seriesPosts.length;
-
   return `
     <section class="article-series">
       <div class="article-series-title">
@@ -395,8 +392,7 @@ function createSeriesMarkup(
                 item.id === post.id
                   ? " is-current"
                   : ""
-              }"
-
+              }">
                 <a
                   class="article-series-link"
                   href="./article.html?id=${encodeURIComponent(
