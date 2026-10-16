@@ -723,7 +723,26 @@ function initializeVideoEmbeds() {
 }
 
   initializeVideoEmbeds();
-  initializeFootnotes();
+initializeFootnotes();
+
+initializeImagePositions();
+
+document
+  .querySelectorAll(
+    ".article-image"
+  )
+  .forEach(
+    (image) => {
+      image.addEventListener(
+        "load",
+        initializeImagePositions
+      );
+    }
+  );
+
+  requestAnimationFrame(
+  initializeImagePositions
+  );
 }
 
 
