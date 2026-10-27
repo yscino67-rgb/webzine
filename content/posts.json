@@ -96,7 +96,16 @@
       "subcategory": "COLUMN",
       "series": "",
       "seriesOrder": null,
-      "imagePositions": [],
+      "imagePositions": [
+        {
+          "imageIndex": 0,
+          "afterBlock": 0
+        },
+        {
+          "imageIndex": 1,
+          "afterBlock": 16
+        }
+      ],
       "thumbnail": "/images/uploads/1793091840897-a9b8d4e4.png",
       "images": [
         "/images/uploads/1793091847127-c8d7252b.png"
