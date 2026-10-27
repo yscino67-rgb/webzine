@@ -168,7 +168,9 @@
       "seriesOrder": 1,
       "imagePositions": [],
       "thumbnail": "/images/uploads/1793091670893-32949dfc.png",
-      "images": [],
+      "images": [
+        "/images/uploads/1793091725056-f290a208.png"
+      ],
       "imageAlt": "[퍼시픽션 SERIES] 왜 우리는 <퍼시픽션>에 대해 쓰는가",
       "imageCaption": "",
       "imageSource": "",
