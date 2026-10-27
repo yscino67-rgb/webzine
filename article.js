@@ -280,30 +280,34 @@ function initializeImagePositions() {
 
   figures.forEach(
     (figure) => {
-      const requestedIndex =
-        Number(
-          figure.dataset.afterBlock
-        ) || 0;
+      const requestedPosition =
+  Math.max(
+    0,
+    Number(
+      figure.dataset.afterBlock
+    ) || 0
+  );
 
-      const safeIndex =
-        Math.max(
-          0,
-          Math.min(
-            requestedIndex,
-            Math.max(
-              blocks.length - 1,
-              0
-            )
-          )
-        );
+let desiredTop = 0;
 
-      const block =
-        blocks[safeIndex];
+if (
+  requestedPosition > 0
+) {
+  const blockIndex =
+    Math.min(
+      requestedPosition - 1,
+      blocks.length - 1
+    );
 
-      const desiredTop =
-        block
-          ? block.offsetTop
-          : 0;
+  const block =
+    blocks[blockIndex];
+
+  if (block) {
+    desiredTop =
+      block.offsetTop +
+      block.offsetHeight;
+  }
+}
 
       const top =
         Math.max(

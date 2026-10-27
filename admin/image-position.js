@@ -313,19 +313,21 @@ function updateAnchorHighlights() {
 
   imagePositions.forEach(
     (position) => {
-      const index =
-        Number(
-          position.afterBlock
-        );
+      const afterBlock =
+  Number(
+    position.afterBlock
+  ) || 0;
 
-      if (
-        blocks[index]
-      ) {
-        blocks[index]
-          .classList.add(
-            "position-anchor-target"
-          );
-      }
+if (
+  afterBlock > 0 &&
+  blocks[afterBlock - 1]
+) {
+  blocks[
+    afterBlock - 1
+  ].classList.add(
+    "position-anchor-target"
+  );
+}
     }
   );
 }
@@ -372,24 +374,29 @@ function getAnchorTop(
     getBodyBlocks();
 
   if (
-    blocks.length === 0
+    blocks.length === 0 ||
+    afterBlock <= 0
   ) {
     return 0;
   }
 
-  const safeIndex =
-    Math.max(
-      0,
-      Math.min(
-        afterBlock,
-        blocks.length - 1
-      )
+  const blockIndex =
+    Math.min(
+      afterBlock - 1,
+      blocks.length - 1
     );
 
   const block =
-    blocks[safeIndex];
+    blocks[blockIndex];
 
-  return block.offsetTop;
+  if (!block) {
+    return 0;
+  }
+
+  return (
+    block.offsetTop +
+    block.offsetHeight
+  );
 }
 
 

@@ -996,6 +996,27 @@
   margin-top: 70px;
   }
   
+  .article-series-title {
+  margin-bottom: 22px;
+}
+
+.article-series-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+
+  margin:
+    0
+    0
+    36px;
+
+  padding-left: 1.7em;
+}
+
+.article-series-item {
+  line-height: 1.55;
+}
 
 /* =========================================================
    기사 하단
