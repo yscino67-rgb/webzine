@@ -94,8 +94,13 @@
       "date": "2026-08-01",
       "category": "article",
       "subcategory": "COLUMN",
-      "thumbnail": "",
-      "images": [],
+      "series": "",
+      "seriesOrder": null,
+      "imagePositions": [],
+      "thumbnail": "/images/uploads/1793091840897-a9b8d4e4.png",
+      "images": [
+        "/images/uploads/1793091847127-c8d7252b.png"
+      ],
       "imageAlt": "시간을 거슬러 갈 순 없나요: '시네마테크 프랑세즈'에서 '서울영화센터'까지",
       "imageCaption": "",
       "imageSource": "",
